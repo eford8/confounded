@@ -1,0 +1,5 @@
+{
+    "files.exclude": {
+        "*.{aux,bbl,blg,fdb*,fls,log,out,synctex.gz}": true
+    }
+}
