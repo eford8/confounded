@@ -1,8 +1,10 @@
 \documentclass[titlepage]{article}
-\usepackage[style=nature]{biblatex}
 \usepackage{graphicx}
 \usepackage{authblk}
 \usepackage{hyperref}
+\usepackage[square,numbers]{natbib}
+\bibliographystyle{unsrtnat}
+
 
 \begin{document}
 
@@ -10,6 +12,7 @@
 \author[1]{Jonathan B. Dayton}
 \author[1]{Stephen R. Piccolo}
 \affil[1]{Department of Biology, Brigham Young University, Provo, UT 84602 USA}
+\date{}
 
 \maketitle
 
@@ -24,7 +27,7 @@
 Many tools have been developed to account and adjust for batch effects in expression data.
 However, most of these tools only adjust for linear batch effects without accounting for nonlinear interactions between variables.
 Because of the large number of features in expression data and the nature of these features (i.e. transcripts and proteins that interact biologically), we anticipate that these nonlinear effects may still be present even after adjustment with popular tools.
-A few notable examples use deep neural networks to correct for batch effects, but these are optimized for use in large, balanced, dual-batched datasets and are therefore unusable for many real-world examples.
+A few notable examples \cite{shaham_removal_2017,shaham_batch_2018} use deep neural networks to correct for batch effects, but these are optimized for use in large, balanced, dual-batched datasets and are therefore unusable for many real-world examples.
 
 \textbf{Hypothesis:}
 Using an adversarial neural network can correct for batch effects more completely than previous tools do. % clarify here what "more completely" means
@@ -99,5 +102,7 @@ Where $k(x, y)$ is the Gaussian kernel between $x$ and $y$ as implemented in \te
 \section{Discussion}
 
 \section{Conclusions}
+
+\bibliography{references}
 
 \end{document}
