@@ -262,18 +262,12 @@ We report these values in section \ref{results}.
 
 % TODO: put all the figures in here
 
-\subsection{Effects are still detectable after ComBat and scale adjusting}
+\subsection{Batch effects are still detectable after ComBat and scale adjusting}
 
-\subsection{Effects not removed by other adjusters are removed by Confounded}
-
-\subsection{Important signal is not removed by Confounded}
+PCA and t-SNE plots seem to show a decrease in separability after adjustment with various adjusters; however, previous research has shown that these plots aren't completely trustworthy in representing nonlinear effects \cite{dayton_classifying_2017-1}.
+Figure \ref{fig:pca}, Figure \ref{fig:tsne}
 
 \begin{figure}
-	\centering
-	\includegraphics[width=4.5in]{figures/rough/mnist}
-	\caption{\textbf{MNIST handwritten digits} (a) before any adjustment, (b), with artificial noise added, (c) adjusted for noise by ComBat, and (d) adjusted for noise by Confounded. Although Confounded seems to remove more noise from the background and make it look more like the original background, it struggles in some cases to accurately replicate the input data.}
-	\label{fig:mnist}
-\end{figure}\begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/pca}
 	\caption{\textbf{Principal components analysis} (PCA) of the GSE37199 dataset before and after batch adjustment with various adjusters.}
@@ -285,6 +279,11 @@ We report these values in section \ref{results}.
 	\caption{\textbf{T-distributed Stochastic Neighbor Embedding} (t-SNE) plot for the GSE37199 dataset before and after adjustment with several algorithms.}
 	\label{fig:tsne}
 \end{figure}
+
+The MSE and MMD metrics show mixed success.
+Figure \ref{mse}, Figure \ref{mmd}.
+% TODO: this might not be the case after running with updated code...
+
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/mse}
@@ -297,6 +296,18 @@ We report these values in section \ref{results}.
 	\caption{\textbf{Maximum mean discrepancy} (MMD) between different batches. In cases with more than two batches, MMD is computed pairwise between each batch and averaged.}
 	\label{fig:mmd}
 \end{figure}
+
+We would expect that after batch adjustment by an ideal adjuster, batch would no longer be detectable.
+
+ComBat performs very well on very small datasets and on traditional batch effects.
+
+Although ComBat removes batch well enough to greatly decrease the accuracy of Naive Bayes (a classifier that doesn't account for interactions between variables) in the larger datasets (MNIST and TCGA), Random Forests is still able to predict batch with a high degree of accuracy after ComBat adjustment.
+
+\subsection{Batch effects not removed by other adjusters are removed by Confounded}
+
+Confounded slightly decreases batch accuracy with the MNIST dataset.
+Figure \ref{fig:batch}, Table \ref{tab:batch}
+
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/batch_accuracy}
@@ -309,6 +320,16 @@ We report these values in section \ref{results}.
 	\caption{\textbf{Batch classification accuracy} for several datasets and adjusters. The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers. See also Figure \ref{fig:batch}.}
 	\label{tab:batch}
 \end{table}
+
+Confounded greatly decreases batch accuracy with the TCGA dataset.
+
+Additional modifications to the network may increase Confounded's efficacy with the larger datasets and possibly with the smaller ones as well.
+
+\subsection{Important signal is not removed by Confounded}
+
+With the smaller datasets, Confounded seems to keep true class information roughly as well as ComBat.
+Figure \ref{fig:true_class}, Table \ref{tab:true_class}
+
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/true_class_accuracy}
@@ -321,6 +342,19 @@ We report these values in section \ref{results}.
 	\caption{\textbf{True class classification accuracy} for several datasets and adjusters. After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment. See also Figure \ref{fig:true_class}}
 	\label{tab:true_class}
 \end{table}
+
+With the larger datasets, Confounded seems to be losing some accuracy.
+Figure \ref{fig:mnist}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/mnist}
+	\caption{\textbf{MNIST handwritten digits} (a) before any adjustment, (b), with artificial noise added, (c) adjusted for noise by ComBat, and (d) adjusted for noise by Confounded. Although Confounded seems to remove more noise from the background and make it look more like the original background, it struggles in some cases to accurately replicate the input data.}
+	\label{fig:mnist}
+\end{figure}
+
+Loss of accuracy may be ameliorated by longer training.
+Or it might be an acceptable amount of lost accuracy, depending on the application.
 
 \section{Discussion}
 
