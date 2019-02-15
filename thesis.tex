@@ -300,25 +300,25 @@ We report these values in section \ref{results}.
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/batch_accuracy}
-	\caption{\textbf{Batch classification accuracy} Accuracies for batch classification for 4-fold cross validation repeated 10 times for several classifiers.}
+	\caption{\textbf{Batch classification accuracy} Accuracies for batch classification for 4-fold cross validation repeated 10 times for several classifiers. See also Table \ref{tab:batch}.}
 	\label{fig:batch}
 \end{figure}
 \begin{table}
 	\centering
 	\csvautotabular{figures/rough/batch.csv}
-	\caption{Batch classification accuracy}
+	\caption{\textbf{Batch classification accuracy} for several datasets and adjusters. The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers. See also Figure \ref{fig:batch}.}
 	\label{tab:batch}
 \end{table}
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/true_class_accuracy}
-	\caption{\textbf{True class classification accuracy} for several datasets and adjusters.}
+	\caption{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross validation repeated 10 times. See also Table \ref{tab:true_class}.}
 	\label{fig:true_class}
 \end{figure}
 \begin{table}
 	\centering
 	\csvautotabular{figures/rough/true_class.csv}
-	\caption{True class classification accuracies}
+	\caption{\textbf{True class classification accuracy} for several datasets and adjusters. After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment. See also Figure \ref{fig:true_class}}
 	\label{tab:true_class}
 \end{table}
 
