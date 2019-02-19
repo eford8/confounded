@@ -1,5 +1,8 @@
 {
     "files.exclude": {
-        "*.{aux,bbl,blg,fdb*,fls,log,out,synctex.gz}": true
-    }
+        "*.{aux,bbl,blg,fdb*,fff,fls,log,out,synctex.gz,ttt}": true
+    },
+    "latex-workshop.docker.enabled": true,
+    "editor.wordWrap": "bounded",
+    "latex-workshop.latex.autoBuild.onSave.enabled": true
 }

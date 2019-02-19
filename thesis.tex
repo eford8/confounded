@@ -1,10 +1,14 @@
-\documentclass[titlepage]{article}
+\documentclass[notitlepage]{article}
 \usepackage{graphicx}
 \usepackage{authblk}
 \usepackage{hyperref}
 \usepackage[square,numbers]{natbib}
+\usepackage[nomarkers,nolists]{endfloat}
+\renewcommand{\efloatseparator}{\mbox{}} % multiple figures per page
+\usepackage[letterpaper,left=1in,right=1in,top=1in,bottom=1in,footskip=0.25in]{geometry}
+\usepackage{csvsimple}
+\linespread{1.5}
 \bibliographystyle{unsrtnat}
-
 
 \begin{document}
 
@@ -23,6 +27,13 @@
 \section{Background}
 
 \emph{[Explanation of what's been done in batch adjusting so far].}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/adjuster_workflow}
+	\caption{\textbf{Batch adjustment justification and steps} (a) When measurements are collected from a sample ($X$), systematic effects ($H$) also affect the measurements. (b) If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements. (c) In orer to normalize batches of data relative to one another, we first estimate the effect of the hidden variables based on differences in measurements between batches. (d) Second, we remove the estimated effects in order to normalize the batches relative to one another.}
+	\label{fig:workflow}
+\end{figure}
 
 Many tools have been developed to account and adjust for batch effects in expression data.
 However, most of these tools only adjust for linear batch effects without accounting for nonlinear interactions between variables.
@@ -57,9 +68,9 @@ We welcome any future intellectual advances that may allow convolutional network
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/network}
-	\caption{Network architecture}
-	\label{simulationfigure}
+	\includegraphics[width=4.5in]{figures/rough/network}
+	\caption{\textbf{Network architecture} of Confounded. Data with batch effects (represented by different colors) are input into an autoencoder. The output of the autoencoder is classified by a discriminator network based on batch. The autoencoder is then penalized based on the success of the discriminator. Over time, the autoencoder learns to output a faithful representation of the data without signal due to batch.}
+	\label{fig:network}
 \end{figure}
 
 \subsubsection{Autoencoder}
@@ -98,6 +109,13 @@ Where the $\lambda$ value represents a tradeoff parameter for tuning the network
 In all cases, the network was trained using the Adam Optimizer \cite{kingma_adam_2014} with a training rate of either 0.001 or 0.0001.
 We typically trained for 10,000 iterations on mini-batches of size 100.
 This training typically took roughly 30 minutes to complete, including time spent to load the input and to save the output.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/training_loss}
+	\caption{Autoencoder and discriminator loss over time for one run of Confounded. Over the course of training, the autoencoder more faithfully replicates the input data. The autoencoder also seems to introduce noise (see around iteration 3100) in response to the discriminator's slight improvements.}
+	\label{fig:training_loss}
+\end{figure}
 
 \subsection{Datasets}
 
@@ -241,6 +259,102 @@ We report these values in section \ref{results}.
 % TODO: ^ This
 
 \section{Results} \label{results}
+
+% TODO: put all the figures in here
+
+\subsection{Batch effects are still detectable after ComBat and scale adjusting}
+
+PCA and t-SNE plots seem to show a decrease in separability after adjustment with various adjusters; however, previous research has shown that these plots aren't completely trustworthy in representing nonlinear effects \cite{dayton_classifying_2017-1}.
+Figure \ref{fig:pca}, Figure \ref{fig:tsne}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/pca}
+	\caption{\textbf{Principal components analysis} (PCA) of the GSE37199 dataset before and after batch adjustment with various adjusters.}
+	\label{fig:pca}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/tsne}
+	\caption{\textbf{T-distributed Stochastic Neighbor Embedding} (t-SNE) plot for the GSE37199 dataset before and after adjustment with several algorithms.}
+	\label{fig:tsne}
+\end{figure}
+
+The MSE and MMD metrics show mixed success.
+Figure \ref{mse}, Figure \ref{mmd}.
+% TODO: this might not be the case after running with updated code...
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/mse}
+	\caption{\textbf{Mean squared error} (MSE) between the data prior to and after adjustment with various algorithms.}
+	\label{fig:mse}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/mmd}
+	\caption{\textbf{Maximum mean discrepancy} (MMD) between different batches. In cases with more than two batches, MMD is computed pairwise between each batch and averaged.}
+	\label{fig:mmd}
+\end{figure}
+
+We would expect that after batch adjustment by an ideal adjuster, batch would no longer be detectable.
+
+ComBat performs very well on very small datasets and on traditional batch effects.
+
+Although ComBat removes batch well enough to greatly decrease the accuracy of Naive Bayes (a classifier that doesn't account for interactions between variables) in the larger datasets (MNIST and TCGA), Random Forests is still able to predict batch with a high degree of accuracy after ComBat adjustment.
+
+\subsection{Batch effects not removed by other adjusters are removed by Confounded}
+
+Confounded slightly decreases batch accuracy with the MNIST dataset.
+Figure \ref{fig:batch}, Table \ref{tab:batch}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/batch_accuracy}
+	\caption{\textbf{Batch classification accuracy} Accuracies for batch classification for 4-fold cross validation repeated 10 times for several classifiers. See also Table \ref{tab:batch}.}
+	\label{fig:batch}
+\end{figure}
+\begin{table}
+	\centering
+	\csvautotabular{figures/rough/batch.csv}
+	\caption{\textbf{Batch classification accuracy} for several datasets and adjusters. The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers. See also Figure \ref{fig:batch}.}
+	\label{tab:batch}
+\end{table}
+
+Confounded greatly decreases batch accuracy with the TCGA dataset.
+
+Additional modifications to the network may increase Confounded's efficacy with the larger datasets and possibly with the smaller ones as well.
+
+\subsection{Important signal is not removed by Confounded}
+
+With the smaller datasets, Confounded seems to keep true class information roughly as well as ComBat.
+Figure \ref{fig:true_class}, Table \ref{tab:true_class}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/true_class_accuracy}
+	\caption{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross validation repeated 10 times. See also Table \ref{tab:true_class}.}
+	\label{fig:true_class}
+\end{figure}
+\begin{table}
+	\centering
+	\csvautotabular{figures/rough/true_class.csv}
+	\caption{\textbf{True class classification accuracy} for several datasets and adjusters. After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment. See also Figure \ref{fig:true_class}}
+	\label{tab:true_class}
+\end{table}
+
+With the larger datasets, Confounded seems to be losing some accuracy.
+Figure \ref{fig:mnist}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=4.5in]{figures/rough/mnist}
+	\caption{\textbf{MNIST handwritten digits} (a) before any adjustment, (b), with artificial noise added, (c) adjusted for noise by ComBat, and (d) adjusted for noise by Confounded. Although Confounded seems to remove more noise from the background and make it look more like the original background, it struggles in some cases to accurately replicate the input data.}
+	\label{fig:mnist}
+\end{figure}
+
+Loss of accuracy may be ameliorated by longer training.
+Or it might be an acceptable amount of lost accuracy, depending on the application.
 
 \section{Discussion}
 
