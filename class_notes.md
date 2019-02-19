@@ -9,3 +9,7 @@ Next week:
   - Don't wander around, just tell the reader what is important to the hypothesis
   - This is a place for subtle oddities in your work (a fish died so it wasn't balanced, or whatever)
   - Come up with subsections, each should probably have a few paragraphs
+
+## 2019-01-29
+
+When he reviews our papers, Jerry will look for how the ideas in our methods relate to our hypothesis.
