@@ -28,12 +28,45 @@
 
 \emph{[Explanation of what's been done in batch adjusting so far].}
 
+When working with biological data, problems can arise from combining data from multiple sources.
+For example, if two labs quantify the same 300 RNA samples for lung cancer patients but use different equipment to do so, each lab will come up with slightly different measurements.
+If a third party were to then study the patients using data from both labs, the differences in measurements could alter their analysis.
+These systemic effects are known as ``batch effects'' and are understood to have a nontrivial impact on high-throughput biological data \citep{leek_tackling_2010}.
+In one study, researchers found that, contrary to previous knowledge, molecular data from mice and humans clustered more closely by species than by tissue type \citep{yue_comparative_2014}.
+Referees showed in a rebuttal that when accounting for batch effects, these data actually clustered more closely by tissue type, as expected \citep{gilad_reanalysis_2015}.
+This type of bias can be even more pronounced when using data collected from different tissue types and can skew results, such as in pan-cancer analyses \citep{dayton_classifying_2017}.
+
+Several methods exist for removing batch effects from biological datasets.
+Two commonly used methods are ComBat \citep{johnson_adjusting_2007} and SVA \citep{leek_capturing_2007}.
+ComBat uses an empirical Bayes method to estimate batch effect parameters and then uses linear regression to remove the effects, and SVA uses singular value decomposition to identify and remove batch effects.
+Since both of these methods use linear adjustments to remove batch effects, they do not account for nonlinear effects.
+However, recent advances in neural networks have introduced new ways to account for higher-order, nonlinear relationships in data.
+
+Artificial neural networks are a machine learning tool inspired by the way human brains function; input values pass through layers of linear and nonlinear functions, the final output values are measured against objectives, and the layers of functions are adjusted to bring the outputs closer to the objectives.
+This process is repeated until the outputs are sufficiently close to their targets \citep{schmidhuber_deep_2015}.
+Autoencoders are a type of neural network that encode and then reconstruct their input, and their traditional objective function is to construct the output as similarly to the input as possible \citep{hinton_reducing_2006}.
+Neural networks have historically decreased in effectiveness when working with data from multiple domains \citep{ganin_domain-adversarial_2015}, in part because they may learn based on confounding effects (e.g. which researcher collected the data) instead of learning based on biologically interesting causal effects (e.g. which gene is consistently upregulated in a disease) \citep{louizos_causal_2017}.
+Recently, researchers have experimented with discouraging the networks from distinguishing between classes by giving them two objective functions:
+1. to learn as much as possible about the input data and
+2. to forget any patterns that help distinguish between classes \citep{ganin_domain-adversarial_2015,tzeng_deep_2014}.
+This type of dual objective function has been used in conjunction with autoencoders \citep{louizos_variational_2015}; the autoencoder is ``rewarded'' for reconstructing the input faithfully, but ``punished'' for keeping class-specific patterns.
+Research has also shown that neural networks are effective in working with biological data; for example, neural networks have been applied to extract biologically relevant latent spaces in RNA-Seq data with as few as 10,000 samples \citep{way_extracting_2017}, and some researchers have used that latent space to generate realistic synthetic biomedical data for other scientific studies \citep{beaulieu-jones_privacy-preserving_2017}.
+
+Our approach will build on this previous research by creating an adversarial autoencoder that removes confounding effects from multi-origin data.
+This autoencoder will be packaged and made available to allow other researchers to remove these effects from their own data to enable further analysis.
+
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/adjuster_workflow}
-	\caption{\textbf{Batch adjustment justification and steps} (a) When measurements are collected from a sample ($X$), systematic effects ($H$) also affect the measurements. (b) If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements. (c) In orer to normalize batches of data relative to one another, we first estimate the effect of the hidden variables based on differences in measurements between batches. (d) Second, we remove the estimated effects in order to normalize the batches relative to one another.}
+	\caption{\textbf{Batch adjustment justification and steps}
+	(a) When measurements are collected from a sample ($X$), systematic effects ($H$) also affect the measurements.
+	(b) If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements.
+	(c) In order to normalize batches of data relative to one another, we first estimate the effect of the hidden variables based on differences in measurements between batches.
+	(d) Second, we remove the estimated effects in order to normalize the batches relative to one another.}
 	\label{fig:workflow}
 \end{figure}
+
+-------
 
 Many tools have been developed to account and adjust for batch effects in expression data.
 However, most of these tools only adjust for linear batch effects without accounting for nonlinear interactions between variables.
@@ -69,7 +102,11 @@ We welcome any future intellectual advances that may allow convolutional network
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/network}
-	\caption{\textbf{Network architecture} of Confounded. Data with batch effects (represented by different colors) are input into an autoencoder. The output of the autoencoder is classified by a discriminator network based on batch. The autoencoder is then penalized based on the success of the discriminator. Over time, the autoencoder learns to output a faithful representation of the data without signal due to batch.}
+	\caption{\textbf{Network architecture} of Confounded.
+	Data with batch effects (represented by different colors) are input into an autoencoder.
+	The output of the autoencoder is classified by a discriminator network based on batch.
+	The autoencoder is then penalized based on the success of the discriminator.
+	Over time, the autoencoder learns to output a faithful representation of the data without signal due to batch.}
 	\label{fig:network}
 \end{figure}
 
@@ -113,7 +150,9 @@ This training typically took roughly 30 minutes to complete, including time spen
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/training_loss}
-	\caption{Autoencoder and discriminator loss over time for one run of Confounded. Over the course of training, the autoencoder more faithfully replicates the input data. The autoencoder also seems to introduce noise (see around iteration 3100) in response to the discriminator's slight improvements.}
+	\caption{Autoencoder and discriminator loss over time for one run of Confounded.
+	Over the course of training, the autoencoder more faithfully replicates the input data.
+	The autoencoder also seems to introduce noise (see around iteration 3100) in response to the discriminator's slight improvements.}
 	\label{fig:training_loss}
 \end{figure}
 
@@ -262,10 +301,18 @@ We report these values in section \ref{results}.
 
 % TODO: put all the figures in here
 
-\subsection{Batch effects are still detectable after ComBat and scale adjusting}
 
-PCA and t-SNE plots seem to show a decrease in separability after adjustment with various adjusters; however, previous research has shown that these plots aren't completely trustworthy in representing nonlinear effects \cite{dayton_classifying_2017-1}.
-Figure \ref{fig:pca}, Figure \ref{fig:tsne}
+\subsection{Some batch effects not removed by other adjusters are removed by Confounded}
+
+Various previous studies use differing methods to show qualitatively and quantitatively how well batch effects have been removed.
+We used several plots and metrics to compare adjusters, including PCA, t-SNE, MSE, MMD, and classifier batch prediction accuracy (for various classifiers).
+Classifier accuracy may be a better indicator of adjuster success than other metrics because many classifiers are able to identify nonlinear interactions;
+therefore, a decrease in classifier accuracy represents that nonlinear batch effects have been removed.
+
+PCA and t-SNE plots seem to show a decrease in separability after adjustment with various methods (see Figures \ref{fig:pca} and \ref{fig:tsne})
+However, previous research has shown that these plots aren't completely trustworthy in representing nonlinear effects \cite{dayton_classifying_2017-1}.
+Additionally, Confounded seems to change the overall shape of the distribution in these two plots, which may indicate an unwanted change to the underlying data.
+
 
 \begin{figure}
 	\centering
@@ -280,8 +327,7 @@ Figure \ref{fig:pca}, Figure \ref{fig:tsne}
 	\label{fig:tsne}
 \end{figure}
 
-The MSE and MMD metrics show mixed success.
-Figure \ref{mse}, Figure \ref{mmd}.
+The MSE and MMD metrics show mixed success (see Figures \ref{mse} and \ref{mmd}).
 % TODO: this might not be the case after running with updated code...
 
 \begin{figure}
@@ -293,31 +339,35 @@ Figure \ref{mse}, Figure \ref{mmd}.
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/mmd}
-	\caption{\textbf{Maximum mean discrepancy} (MMD) between different batches. In cases with more than two batches, MMD is computed pairwise between each batch and averaged.}
+	\caption{\textbf{Maximum mean discrepancy} (MMD) between different batches.
+	In cases with more than two batches, MMD is computed pairwise between each batch and averaged.}
 	\label{fig:mmd}
 \end{figure}
 
+Using the batch classification accuracy metric, Confounded seems to outperform other adjusters on larger datasets, whereas ComBat seems to perform better on smaller datasets (see Figure \ref{fig:batch}).
 We would expect that after batch adjustment by an ideal adjuster, batch would no longer be detectable.
-
-ComBat performs very well on very small datasets and on traditional batch effects.
+With both the bladderbatch and GSE37199 datasets, batch classification accuracy decreases well below baseline after batch adjustment with ComBat for all classifiers we tested (see Table \ref{tab:batch}).
+Interestingly, batch accuracy also decreases drastically for the MNIST and TCGA datasets, but only for the Naive Bayes classifier.
+This may be due to two factors: both ComBat and Naive Bayes use Bayesian methods, so ComBat may specifically remove the effects that Naive Bayes identifies; and Naive Bayes does not find patterns based on interactions between variables.
+Although Naive Bayes is no longer able to identify batch effects in the data after ComBat adjustment, Random Forests (which does use interactions between variables) still has a very high accuracy for MNIST and an increased accuracy for TCGA.
+In contrast, after adjustment by Confounded, the Random Forests algorithm's accuracy decreases more than with any other adjuster for both the MNIST and TCGA datasets.
+This indicates that while ComBat's performance may still be superior for smaller, more traditional expression datasets, Confounded may be better with newer larger datasets.
 
 Although ComBat removes batch well enough to greatly decrease the accuracy of Naive Bayes (a classifier that doesn't account for interactions between variables) in the larger datasets (MNIST and TCGA), Random Forests is still able to predict batch with a high degree of accuracy after ComBat adjustment.
-
-\subsection{Batch effects not removed by other adjusters are removed by Confounded}
-
-Confounded slightly decreases batch accuracy with the MNIST dataset.
-Figure \ref{fig:batch}, Table \ref{tab:batch}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/batch_accuracy}
-	\caption{\textbf{Batch classification accuracy} Accuracies for batch classification for 4-fold cross validation repeated 10 times for several classifiers. See also Table \ref{tab:batch}.}
+	\caption{\textbf{Batch classification accuracy} Accuracies for batch classification for 4-fold cross validation repeated 10 times for several classifiers.
+	See also Table \ref{tab:batch}.}
 	\label{fig:batch}
 \end{figure}
 \begin{table}
 	\centering
 	\csvautotabular{figures/rough/batch.csv}
-	\caption{\textbf{Batch classification accuracy} for several datasets and adjusters. The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers. See also Figure \ref{fig:batch}.}
+	\caption{\textbf{Batch classification accuracy} for several datasets and adjusters.
+	The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers.
+	See also Figure \ref{fig:batch}.}
 	\label{tab:batch}
 \end{table}
 
@@ -325,7 +375,7 @@ Confounded greatly decreases batch accuracy with the TCGA dataset.
 
 Additional modifications to the network may increase Confounded's efficacy with the larger datasets and possibly with the smaller ones as well.
 
-\subsection{Important signal is not removed by Confounded}
+\subsection{Important signal is still detectable after adjustment by Confounded}
 
 With the smaller datasets, Confounded seems to keep true class information roughly as well as ComBat.
 Figure \ref{fig:true_class}, Table \ref{tab:true_class}
@@ -333,13 +383,16 @@ Figure \ref{fig:true_class}, Table \ref{tab:true_class}
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/true_class_accuracy}
-	\caption{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross validation repeated 10 times. See also Table \ref{tab:true_class}.}
+	\caption{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross validation repeated 10 times.
+	See also Table \ref{tab:true_class}.}
 	\label{fig:true_class}
 \end{figure}
 \begin{table}
 	\centering
 	\csvautotabular{figures/rough/true_class.csv}
-	\caption{\textbf{True class classification accuracy} for several datasets and adjusters. After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment. See also Figure \ref{fig:true_class}}
+	\caption{\textbf{True class classification accuracy} for several datasets and adjusters.
+	After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment.
+	See also Figure \ref{fig:true_class}}
 	\label{tab:true_class}
 \end{table}
 
@@ -349,7 +402,11 @@ Figure \ref{fig:mnist}
 \begin{figure}
 	\centering
 	\includegraphics[width=4.5in]{figures/rough/mnist}
-	\caption{\textbf{MNIST handwritten digits} (a) before any adjustment, (b), with artificial noise added, (c) adjusted for noise by ComBat, and (d) adjusted for noise by Confounded. Although Confounded seems to remove more noise from the background and make it look more like the original background, it struggles in some cases to accurately replicate the input data.}
+	\caption{\textbf{MNIST handwritten digits} (a) before any adjustment,
+	(b) with artificial noise added,
+	(c) adjusted for noise by ComBat, and
+	(d) adjusted for noise by Confounded.
+	Although Confounded seems to remove more noise from the background and make it look more like the original background, it struggles in some cases to accurately replicate the input data.}
 	\label{fig:mnist}
 \end{figure}
 
