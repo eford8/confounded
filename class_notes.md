@@ -13,3 +13,20 @@ Next week:
 ## 2019-01-29
 
 When he reviews our papers, Jerry will look for how the ideas in our methods relate to our hypothesis.
+
+## 2019-02-19
+
+Four paragraphs in an introduction
+
+1. Hook / funnel - about 2 steps away from the main point
+2. Talk about all the awesome stuff that's been done (noble failure at the end)
+3. "To address this question, what we need is...", then brief description of study system & how it can be used to address the noble failure, lead up to next paragraph
+4. Introduce the hypothesis or hypotheses: "In this study, we address this question by addressing the following hypotheses."
+
+Could be fewer or more paragraphs, but this ^ generally works well.
+
+There should probably be about 10-15 citations within the introduction.
+
+**Think about the title this week.**
+
+Don't come on Thursday.
