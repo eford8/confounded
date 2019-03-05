@@ -26,29 +26,35 @@
 
 \section{Background}
 
-\emph{[Explanation of what's been done in batch adjusting so far].}
+\subsection{Hook / funnel}
+
+\subsection{Awesome stuff that's been done, noble failure}
+
+\subsection{To address this question, we need...}
+
+\subsection{In this study, we address this question by addressing the following hypotheses}
 
 When working with biological data, problems can arise from combining data from multiple sources.
-For example, if two labs quantify the same 300 RNA samples for lung cancer patients but use different equipment to do so, each lab will come up with slightly different measurements.
+For example, if two labs quantify the sequences of the same RNA samples for the same lung cancer patients but use different equipment to do so, each lab will come up with slightly different measurements.
 If a third party were to then study the patients using data from both labs, the differences in measurements could alter their analysis.
 These systemic effects are known as ``batch effects'' and are understood to have a nontrivial impact on high-throughput biological data \citep{leek_tackling_2010}.
 In one study, researchers found that, contrary to previous knowledge, molecular data from mice and humans clustered more closely by species than by tissue type \citep{yue_comparative_2014}.
-Referees showed in a rebuttal that when accounting for batch effects, these data actually clustered more closely by tissue type, as expected \citep{gilad_reanalysis_2015}.
-This type of bias can be even more pronounced when using data collected from different tissue types and can skew results, such as in pan-cancer analyses \citep{dayton_classifying_2017}.
+Referees showed in a rebuttal that when accounting for batch effects, these data actually clustered more closely by tissue type, as initially expected \citep{gilad_reanalysis_2015}.
+Systemic bias can be even more pronounced when using data collected from different tissue types and can skew sec:results, such as in pan-cancer analyses \citep{dayton_classifying_2017-1}.
 
 Several methods exist for removing batch effects from biological datasets.
 Two commonly used methods are ComBat \citep{johnson_adjusting_2007} and SVA \citep{leek_capturing_2007}.
-ComBat uses an empirical Bayes method to estimate batch effect parameters and then uses linear regression to remove the effects, and SVA uses singular value decomposition to identify and remove batch effects.
+ComBat uses an empirical Bayes method to estimate batch effect parameters and then uses linear regression to remove the effects, and SVA uses singular value decomposition to model batch effects which can then be accounted for in statistical analyses.
 Since both of these methods use linear adjustments to remove batch effects, they do not account for nonlinear effects.
 However, recent advances in neural networks have introduced new ways to account for higher-order, nonlinear relationships in data.
 
 Artificial neural networks are a machine learning tool inspired by the way human brains function; input values pass through layers of linear and nonlinear functions, the final output values are measured against objectives, and the layers of functions are adjusted to bring the outputs closer to the objectives.
 This process is repeated until the outputs are sufficiently close to their targets \citep{schmidhuber_deep_2015}.
 Autoencoders are a type of neural network that encode and then reconstruct their input, and their traditional objective function is to construct the output as similarly to the input as possible \citep{hinton_reducing_2006}.
-Neural networks have historically decreased in effectiveness when working with data from multiple domains \citep{ganin_domain-adversarial_2015}, in part because they may learn based on confounding effects (e.g. which researcher collected the data) instead of learning based on biologically interesting causal effects (e.g. which gene is consistently upregulated in a disease) \citep{louizos_causal_2017}.
+Neural networks have historically decreased in effectiveness when working with data from multiple domains \citep{ganin_domain-adversarial_2015}, in part because they may learn based on confounding effects (e.g. which researcher collected the data) instead of learning based on biologically interesting causal effects (e.g. which gene is consistently upregulated in a disease) \citep{louizos_causal_2017-2}.
 Recently, researchers have experimented with discouraging the networks from distinguishing between classes by giving them two objective functions:
 1. to learn as much as possible about the input data and
-2. to forget any patterns that help distinguish between classes \citep{ganin_domain-adversarial_2015,tzeng_deep_2014}.
+2. to forget any patterns that help distinguish between classes \citep{ganin_domain-adversarial_2015,tzeng_deep_2014-2}.
 This type of dual objective function has been used in conjunction with autoencoders \citep{louizos_variational_2015}; the autoencoder is ``rewarded'' for reconstructing the input faithfully, but ``punished'' for keeping class-specific patterns.
 Research has also shown that neural networks are effective in working with biological data; for example, neural networks have been applied to extract biologically relevant latent spaces in RNA-Seq data with as few as 10,000 samples \citep{way_extracting_2017}, and some researchers have used that latent space to generate realistic synthetic biomedical data for other scientific studies \citep{beaulieu-jones_privacy-preserving_2017}.
 
@@ -66,7 +72,7 @@ This autoencoder will be packaged and made available to allow other researchers 
 	\label{fig:workflow}
 \end{figure}
 
--------
+\noindent\rule{\textwidth}{1pt}
 
 Many tools have been developed to account and adjust for batch effects in expression data.
 However, most of these tools only adjust for linear batch effects without accounting for nonlinear interactions between variables.
@@ -76,9 +82,7 @@ A few notable examples \cite{shaham_removal_2017,shaham_batch_2018} use deep neu
 \textbf{Hypothesis:}
 Using an adversarial neural network can correct for batch effects more completely than previous tools do. % clarify here what "more completely" means
 
-\section{Implementation}
-
-\emph{\href{https://bmcbioinformatics.biomedcentral.com/submission-guidelines/preparing-your-manuscript/software-article}{Oxford Bioinformatics' guidelines} say that you should have an "Implementation" section instead of Materials and Methods.}
+\section{Methods} \label{sec:methods}
 
 \subsection{Network Structure}
 
@@ -260,7 +264,7 @@ A recent paper also used neural networks to remove batch effects \cite{shaham_re
 Instead of constraining the autoencoder to remove batch effects based on a discriminator, these researchers trained their network to minimize maximum mean discrepancy (MMD) between batches in an embedded layer of their network.
 We wanted to compare our network against this network, so we calculated MMD for each adjuster.
 Unfortunately, we were unable to get their network to work on our datasets for comparison due to some assumptions in their code (there must only be two batches, the two batches must be perfectly balanced, and the dataset must be fairly large).
-However, we still calculated this metric to determine whether batches looked like they came from the same distribution after adjustement.
+However, we still calculated this metric to determine whether batches looked like they came from the same distribution after adjustment.
 
 We calculated MMD using the following formula:
 
@@ -294,10 +298,9 @@ We calculated the average of classification accuracies for four-fold cross-valid
 We interpret lower accuracy for batch classification as meaning that the batch is removed more effectively.
 We also interpret higher true class classification as meaning that the important signal is not lost during the process of adjustment.
 Therefore, given output data from the ideal batch adjuster, batch classification would be no better than random for any classification algorithm, and true class accuracy would be no lower than accuracy for the unadjusted data.
-We report these values in section \ref{results}.
-% TODO: ^ This
+We report these values in section \ref{sec:results}.
 
-\section{Results} \label{results}
+\section{Results} \label{sec:results}
 
 % TODO: put all the figures in here
 

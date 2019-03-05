@@ -1,26 +1,449 @@
 
-@book{r_core_team_r_2014,
-  address = {Vienna, Austria},
-  title = {R: {{A Language}} and {{Environment}} for {{Statistical Computing}}},
-  publisher = {{R Foundation for Statistical Computing}},
-  author = {{R Core Team}},
-  year = {2014}
+@article{louizos_variational_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1511.00830},
+  primaryClass = {cs, stat},
+  title = {The {{Variational Fair Autoencoder}}},
+  abstract = {We investigate the problem of learning representations that are invariant to certain nuisance or sensitive factors of variation in the data while retaining as much of the remaining information as possible. Our model is based on a variational autoencoding architecture with priors that encourage independence between sensitive and latent factors of variation. Any subsequent processing, such as classification, can then be performed on this purged latent representation. To remove any remaining dependencies we incorporate an additional penalty term based on the "Maximum Mean Discrepancy" (MMD) measure. We discuss how these architectures can be efficiently trained on data and show in experiments that this method is more effective than previous work in removing unwanted sources of variation while maintaining informative latent representations.},
+  journal = {arXiv:1511.00830 [cs, stat]},
+  author = {Louizos, Christos and Swersky, Kevin and Li, Yujia and Welling, Max and Zemel, Richard},
+  month = nov,
+  year = {2015},
+  keywords = {Computer Science - Learning,Statistics - Machine Learning},
+  file = {/home/jdayton3/.zotero/library/storage/HVE6H8WF/Louizos et al. - 2015 - The Variational Fair Autoencoder.pdf;/home/jdayton3/.zotero/library/storage/XB9DBASL/1511.html},
+  annote = {Comment: Fixed typo in eq. 3 and 4}
 }
 
-@article{the_cancer_genome_atlas_research_network_cancer_2013,
-  title = {The {{Cancer Genome Atlas Pan}}-{{Cancer}} Analysis Project},
-  volume = {45},
-  copyright = {2013 Nature Publishing Group},
-  issn = {1546-1718},
-  doi = {10.1038/ng.2764},
-  abstract = {The Cancer Genome Atlas (TCGA) Research Network has profiled and analyzed large numbers of human tumors to discover molecular aberrations at the DNA, RNA, protein and epigenetic levels. The resulting rich data provide a major opportunity to develop an integrated picture of commonalities, differences and emergent themes across tumor lineages. The Pan-Cancer initiative compares the first 12 tumor types profiled by TCGA. Analysis of the molecular aberrations and their functional roles across tumor types will teach us how to extend therapies effective in one cancer type to others with a similar genomic profile.},
+@article{way_extracting_2017,
+  title = {Extracting a {{Biologically Relevant Latent Space}} from {{Cancer Transcriptomes}} with {{Variational Autoencoders}}},
+  copyright = {\textcopyright{} 2017, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution 4.0 International), CC BY 4.0, as described at http://creativecommons.org/licenses/by/4.0/},
+  doi = {10.1101/174474},
+  abstract = {The Cancer Genome Atlas (TCGA) has profiled over 10,000 tumors across 33 different cancer-types for many genomic features, including gene expression levels. Gene expression measurements capture substantial information about the state of each tumor. Certain classes of deep neural network models are capable of learning a meaningful latent space. Such a latent space could be used to explore and generate hypothetical gene expression profiles under various types of molecular and genetic perturbation. For example, one might wish to use such a model to predict a tumor's response to specific therapies or to characterize complex gene expression activations existing in differential proportions in different tumors. Variational autoencoders (VAEs) are a deep neural network approach capable of generating meaningful latent spaces for image and text data. In this work, we sought to determine the extent to which a VAE can be trained to model cancer gene expression, and whether or not such a VAE would capture biologically-relevant features. In the following report, we introduce a VAE trained on TCGA pan-cancer RNA-seq data, identify specific patterns in the VAE encoded features, and discuss potential merits of the approach. We name our method "Tybalt" after an instigative, cat-like character who sets a cascading chain of events in motion in Shakespeare's Romeo and Juliet. From a systems biology perspective, Tybalt could one day aid in cancer stratification or predict specific activated expression patterns that would result from genetic changes or treatment effects.},
   language = {en},
-  journal = {Nature Genetics},
-  author = {{The Cancer Genome Atlas Research Network} and Weinstein, John N. and Collisson, Eric A. and Mills, Gordon B. and Shaw, Kenna R. Mills and Ozenberger, Brad A. and Ellrott, Kyle and Shmulevich, Ilya and Sander, Chris and Stuart, Joshua M.},
+  journal = {bioRxiv},
+  author = {Way, Gregory P. and Greene, Casey S.},
+  month = oct,
+  year = {2017},
+  pages = {174474},
+  file = {/home/jdayton3/.zotero/library/storage/5XHRV7KS/Way and Greene - 2017 - Extracting a Biologically Relevant Latent Space fr.pdf;/home/jdayton3/.zotero/library/storage/BK4W4HT8/174474.html}
+}
+
+@article{beaulieu-jones_privacy-preserving_2017,
+  title = {Privacy-Preserving Generative Deep Neural Networks Support Clinical Data Sharing},
+  copyright = {\textcopyright{} 2017, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution 4.0 International), CC BY 4.0, as described at http://creativecommons.org/licenses/by/4.0/},
+  doi = {10.1101/159756},
+  abstract = {Though it is widely recognized that data sharing enables faster scientific progress, the sensible need to protect participant privacy hampers this practice in medicine. We train deep neural networks that generate synthetic subjects closely resembling study participants. Using the SPRINT trial as an example, we show that machine-learning models built from simulated participants generalize to the original dataset. We incorporate differential privacy, which offers strong guarantees on the likelihood that a subject could be identified as a member of the trial. Investigators who have compiled a dataset can use our method to provide a freely accessible public version that enables other scientists to perform discovery-oriented analyses. Generated data can be released alongside analytical code to enable fully reproducible workflows, even when privacy is a concern. By addressing data sharing challenges, deep neural networks can facilitate the rigorous and reproducible investigation of clinical datasets.},
+  language = {en},
+  journal = {bioRxiv},
+  author = {{Beaulieu-Jones}, Brett K. and Wu, Zhiwei Steven and Williams, Chris and Byrd, James Brian and Greene, Casey S.},
+  month = nov,
+  year = {2017},
+  pages = {159756},
+  file = {/home/jdayton3/.zotero/library/storage/Q5QRV72N/Beaulieu-Jones et al. - 2017 - Privacy-preserving generative deep neural networks.pdf;/home/jdayton3/.zotero/library/storage/E35FRR5I/159756.html}
+}
+
+@article{yue_comparative_2014,
+  title = {A Comparative Encyclopedia of {{DNA}} Elements in the Mouse Genome},
+  volume = {515},
+  issn = {1476-4687},
+  doi = {10.1038/nature13992},
+  abstract = {The laboratory mouse shares the majority of its protein-coding genes with humans, making it the premier model organism in biomedical research, yet the two mammals differ in significant ways. To gain greater insights into both shared and species-specific transcriptional and cellular regulatory programs in the mouse, the Mouse ENCODE Consortium has mapped transcription, DNase I hypersensitivity, transcription factor binding, chromatin modifications and replication domains throughout the mouse genome in diverse cell and tissue types. By comparing with the human genome, we not only confirm substantial conservation in the newly annotated potential functional sequences, but also find a large degree of divergence of sequences involved in transcriptional regulation, chromatin state and higher order chromatin organization. Our results illuminate the wide range of evolutionary forces acting on genes and their regulatory regions, and provide a general resource for research into mammalian biology and mechanisms of human diseases.},
+  language = {eng},
+  number = {7527},
+  journal = {Nature},
+  author = {Yue, Feng and Cheng, Yong and Breschi, Alessandra and Vierstra, Jeff and Wu, Weisheng and Ryba, Tyrone and Sandstrom, Richard and Ma, Zhihai and Davis, Carrie and Pope, Benjamin D. and Shen, Yin and Pervouchine, Dmitri D. and Djebali, Sarah and Thurman, Robert E. and Kaul, Rajinder and Rynes, Eric and Kirilusha, Anthony and Marinov, Georgi K. and Williams, Brian A. and Trout, Diane and Amrhein, Henry and {Fisher-Aylor}, Katherine and Antoshechkin, Igor and DeSalvo, Gilberto and See, Lei-Hoon and Fastuca, Meagan and Drenkow, Jorg and Zaleski, Chris and Dobin, Alex and Prieto, Pablo and Lagarde, Julien and Bussotti, Giovanni and Tanzer, Andrea and Denas, Olgert and Li, Kanwei and Bender, M. A. and Zhang, Miaohua and Byron, Rachel and Groudine, Mark T. and McCleary, David and Pham, Long and Ye, Zhen and Kuan, Samantha and Edsall, Lee and Wu, Yi-Chieh and Rasmussen, Matthew D. and Bansal, Mukul S. and Kellis, Manolis and Keller, Cheryl A. and Morrissey, Christapher S. and Mishra, Tejaswini and Jain, Deepti and Dogan, Nergiz and Harris, Robert S. and Cayting, Philip and Kawli, Trupti and Boyle, Alan P. and Euskirchen, Ghia and Kundaje, Anshul and Lin, Shin and Lin, Yiing and Jansen, Camden and Malladi, Venkat S. and Cline, Melissa S. and Erickson, Drew T. and Kirkup, Vanessa M. and Learned, Katrina and Sloan, Cricket A. and Rosenbloom, Kate R. and {Lacerda de Sousa}, Beatriz and Beal, Kathryn and Pignatelli, Miguel and Flicek, Paul and Lian, Jin and Kahveci, Tamer and Lee, Dongwon and Kent, W. James and Ramalho Santos, Miguel and Herrero, Javier and Notredame, Cedric and Johnson, Audra and Vong, Shinny and Lee, Kristen and Bates, Daniel and Neri, Fidencio and Diegel, Morgan and Canfield, Theresa and Sabo, Peter J. and Wilken, Matthew S. and Reh, Thomas A. and Giste, Erika and Shafer, Anthony and Kutyavin, Tanya and Haugen, Eric and Dunn, Douglas and Reynolds, Alex P. and Neph, Shane and Humbert, Richard and Hansen, R. Scott and De Bruijn, Marella and Selleri, Licia and Rudensky, Alexander and Josefowicz, Steven and Samstein, Robert and Eichler, Evan E. and Orkin, Stuart H. and Levasseur, Dana and Papayannopoulou, Thalia and Chang, Kai-Hsin and Skoultchi, Arthur and Gosh, Srikanta and Disteche, Christine and Treuting, Piper and Wang, Yanli and Weiss, Mitchell J. and Blobel, Gerd A. and Cao, Xiaoyi and Zhong, Sheng and Wang, Ting and Good, Peter J. and Lowdon, Rebecca F. and Adams, Leslie B. and Zhou, Xiao-Qiao and Pazin, Michael J. and Feingold, Elise A. and Wold, Barbara and Taylor, James and Mortazavi, Ali and Weissman, Sherman M. and Stamatoyannopoulos, John A. and Snyder, Michael P. and Guigo, Roderic and Gingeras, Thomas R. and Gilbert, David M. and Hardison, Ross C. and Beer, Michael A. and Ren, Bing and {Mouse ENCODE Consortium}},
+  month = nov,
+  year = {2014},
+  keywords = {Animals,Humans,Cell Lineage,Chromatin,Conserved Sequence,Deoxyribonuclease I,DNA Replication,Gene Expression Regulation,Gene Regulatory Networks,Genome,Genome-Wide Association Study,Genomics,Mice,Molecular Sequence Annotation,Regulatory Sequences; Nucleic Acid,RNA,Species Specificity,Transcription Factors,Transcriptome},
+  pages = {355-364},
+  pmid = {25409824},
+  pmcid = {PMC4266106}
+}
+
+@article{gilad_reanalysis_2015,
+  title = {A Reanalysis of Mouse {{ENCODE}} Comparative Gene Expression Data},
+  volume = {4},
+  issn = {2046-1402},
+  doi = {10.12688/f1000research.6536.1},
+  abstract = {Recently, the Mouse ENCODE Consortium reported that comparative gene expression data from human and mouse tend to cluster more by species rather than by tissue. This observation was surprising, as it contradicted much of the comparative gene regulatory data collected previously, as well as the common notion that major developmental pathways are highly conserved across a wide range of species, in particular across mammals. Here we show that the Mouse ENCODE gene expression data were collected using a flawed study design, which confounded sequencing batch (namely, the assignment of samples to sequencing flowcells and lanes) with species. When we account for the batch effect, the corrected comparative gene expression data from human and mouse tend to cluster by tissue, not by species.},
+  journal = {F1000Research},
+  author = {Gilad, Yoav and {Mizrahi-Man}, Orna},
+  month = may,
+  year = {2015},
+  file = {/home/jdayton3/.zotero/library/storage/PN9V7X22/Gilad and Mizrahi-Man - 2015 - A reanalysis of mouse ENCODE comparative gene expr.pdf},
+  pmid = {26236466},
+  pmcid = {PMC4516019}
+}
+
+@article{leek_tackling_2010,
+  title = {Tackling the Widespread and Critical Impact of Batch Effects in High-Throughput Data},
+  volume = {11},
+  issn = {1471-0064},
+  doi = {10.1038/nrg2825},
+  abstract = {High-throughput technologies are widely used, for example to assay genetic variants, gene and protein expression, and epigenetic modifications. One often overlooked complication with such studies is batch effects, which occur because measurements are affected by laboratory conditions, reagent lots and personnel differences. This becomes a major problem when batch effects are correlated with an outcome of interest and lead to incorrect conclusions. Using both published studies and our own analyses, we argue that batch effects (as well as other technical and biological artefacts) are widespread and critical to address. We review experimental and computational approaches for doing so.},
+  language = {eng},
+  number = {10},
+  journal = {Nature Reviews. Genetics},
+  author = {Leek, Jeffrey T. and Scharpf, Robert B. and Bravo, H\'ector Corrada and Simcha, David and Langmead, Benjamin and Johnson, W. Evan and Geman, Donald and Baggerly, Keith and Irizarry, Rafael A.},
+  month = oct,
+  year = {2010},
+  keywords = {Genomics,Biotechnology,Computational Biology,Oligonucleotide Array Sequence Analysis,Periodicals as Topic,Research Design,Sequence Analysis; DNA},
+  pages = {733-739},
+  pmid = {20838408},
+  pmcid = {PMC3880143}
+}
+
+@article{johnson_adjusting_2007,
+  title = {Adjusting Batch Effects in Microarray Expression Data Using Empirical {{Bayes}} Methods},
+  volume = {8},
+  issn = {1465-4644},
+  doi = {10.1093/biostatistics/kxj037},
+  abstract = {Non-biological experimental variation or "batch effects" are commonly observed across multiple batches of microarray experiments, often rendering the task of combining data from these batches difficult. The ability to combine microarray data sets is advantageous to researchers to increase statistical power to detect biological phenomena from studies where logistical considerations restrict sample size or in studies that require the sequential hybridization of arrays. In general, it is inappropriate to combine data sets without adjusting for batch effects. Methods have been proposed to filter batch effects from data, but these are often complicated and require large batch sizes ( $>$ 25) to implement. Because the majority of microarray studies are conducted using much smaller sample sizes, existing methods are not sufficient. We propose parametric and non-parametric empirical Bayes frameworks for adjusting data for batch effects that is robust to outliers in small sample sizes and performs comparable to existing methods for large samples. We illustrate our methods using two example data sets and show that our methods are justifiable, easy to apply, and useful in practice. Software for our method is freely available at: http://biosun1.harvard.edu/complab/batch/.},
+  language = {eng},
+  number = {1},
+  journal = {Biostatistics (Oxford, England)},
+  author = {Johnson, W. Evan and Li, Cheng and Rabinovic, Ariel},
+  month = jan,
+  year = {2007},
+  keywords = {Humans,Oligonucleotide Array Sequence Analysis,Bayes Theorem,Data Interpretation; Statistical,Gene Expression Profiling},
+  pages = {118-127},
+  pmid = {16632515}
+}
+
+@article{louizos_causal_2017-2,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1705.08821},
+  primaryClass = {cs, stat},
+  title = {Causal {{Effect Inference}} with {{Deep Latent}}-{{Variable Models}}},
+  abstract = {Learning individual-level causal effects from observational data, such as inferring the most effective medication for a specific patient, is a problem of growing importance for policy makers. The most important aspect of inferring causal effects from observational data is the handling of confounders, factors that affect both an intervention and its outcome. A carefully designed observational study attempts to measure all important confounders. However, even if one does not have direct access to all confounders, there may exist noisy and uncertain measurement of proxies for confounders. We build on recent advances in latent variable modeling to simultaneously estimate the unknown latent space summarizing the confounders and the causal effect. Our method is based on Variational Autoencoders (VAE) which follow the causal structure of inference with proxies. We show our method is significantly more robust than existing methods, and matches the state-of-the-art on previous benchmarks focused on individual treatment effects.},
+  journal = {arXiv:1705.08821 [cs, stat]},
+  author = {Louizos, Christos and Shalit, Uri and Mooij, Joris and Sontag, David and Zemel, Richard and Welling, Max},
+  month = may,
+  year = {2017},
+  keywords = {Computer Science - Learning,Statistics - Machine Learning},
+  file = {/home/jdayton3/.zotero/library/storage/6AXNHRMR/Louizos et al. - 2017 - Causal Effect Inference with Deep Latent-Variable .pdf;/home/jdayton3/.zotero/library/storage/97NXU7CC/1705.html},
+  annote = {Comment: Published as a conference paper at NIPS 2017}
+}
+
+@article{tzeng_deep_2014-2,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1412.3474},
+  primaryClass = {cs},
+  title = {Deep {{Domain Confusion}}: {{Maximizing}} for {{Domain Invariance}}},
+  shorttitle = {Deep {{Domain Confusion}}},
+  abstract = {Recent reports suggest that a generic supervised deep CNN model trained on a large-scale dataset reduces, but does not remove, dataset bias on a standard benchmark. Fine-tuning deep models in a new domain can require a significant amount of data, which for many applications is simply not available. We propose a new CNN architecture which introduces an adaptation layer and an additional domain confusion loss, to learn a representation that is both semantically meaningful and domain invariant. We additionally show that a domain confusion metric can be used for model selection to determine the dimension of an adaptation layer and the best position for the layer in the CNN architecture. Our proposed adaptation method offers empirical performance which exceeds previously published results on a standard benchmark visual domain adaptation task.},
+  journal = {arXiv:1412.3474 [cs]},
+  author = {Tzeng, Eric and Hoffman, Judy and Zhang, Ning and Saenko, Kate and Darrell, Trevor},
+  month = dec,
+  year = {2014},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  file = {/home/jdayton3/.zotero/library/storage/MWMN8ZJ6/Tzeng et al. - 2014 - Deep Domain Confusion Maximizing for Domain Invar.pdf;/home/jdayton3/.zotero/library/storage/WQWP2TZV/1412.html}
+}
+
+@article{leek_capturing_2007,
+  title = {Capturing {{Heterogeneity}} in {{Gene Expression Studies}} by {{Surrogate Variable Analysis}}},
+  volume = {3},
+  issn = {1553-7404},
+  doi = {10.1371/journal.pgen.0030161},
+  abstract = {It has unambiguously been shown that genetic, environmental, demographic, and technical factors may have substantial effects on gene expression levels. In addition to the measured variable(s) of interest, there will tend to be sources of signal due to factors that are unknown, unmeasured, or too complicated to capture through simple models. We show that failing to incorporate these sources of heterogeneity into an analysis can have widespread and detrimental effects on the study. Not only can this reduce power or induce unwanted dependence across genes, but it can also introduce sources of spurious signal to many genes. This phenomenon is true even for well-designed, randomized studies. We introduce ``surrogate variable analysis'' (SVA) to overcome the problems caused by heterogeneity in expression studies. SVA can be applied in conjunction with standard analysis techniques to accurately capture the relationship between expression and any modeled variables of interest. We apply SVA to disease class, time course, and genetics of gene expression studies. We show that SVA increases the biological accuracy and reproducibility of analyses in genome-wide expression studies.},
+  number = {9},
+  journal = {PLOS Genetics},
+  author = {Leek, Jeffrey T. and Storey, John D.},
   month = sep,
+  year = {2007},
+  keywords = {Algorithms,Gene expression,Genetic causes of cancer,Genetic loci,Genomic signal processing,Microarrays,Trait locus analysis,Vector spaces},
+  pages = {e161},
+  file = {/home/jdayton3/.zotero/library/storage/Y7WRCJES/Leek and Storey - 2007 - Capturing Heterogeneity in Gene Expression Studies.pdf;/home/jdayton3/.zotero/library/storage/ZENL2MY6/article.html}
+}
+
+@article{schmidhuber_deep_2015,
+  title = {Deep Learning in Neural Networks: {{An}} Overview},
+  volume = {61},
+  issn = {0893-6080},
+  shorttitle = {Deep Learning in Neural Networks},
+  doi = {10.1016/j.neunet.2014.09.003},
+  abstract = {In recent years, deep artificial neural networks (including recurrent ones) have won numerous contests in pattern recognition and machine learning. This historical survey compactly summarizes relevant work, much of it from the previous millennium. Shallow and Deep Learners are distinguished by the depth of their credit assignment paths, which are chains of possibly learnable, causal links between actions and effects. I review deep supervised learning (also recapitulating the history of backpropagation), unsupervised learning, reinforcement learning \& evolutionary computation, and indirect search for short programs encoding deep and large networks.},
+  journal = {Neural Networks},
+  author = {Schmidhuber, J\"urgen},
+  month = jan,
+  year = {2015},
+  keywords = {Deep learning,Evolutionary computation,Reinforcement learning,Supervised learning,Unsupervised learning},
+  pages = {85-117},
+  file = {/home/jdayton3/.zotero/library/storage/ISG49HCD/S0893608014002135.html}
+}
+
+@article{hinton_reducing_2006,
+  title = {Reducing the {{Dimensionality}} of {{Data}} with {{Neural Networks}}},
+  volume = {313},
+  copyright = {American Association for the Advancement of Science},
+  issn = {0036-8075, 1095-9203},
+  doi = {10.1126/science.1127647},
+  abstract = {High-dimensional data can be converted to low-dimensional codes by training a multilayer neural network with a small central layer to reconstruct high-dimensional input vectors. Gradient descent can be used for fine-tuning the weights in such ``autoencoder'' networks, but this works well only if the initial weights are close to a good solution. We describe an effective way of initializing the weights that allows deep autoencoder networks to learn low-dimensional codes that work much better than principal components analysis as a tool to reduce the dimensionality of data.
+Neural networks can be used to reduce accurately high-dimensional data to lower dimensional representations for pattern recognition tasks.
+Neural networks can be used to reduce accurately high-dimensional data to lower dimensional representations for pattern recognition tasks.},
+  language = {en},
+  number = {5786},
+  journal = {Science},
+  author = {Hinton, G. E. and Salakhutdinov, R. R.},
+  month = jul,
+  year = {2006},
+  pages = {504-507},
+  file = {/home/jdayton3/.zotero/library/storage/9T4BJZN3/504.html},
+  pmid = {16873662}
+}
+
+@article{ganin_domain-adversarial_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1505.07818},
+  primaryClass = {cs, stat},
+  title = {Domain-{{Adversarial Training}} of {{Neural Networks}}},
+  abstract = {We introduce a new representation learning approach for domain adaptation, in which data at training and test time come from similar but different distributions. Our approach is directly inspired by the theory on domain adaptation suggesting that, for effective domain transfer to be achieved, predictions must be made based on features that cannot discriminate between the training (source) and test (target) domains. The approach implements this idea in the context of neural network architectures that are trained on labeled data from the source domain and unlabeled data from the target domain (no labeled target-domain data is necessary). As the training progresses, the approach promotes the emergence of features that are (i) discriminative for the main learning task on the source domain and (ii) indiscriminate with respect to the shift between the domains. We show that this adaptation behaviour can be achieved in almost any feed-forward model by augmenting it with few standard layers and a new gradient reversal layer. The resulting augmented architecture can be trained using standard backpropagation and stochastic gradient descent, and can thus be implemented with little effort using any of the deep learning packages. We demonstrate the success of our approach for two distinct classification problems (document sentiment analysis and image classification), where state-of-the-art domain adaptation performance on standard benchmarks is achieved. We also validate the approach for descriptor learning task in the context of person re-identification application.},
+  journal = {arXiv:1505.07818 [cs, stat]},
+  author = {Ganin, Yaroslav and Ustinova, Evgeniya and Ajakan, Hana and Germain, Pascal and Larochelle, Hugo and Laviolette, Fran{\c c}ois and Marchand, Mario and Lempitsky, Victor},
+  month = may,
+  year = {2015},
+  keywords = {Computer Science - Learning,Statistics - Machine Learning,Computer Science - Neural and Evolutionary Computing},
+  file = {/home/jdayton3/.zotero/library/storage/QYT62QMZ/Ganin et al. - 2015 - Domain-Adversarial Training of Neural Networks.pdf;/home/jdayton3/.zotero/library/storage/8J7WXX2B/1505.html},
+  annote = {Comment: Published in JMLR: http://jmlr.org/papers/v17/15-239.html}
+}
+
+@article{shaham_removal_2017,
+  title = {Removal of Batch Effects Using Distribution-Matching Residual Networks},
+  volume = {33},
+  issn = {1367-4811},
+  doi = {10.1093/bioinformatics/btx196},
+  abstract = {Motivation: Sources of variability in experimentally derived data include measurement error in addition to the physical phenomena of interest. This measurement error is a combination of systematic components, originating from the measuring instrument and random measurement errors. Several novel biological technologies, such as mass cytometry and single-cell RNA-seq (scRNA-seq), are plagued with systematic errors that may severely affect statistical analysis if the data are not properly calibrated.
+Results: We propose a novel deep learning approach for removing systematic batch effects. Our method is based on a residual neural network, trained to minimize the Maximum Mean Discrepancy between the multivariate distributions of two replicates, measured in different batches. We apply our method to mass cytometry and scRNA-seq datasets, and demonstrate that it effectively attenuates batch effects.
+Availability and Implementation: our codes and data are publicly available at https://github.com/ushaham/BatchEffectRemoval.git.
+Contact: yuval.kluger@yale.edu.
+Supplementary information: Supplementary data are available at Bioinformatics online.},
+  language = {eng},
+  number = {16},
+  journal = {Bioinformatics (Oxford, England)},
+  author = {Shaham, Uri and Stanton, Kelly P. and Zhao, Jun and Li, Huamin and Raddassi, Khadir and Montgomery, Ruth and Kluger, Yuval},
+  month = aug,
+  year = {2017},
+  keywords = {Humans,Computational Biology,Cytophotometry,Data Accuracy,Machine Learning,Sequence Analysis; RNA,Single-Cell Analysis,Statistics as Topic},
+  pages = {2539-2546},
+  pmid = {28419223},
+  pmcid = {PMC5870543}
+}
+
+@article{shaham_batch_2018,
+  title = {Batch {{Effect Removal}} via {{Batch}}-{{Free Encoding}}},
+  doi = {10.1101/380816},
+  abstract = {Biological measurements often contain systematic errors, also known as ``batch effects'', which may invalidate downstream analysis when not handled correctly. The problem of removing batch effects is of major importance in the biological community. Despite recent advances in this direction via deep learning techniques, most current methods may not fully preserve the true biological patterns the data contains. In this work we propose a deep learning approach for batch effect removal. The crux of our approach is learning a batch-free encoding of the data, representing its intrinsic biological properties, but not batch effects. In addition, we also encode the systematic factors through a decoding mechanism and require accurate reconstruction of the data. Altogether, this allows us to fully preserve the true biological patterns represented in the data. Experimental results are reported on data obtained from two high throughput technologies, mass cytometry and single-cell RNA-seq. Beyond good performance on training data, we also observe that our system performs well on test data obtained from new patients, which was not available at training time. Our method is easy to handle, a publicly available code can be found at https://github.com/ushaham/BatchEffectRemoval2018.},
+  language = {en},
+  journal = {bioRxiv},
+  author = {Shaham, Uri},
+  month = jul,
+  year = {2018},
+  file = {/home/jdayton3/.zotero/library/storage/L3S8TLDL/Shaham - 2018 - Batch Effect Removal via Batch-Free Encoding.pdf}
+}
+
+@incollection{baldi_understanding_2013,
+  title = {Understanding {{Dropout}}},
+  booktitle = {Advances in {{Neural Information Processing Systems}} 26},
+  publisher = {{Curran Associates, Inc.}},
+  author = {Baldi, Pierre and Sadowski, Peter J},
+  editor = {Burges, C. J. C. and Bottou, L. and Welling, M. and Ghahramani, Z. and Weinberger, K. Q.},
   year = {2013},
-  pages = {1113-1120},
-  file = {/Users/jdayton3/Zotero/storage/RQUNAYYZ/The Cancer Genome Atlas Research Network et al. - 2013 - The Cancer Genome Atlas Pan-Cancer analysis projec.pdf;/Users/jdayton3/Zotero/storage/BDDXZ7V7/ng.html}
+  pages = {2814--2822},
+  file = {/home/jdayton3/.zotero/library/storage/CZ55YD2U/Baldi and Sadowski - 2013 - Understanding Dropout.pdf;/home/jdayton3/.zotero/library/storage/78YNCB5S/4878-understanding-dropout.html}
+}
+
+@article{ronneberger_u-net_2015,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1505.04597},
+  primaryClass = {cs},
+  title = {U-{{Net}}: {{Convolutional Networks}} for {{Biomedical Image Segmentation}}},
+  shorttitle = {U-{{Net}}},
+  abstract = {There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net .},
+  journal = {arXiv:1505.04597 [cs]},
+  author = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
+  month = may,
+  year = {2015},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  file = {/home/jdayton3/.zotero/library/storage/4LEVJ4MI/Ronneberger et al. - 2015 - U-Net Convolutional Networks for Biomedical Image.pdf;/home/jdayton3/.zotero/library/storage/WG5Q6IKC/1505.html},
+  annote = {Comment: conditionally accepted at MICCAI 2015}
+}
+
+@article{klambauer_self-normalizing_2017,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1706.02515},
+  primaryClass = {cs, stat},
+  title = {Self-{{Normalizing Neural Networks}}},
+  abstract = {Deep Learning has revolutionized vision via convolutional neural networks (CNNs) and natural language processing via recurrent neural networks (RNNs). However, success stories of Deep Learning with standard feed-forward neural networks (FNNs) are rare. FNNs that perform well are typically shallow and, therefore cannot exploit many levels of abstract representations. We introduce self-normalizing neural networks (SNNs) to enable high-level abstract representations. While batch normalization requires explicit normalization, neuron activations of SNNs automatically converge towards zero mean and unit variance. The activation function of SNNs are "scaled exponential linear units" (SELUs), which induce self-normalizing properties. Using the Banach fixed-point theorem, we prove that activations close to zero mean and unit variance that are propagated through many network layers will converge towards zero mean and unit variance -- even under the presence of noise and perturbations. This convergence property of SNNs allows to (1) train deep networks with many layers, (2) employ strong regularization, and (3) to make learning highly robust. Furthermore, for activations not close to unit variance, we prove an upper and lower bound on the variance, thus, vanishing and exploding gradients are impossible. We compared SNNs on (a) 121 tasks from the UCI machine learning repository, on (b) drug discovery benchmarks, and on (c) astronomy tasks with standard FNNs and other machine learning methods such as random forests and support vector machines. SNNs significantly outperformed all competing FNN methods at 121 UCI tasks, outperformed all competing methods at the Tox21 dataset, and set a new record at an astronomy data set. The winning SNN architectures are often very deep. Implementations are available at: github.com/bioinf-jku/SNNs.},
+  journal = {arXiv:1706.02515 [cs, stat]},
+  author = {Klambauer, G\"unter and Unterthiner, Thomas and Mayr, Andreas and Hochreiter, Sepp},
+  month = jun,
+  year = {2017},
+  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning},
+  file = {/home/jdayton3/.zotero/library/storage/SPB3FFYM/Klambauer et al. - 2017 - Self-Normalizing Neural Networks.pdf;/home/jdayton3/.zotero/library/storage/Y3P5FS4S/1706.html},
+  annote = {Comment: 9 pages (+ 93 pages appendix)}
+}
+
+@article{agarap_deep_2018,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1803.08375},
+  primaryClass = {cs, stat},
+  title = {Deep {{Learning}} Using {{Rectified Linear Units}} ({{ReLU}})},
+  abstract = {We introduce the use of rectified linear units (ReLU) as the classification function in a deep neural network (DNN). Conventionally, ReLU is used as an activation function in DNNs, with Softmax function as their classification function. However, there have been several studies on using a classification function other than Softmax, and this study is an addition to those. We accomplish this by taking the activation of the penultimate layer \$h\_\{n - 1\}\$ in a neural network, then multiply it by weight parameters \$$\backslash$theta\$ to get the raw scores \$o\_\{i\}\$. Afterwards, we threshold the raw scores \$o\_\{i\}\$ by \$0\$, i.e. \$f(o) = $\backslash$max(0, o\_\{i\})\$, where \$f(o)\$ is the ReLU function. We provide class predictions \$$\backslash$hat\{y\}\$ through argmax function, i.e. argmax \$f(x)\$.},
+  journal = {arXiv:1803.08375 [cs, stat]},
+  author = {Agarap, Abien Fred},
+  month = mar,
+  year = {2018},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Statistics - Machine Learning,Computer Science - Neural and Evolutionary Computing,Computer Science - Machine Learning},
+  file = {/home/jdayton3/.zotero/library/storage/2JK2JXZ8/Agarap - 2018 - Deep Learning using Rectified Linear Units (ReLU).pdf;/home/jdayton3/.zotero/library/storage/5DJ8J5J6/1803.html},
+  annote = {Comment: 7 pages, 11 figures, 9 tables}
+}
+
+@article{kingma_auto-encoding_2013,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1312.6114},
+  primaryClass = {cs, stat},
+  title = {Auto-{{Encoding Variational Bayes}}},
+  abstract = {How can we perform efficient inference and learning in directed probabilistic models, in the presence of continuous latent variables with intractable posterior distributions, and large datasets? We introduce a stochastic variational inference and learning algorithm that scales to large datasets and, under some mild differentiability conditions, even works in the intractable case. Our contributions is two-fold. First, we show that a reparameterization of the variational lower bound yields a lower bound estimator that can be straightforwardly optimized using standard stochastic gradient methods. Second, we show that for i.i.d. datasets with continuous latent variables per datapoint, posterior inference can be made especially efficient by fitting an approximate inference model (also called a recognition model) to the intractable posterior using the proposed lower bound estimator. Theoretical advantages are reflected in experimental results.},
+  journal = {arXiv:1312.6114 [cs, stat]},
+  author = {Kingma, Diederik P. and Welling, Max},
+  month = dec,
+  year = {2013},
+  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning},
+  file = {/home/jdayton3/.zotero/library/storage/484HCSZU/Kingma and Welling - 2013 - Auto-Encoding Variational Bayes.pdf;/home/jdayton3/.zotero/library/storage/WJVPPGIL/1312.html}
+}
+
+@article{kingma_adam_2014,
+  archivePrefix = {arXiv},
+  eprinttype = {arxiv},
+  eprint = {1412.6980},
+  primaryClass = {cs},
+  title = {Adam: {{A Method}} for {{Stochastic Optimization}}},
+  shorttitle = {Adam},
+  abstract = {We introduce Adam, an algorithm for first-order gradient-based optimization of stochastic objective functions, based on adaptive estimates of lower-order moments. The method is straightforward to implement, is computationally efficient, has little memory requirements, is invariant to diagonal rescaling of the gradients, and is well suited for problems that are large in terms of data and/or parameters. The method is also appropriate for non-stationary objectives and problems with very noisy and/or sparse gradients. The hyper-parameters have intuitive interpretations and typically require little tuning. Some connections to related algorithms, on which Adam was inspired, are discussed. We also analyze the theoretical convergence properties of the algorithm and provide a regret bound on the convergence rate that is comparable to the best known results under the online convex optimization framework. Empirical results demonstrate that Adam works well in practice and compares favorably to other stochastic optimization methods. Finally, we discuss AdaMax, a variant of Adam based on the infinity norm.},
+  journal = {arXiv:1412.6980 [cs]},
+  author = {Kingma, Diederik P. and Ba, Jimmy},
+  month = dec,
+  year = {2014},
+  keywords = {Computer Science - Machine Learning},
+  file = {/home/jdayton3/.zotero/library/storage/6AQ9XDPY/Kingma and Ba - 2014 - Adam A Method for Stochastic Optimization.pdf;/home/jdayton3/.zotero/library/storage/XFUWQ7VA/1412.html},
+  annote = {Comment: Published as a conference paper at the 3rd International Conference for Learning Representations, San Diego, 2015}
+}
+
+@incollection{krizhevsky_imagenet_2012-1,
+  title = {{{ImageNet Classification}} with {{Deep Convolutional Neural Networks}}},
+  booktitle = {Advances in {{Neural Information Processing Systems}} 25},
+  publisher = {{Curran Associates, Inc.}},
+  author = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  editor = {Pereira, F. and Burges, C. J. C. and Bottou, L. and Weinberger, K. Q.},
+  year = {2012},
+  pages = {1097--1105},
+  file = {/home/jdayton3/.zotero/library/storage/DWHYRPEU/Krizhevsky et al. - 2012 - ImageNet Classification with Deep Convolutional Ne.pdf;/home/jdayton3/.zotero/library/storage/I9BLCZ3U/4824-imagenet-classification-with-deep-convolutional-neural-networks.html}
+}
+
+@article{wickham_tidy_2014-1,
+  title = {Tidy {{Data}}},
+  volume = {59},
+  copyright = {Copyright (c) 2013 Hadley  Wickham},
+  issn = {1548-7660},
+  doi = {10.18637/jss.v059.i10},
+  language = {en},
+  number = {1},
+  journal = {Journal of Statistical Software},
+  author = {Wickham, Hadley},
+  month = sep,
+  year = {2014},
+  pages = {1-23},
+  file = {/home/jdayton3/.zotero/library/storage/7MC73JZN/Wickham - 2014 - Tidy Data.pdf;/home/jdayton3/.zotero/library/storage/JWZ6EMM8/v059i10.html}
+}
+
+@article{lecun_mnist_nodate,
+  title = {{{THE MNIST DATABASE}} of Handwritten Digits},
+  journal = {http://yann.lecun.com/exdb/mnist/},
+  author = {LECUN, Y.},
+  file = {/home/jdayton3/.zotero/library/storage/R86ZPMVP/10027939599.html}
+}
+
+@article{dyrskjot_gene_2004,
+  title = {Gene Expression in the Urinary Bladder: A Common Carcinoma in Situ Gene Expression Signature Exists Disregarding Histopathological Classification},
+  volume = {64},
+  issn = {0008-5472},
+  shorttitle = {Gene Expression in the Urinary Bladder},
+  doi = {10.1158/0008-5472.CAN-03-3620},
+  abstract = {The presence of carcinoma in situ (CIS) lesions in the urinary bladder is associated with a high risk of disease progression to a muscle invasive stage. In this study, we used microarray expression profiling to examine the gene expression patterns in superficial transitional cell carcinoma (sTCC) with surrounding CIS (13 patients), without surrounding CIS lesions (15 patients), and in muscle invasive carcinomas (mTCC; 13 patients). Hierarchical cluster analysis separated the sTCC samples according to the presence or absence of CIS in the surrounding urothelium. We identified a few gene clusters that contained genes with similar expression levels in transitional cell carcinoma (TCC) with surrounding CIS and invasive TCC. However, no close relationship between TCC with adjacent CIS and invasive TCC was observed using hierarchical cluster analysis. Expression profiling of a series of biopsies from normal urothelium and urothelium with CIS lesions from the same urinary bladder revealed that the gene expression found in sTCC with surrounding CIS is found also in CIS biopsies as well as in histologically normal samples adjacent to the CIS lesions. Furthermore, we also identified similar gene expression changes in mTCC samples. We used a supervised learning approach to build a 16-gene molecular CIS classifier. The classifier was able to classify sTCC samples according to the presence or absence of surrounding CIS with a high accuracy. This study demonstrates that a CIS gene expression signature is present not only in CIS biopsies but also in sTCC, mTCC, and, remarkably, in histologically normal urothelium from bladders with CIS. Identification of this expression signature could provide guidance for the selection of therapy and follow-up regimen in patients with early stage bladder cancer.},
+  language = {eng},
+  number = {11},
+  journal = {Cancer Research},
+  author = {Dyrskj\o{}t, Lars and Kruh\o{}ffer, Mogens and Thykjaer, Thomas and Marcussen, Niels and Jensen, Jens L. and M\o{}ller, Klaus and \O{}rntoft, Torben F.},
+  month = jun,
+  year = {2004},
+  keywords = {Humans,Oligonucleotide Array Sequence Analysis,Gene Expression Profiling,Biopsy,Carcinoma in Situ,Carcinoma; Transitional Cell,Cluster Analysis,Neoplasm Staging,Urinary Bladder Neoplasms},
+  pages = {4040-4048},
+  file = {/home/jdayton3/.zotero/library/storage/7RKI8U54/Dyrskjøt et al. - 2004 - Gene expression in the urinary bladder a common c.pdf},
+  pmid = {15173019}
+}
+
+@misc{leek_bladderbatch_2017,
+  title = {Bladderbatch},
+  publisher = {{Bioconductor}},
+  author = {Leek, Jeffrey T.},
+  year = {2017},
+  doi = {10.18129/B9.bioc.bladderbatch}
+}
+
+@misc{leek_sva_2017,
+  title = {Sva},
+  publisher = {{Bioconductor}},
+  author = {Leek, Jeffrey T. and Johnson, W. Evan and Parker, Hilary S. and Fertig, Elana J. and Jaffe, Andrew E. and Storey, John D. and Zhang, Yuqing and Torres, Leonardo Collado},
+  year = {2017},
+  doi = {10.18129/B9.bioc.sva}
+}
+
+@article{olmos_prognostic_2012,
+  title = {Prognostic Value of Blood {{mRNA}} Expression Signatures in Castration-Resistant Prostate Cancer: A Prospective, Two-Stage Study},
+  volume = {13},
+  issn = {1474-5488},
+  shorttitle = {Prognostic Value of Blood {{mRNA}} Expression Signatures in Castration-Resistant Prostate Cancer},
+  doi = {10.1016/S1470-2045(12)70372-8},
+  abstract = {BACKGROUND: Biomarkers are urgently needed to dissect the heterogeneity of prostate cancer between patients to improve treatment and accelerate drug development. We analysed blood mRNA expression arrays to identify patients with metastatic castration-resistant prostate cancer with poorer outcome.
+METHODS: Whole blood was collected into PAXgene tubes from patients with castration-resistant prostate cancer and patients with prostate cancer selected for active surveillance. In stage I (derivation set), patients with castration-resistant prostate cancer were used as cases and patients under active surveillance were used as controls. These patients were recruited from The Royal Marsden Hospital NHS Foundation Trust (Sutton, UK) and The Beatson West of Scotland Cancer Centre (Glasgow, UK). In stage II (validation-set), patients with castration-resistant prostate cancer recruited from the Memorial Sloan-Kettering Cancer Center (New York, USA) were assessed. Whole-blood RNA was hybridised to Affymetrix U133plus2 microarrays. Expression profiles were analysed with Bayesian latent process decomposition (LPD) to identify RNA expression profiles associated with castration-resistant prostate cancer subgroups; these profiles were then confirmed by quantative reverse transcriptase (qRT) PCR studies and correlated with overall survival in both the test-set and validation-set.
+FINDINGS: LPD analyses of the mRNA expression data divided the evaluable patients in stage I (n=94) into four groups. All patients in LPD1 (14 of 14) and most in LPD2 (17 of 18) had castration-resistant prostate cancer. Patients with castration-resistant prostate cancer and those under active surveillance comprised LPD3 (15 of 31 castration-resistant prostate cancer) and LDP4 (12 of 21 castration-resistant prostate cancer). Patients with castration-resistant prostate cancer in the LPD1 subgroup had features associated with worse prognosis and poorer overall survival than patients with castration-resistant prostate cancer in other LPD subgroups (LPD1 overall survival 10$\cdot$7 months [95\% CI 4$\cdot$1-17$\cdot$2] vs non-LPD1 25$\cdot$6 months [18$\cdot$0-33$\cdot$4]; p$<$0$\cdot$0001). A nine-gene signature verified by qRT-PCR classified patients into this LPD1 subgroup with a very low percentage of misclassification (1$\cdot$2\%). The ten patients who were initially unclassifiable by the LPD analyses were subclassified by this signature. We confirmed the prognostic utility of this nine-gene signature in the validation castration-resistant prostate cancer cohort, where LPD1 membership was also associated with worse overall survival (LPD1 9$\cdot$2 months [95\% CI 2$\cdot$1-16$\cdot$4] vs non-LPD1 21$\cdot$6 months [7$\cdot$5-35$\cdot$6]; p=0$\cdot$001), and remained an independent prognostic factor in multivariable analyses for both cohorts.
+INTERPRETATION: Our results suggest that whole-blood gene profiling could identify gene-expression signatures that stratify patients with castration-resistant prostate cancer into distinct prognostic groups.
+FUNDING: AstraZeneca, Experimental Cancer Medicine Centre, Prostate Cancer Charity, Prostate Cancer Foundation.},
+  language = {eng},
+  number = {11},
+  journal = {The Lancet. Oncology},
+  author = {Olmos, David and Brewer, Daniel and Clark, Jeremy and Danila, Daniel C. and Parker, Chris and Attard, Gerhardt and Fleisher, Martin and Reid, Alison Hm and Castro, Elena and Sandhu, Shahneen K. and Barwell, Lorraine and Oommen, Nikhil Babu and Carreira, Suzanne and Drake, Charles G. and Jones, Robert and Cooper, Colin S. and Scher, Howard I. and {de Bono}, Johann S.},
+  month = nov,
+  year = {2012},
+  keywords = {Humans,Gene Expression Profiling,Neoplasm Staging,Aged,Aged; 80 and over,Biomarkers; Tumor,Castration,Gene Expression Regulation; Neoplastic,Inflammation,Male,Middle Aged,Neoplasm Grading,Neoplasm Metastasis,Prognosis,Prospective Studies,Prostatic Neoplasms,RNA; Messenger,Survival Analysis},
+  pages = {1114-1124},
+  file = {/home/jdayton3/.zotero/library/storage/3C95C69E/Olmos et al. - 2012 - Prognostic value of blood mRNA expression signatur.pdf},
+  pmid = {23059046},
+  pmcid = {PMC4878433}
+}
+
+@article{golightly_curated_2018,
+  title = {Curated Compendium of Human Transcriptional Biomarker Data},
+  volume = {5},
+  copyright = {2018 Nature Publishing Group},
+  issn = {2052-4463},
+  doi = {10.1038/sdata.2018.66},
+  abstract = {One important use of genome-wide transcriptional profiles is to identify relationships between transcription levels and patient outcomes. These translational insights can guide the development of biomarkers for clinical application. Data from thousands of translational-biomarker studies have been deposited in public repositories, enabling reuse. However, data-reuse efforts require considerable time and expertise because transcriptional data are generated using heterogeneous profiling technologies, preprocessed using diverse normalization procedures, and annotated in non-standard ways. To address this problem, we curated 45 publicly available, translational-biomarker datasets from a variety of human diseases. To increase the data's utility, we reprocessed the raw expression data using a uniform computational pipeline, addressed quality-control problems, mapped the clinical annotations to a controlled vocabulary, and prepared consistently structured, analysis-ready data files. These data, along with scripts we used to prepare the data, are available in a public repository. We believe these data will be particularly useful to researchers seeking to perform benchmarking studies\textemdash{}for example, to compare and optimize machine-learning algorithms' ability to predict biomedical outcomes.},
+  language = {en},
+  journal = {Scientific Data},
+  author = {Golightly, Nathan P. and Bell, Avery and Bischoff, Anna I. and Hollingsworth, Parker D. and Piccolo, Stephen R.},
+  month = apr,
+  year = {2018},
+  pages = {180066},
+  file = {/home/jdayton3/.zotero/library/storage/8FDS22S7/Golightly et al. - 2018 - Curated compendium of human transcriptional biomar.pdf;/home/jdayton3/.zotero/library/storage/ZWPALTUP/sdata201866.html}
 }
 
 @article{dayton_classifying_2017-1,
@@ -47,277 +470,33 @@ The online version of this article (10.1186/s12920-017-0303-0) contains suppleme
   author = {Dayton, Jonathan B. and Piccolo, Stephen R.},
   month = dec,
   year = {2017},
-  file = {/Users/jdayton3/Zotero/storage/D8KA5YA4/Dayton and Piccolo - 2017 - Classifying cancer genome aberrations by their mut.pdf},
+  file = {/home/jdayton3/.zotero/library/storage/D8KA5YA4/Dayton and Piccolo - 2017 - Classifying cancer genome aberrations by their mut.pdf},
   pmid = {29322935},
   pmcid = {PMC5763295}
 }
 
-@article{golightly_curated_2018,
-  title = {Curated Compendium of Human Transcriptional Biomarker Data},
-  volume = {5},
-  copyright = {2018 Nature Publishing Group},
-  issn = {2052-4463},
-  doi = {10.1038/sdata.2018.66},
-  abstract = {One important use of genome-wide transcriptional profiles is to identify relationships between transcription levels and patient outcomes. These translational insights can guide the development of biomarkers for clinical application. Data from thousands of translational-biomarker studies have been deposited in public repositories, enabling reuse. However, data-reuse efforts require considerable time and expertise because transcriptional data are generated using heterogeneous profiling technologies, preprocessed using diverse normalization procedures, and annotated in non-standard ways. To address this problem, we curated 45 publicly available, translational-biomarker datasets from a variety of human diseases. To increase the data's utility, we reprocessed the raw expression data using a uniform computational pipeline, addressed quality-control problems, mapped the clinical annotations to a controlled vocabulary, and prepared consistently structured, analysis-ready data files. These data, along with scripts we used to prepare the data, are available in a public repository. We believe these data will be particularly useful to researchers seeking to perform benchmarking studies\textemdash{}for example, to compare and optimize machine-learning algorithms' ability to predict biomedical outcomes.},
+@article{the_cancer_genome_atlas_research_network_cancer_2013,
+  title = {The {{Cancer Genome Atlas Pan}}-{{Cancer}} Analysis Project},
+  volume = {45},
+  copyright = {2013 Nature Publishing Group},
+  issn = {1546-1718},
+  doi = {10.1038/ng.2764},
+  abstract = {The Cancer Genome Atlas (TCGA) Research Network has profiled and analyzed large numbers of human tumors to discover molecular aberrations at the DNA, RNA, protein and epigenetic levels. The resulting rich data provide a major opportunity to develop an integrated picture of commonalities, differences and emergent themes across tumor lineages. The Pan-Cancer initiative compares the first 12 tumor types profiled by TCGA. Analysis of the molecular aberrations and their functional roles across tumor types will teach us how to extend therapies effective in one cancer type to others with a similar genomic profile.},
   language = {en},
-  journal = {Scientific Data},
-  author = {Golightly, Nathan P. and Bell, Avery and Bischoff, Anna I. and Hollingsworth, Parker D. and Piccolo, Stephen R.},
-  month = apr,
-  year = {2018},
-  pages = {180066},
-  file = {/Users/jdayton3/Zotero/storage/8FDS22S7/Golightly et al. - 2018 - Curated compendium of human transcriptional biomar.pdf;/Users/jdayton3/Zotero/storage/ZWPALTUP/sdata201866.html}
-}
-
-@article{olmos_prognostic_2012,
-  title = {Prognostic Value of Blood {{mRNA}} Expression Signatures in Castration-Resistant Prostate Cancer: A Prospective, Two-Stage Study},
-  volume = {13},
-  issn = {1474-5488},
-  shorttitle = {Prognostic Value of Blood {{mRNA}} Expression Signatures in Castration-Resistant Prostate Cancer},
-  doi = {10.1016/S1470-2045(12)70372-8},
-  abstract = {BACKGROUND: Biomarkers are urgently needed to dissect the heterogeneity of prostate cancer between patients to improve treatment and accelerate drug development. We analysed blood mRNA expression arrays to identify patients with metastatic castration-resistant prostate cancer with poorer outcome.
-METHODS: Whole blood was collected into PAXgene tubes from patients with castration-resistant prostate cancer and patients with prostate cancer selected for active surveillance. In stage I (derivation set), patients with castration-resistant prostate cancer were used as cases and patients under active surveillance were used as controls. These patients were recruited from The Royal Marsden Hospital NHS Foundation Trust (Sutton, UK) and The Beatson West of Scotland Cancer Centre (Glasgow, UK). In stage II (validation-set), patients with castration-resistant prostate cancer recruited from the Memorial Sloan-Kettering Cancer Center (New York, USA) were assessed. Whole-blood RNA was hybridised to Affymetrix U133plus2 microarrays. Expression profiles were analysed with Bayesian latent process decomposition (LPD) to identify RNA expression profiles associated with castration-resistant prostate cancer subgroups; these profiles were then confirmed by quantative reverse transcriptase (qRT) PCR studies and correlated with overall survival in both the test-set and validation-set.
-FINDINGS: LPD analyses of the mRNA expression data divided the evaluable patients in stage I (n=94) into four groups. All patients in LPD1 (14 of 14) and most in LPD2 (17 of 18) had castration-resistant prostate cancer. Patients with castration-resistant prostate cancer and those under active surveillance comprised LPD3 (15 of 31 castration-resistant prostate cancer) and LDP4 (12 of 21 castration-resistant prostate cancer). Patients with castration-resistant prostate cancer in the LPD1 subgroup had features associated with worse prognosis and poorer overall survival than patients with castration-resistant prostate cancer in other LPD subgroups (LPD1 overall survival 10$\cdot$7 months [95\% CI 4$\cdot$1-17$\cdot$2] vs non-LPD1 25$\cdot$6 months [18$\cdot$0-33$\cdot$4]; p$<$0$\cdot$0001). A nine-gene signature verified by qRT-PCR classified patients into this LPD1 subgroup with a very low percentage of misclassification (1$\cdot$2\%). The ten patients who were initially unclassifiable by the LPD analyses were subclassified by this signature. We confirmed the prognostic utility of this nine-gene signature in the validation castration-resistant prostate cancer cohort, where LPD1 membership was also associated with worse overall survival (LPD1 9$\cdot$2 months [95\% CI 2$\cdot$1-16$\cdot$4] vs non-LPD1 21$\cdot$6 months [7$\cdot$5-35$\cdot$6]; p=0$\cdot$001), and remained an independent prognostic factor in multivariable analyses for both cohorts.
-INTERPRETATION: Our results suggest that whole-blood gene profiling could identify gene-expression signatures that stratify patients with castration-resistant prostate cancer into distinct prognostic groups.
-FUNDING: AstraZeneca, Experimental Cancer Medicine Centre, Prostate Cancer Charity, Prostate Cancer Foundation.},
-  language = {eng},
-  number = {11},
-  journal = {The Lancet. Oncology},
-  author = {Olmos, David and Brewer, Daniel and Clark, Jeremy and Danila, Daniel C. and Parker, Chris and Attard, Gerhardt and Fleisher, Martin and Reid, Alison Hm and Castro, Elena and Sandhu, Shahneen K. and Barwell, Lorraine and Oommen, Nikhil Babu and Carreira, Suzanne and Drake, Charles G. and Jones, Robert and Cooper, Colin S. and Scher, Howard I. and {de Bono}, Johann S.},
-  month = nov,
-  year = {2012},
-  keywords = {Aged,Aged; 80 and over,Biomarkers; Tumor,Castration,Gene Expression Profiling,Gene Expression Regulation; Neoplastic,Humans,Inflammation,Male,Middle Aged,Neoplasm Grading,Neoplasm Metastasis,Neoplasm Staging,Prognosis,Prospective Studies,Prostatic Neoplasms,RNA; Messenger,Survival Analysis},
-  pages = {1114-1124},
-  file = {/Users/jdayton3/Zotero/storage/3C95C69E/Olmos et al. - 2012 - Prognostic value of blood mRNA expression signatur.pdf},
-  pmid = {23059046},
-  pmcid = {PMC4878433}
-}
-
-@misc{leek_bladderbatch_2017,
-  title = {Bladderbatch},
-  publisher = {{Bioconductor}},
-  author = {Leek, Jeffrey T.},
-  year = {2017},
-  doi = {10.18129/B9.bioc.bladderbatch}
-}
-
-@misc{leek_sva_2017,
-  title = {Sva},
-  publisher = {{Bioconductor}},
-  author = {Leek, Jeffrey T. and Johnson, W. Evan and Parker, Hilary S. and Fertig, Elana J. and Jaffe, Andrew E. and Storey, John D. and Zhang, Yuqing and Torres, Leonardo Collado},
-  year = {2017},
-  doi = {10.18129/B9.bioc.sva}
-}
-
-@article{dyrskjot_gene_2004,
-  title = {Gene Expression in the Urinary Bladder: A Common Carcinoma in Situ Gene Expression Signature Exists Disregarding Histopathological Classification},
-  volume = {64},
-  issn = {0008-5472},
-  shorttitle = {Gene Expression in the Urinary Bladder},
-  doi = {10.1158/0008-5472.CAN-03-3620},
-  abstract = {The presence of carcinoma in situ (CIS) lesions in the urinary bladder is associated with a high risk of disease progression to a muscle invasive stage. In this study, we used microarray expression profiling to examine the gene expression patterns in superficial transitional cell carcinoma (sTCC) with surrounding CIS (13 patients), without surrounding CIS lesions (15 patients), and in muscle invasive carcinomas (mTCC; 13 patients). Hierarchical cluster analysis separated the sTCC samples according to the presence or absence of CIS in the surrounding urothelium. We identified a few gene clusters that contained genes with similar expression levels in transitional cell carcinoma (TCC) with surrounding CIS and invasive TCC. However, no close relationship between TCC with adjacent CIS and invasive TCC was observed using hierarchical cluster analysis. Expression profiling of a series of biopsies from normal urothelium and urothelium with CIS lesions from the same urinary bladder revealed that the gene expression found in sTCC with surrounding CIS is found also in CIS biopsies as well as in histologically normal samples adjacent to the CIS lesions. Furthermore, we also identified similar gene expression changes in mTCC samples. We used a supervised learning approach to build a 16-gene molecular CIS classifier. The classifier was able to classify sTCC samples according to the presence or absence of surrounding CIS with a high accuracy. This study demonstrates that a CIS gene expression signature is present not only in CIS biopsies but also in sTCC, mTCC, and, remarkably, in histologically normal urothelium from bladders with CIS. Identification of this expression signature could provide guidance for the selection of therapy and follow-up regimen in patients with early stage bladder cancer.},
-  language = {eng},
-  number = {11},
-  journal = {Cancer Research},
-  author = {Dyrskj\o{}t, Lars and Kruh\o{}ffer, Mogens and Thykjaer, Thomas and Marcussen, Niels and Jensen, Jens L. and M\o{}ller, Klaus and \O{}rntoft, Torben F.},
-  month = jun,
-  year = {2004},
-  keywords = {Gene Expression Profiling,Humans,Neoplasm Staging,Biopsy,Carcinoma in Situ,Carcinoma; Transitional Cell,Cluster Analysis,Oligonucleotide Array Sequence Analysis,Urinary Bladder Neoplasms},
-  pages = {4040-4048},
-  file = {/Users/jdayton3/Zotero/storage/7RKI8U54/Dyrskjøt et al. - 2004 - Gene expression in the urinary bladder a common c.pdf},
-  pmid = {15173019}
-}
-
-@article{lecun_mnist_nodate,
-  title = {{{THE MNIST DATABASE}} of Handwritten Digits},
-  journal = {http://yann.lecun.com/exdb/mnist/},
-  author = {LECUN, Y.},
-  file = {/Users/jdayton3/Zotero/storage/R86ZPMVP/10027939599.html}
-}
-
-@article{wickham_tidy_2014,
-  title = {Tidy {{Data}}},
-  volume = {59},
-  copyright = {Copyright (c) 2013 Hadley  Wickham},
-  issn = {1548-7660},
-  doi = {10.18637/jss.v059.i10},
-  language = {en},
-  number = {1},
-  journal = {Journal of Statistical Software},
-  author = {Wickham, Hadley},
+  journal = {Nature Genetics},
+  author = {{The Cancer Genome Atlas Research Network} and Weinstein, John N. and Collisson, Eric A. and Mills, Gordon B. and Shaw, Kenna R. Mills and Ozenberger, Brad A. and Ellrott, Kyle and Shmulevich, Ilya and Sander, Chris and Stuart, Joshua M.},
   month = sep,
-  year = {2014},
-  pages = {1-23},
-  file = {/Users/jdayton3/Zotero/storage/7MC73JZN/Wickham - 2014 - Tidy Data.pdf;/Users/jdayton3/Zotero/storage/JWZ6EMM8/v059i10.html}
-}
-
-@incollection{krizhevsky_imagenet_2012,
-  title = {{{ImageNet Classification}} with {{Deep Convolutional Neural Networks}}},
-  booktitle = {Advances in {{Neural Information Processing Systems}} 25},
-  publisher = {{Curran Associates, Inc.}},
-  author = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
-  editor = {Pereira, F. and Burges, C. J. C. and Bottou, L. and Weinberger, K. Q.},
-  year = {2012},
-  pages = {1097--1105},
-  file = {/Users/jdayton3/Zotero/storage/DWHYRPEU/Krizhevsky et al. - 2012 - ImageNet Classification with Deep Convolutional Ne.pdf;/Users/jdayton3/Zotero/storage/I9BLCZ3U/4824-imagenet-classification-with-deep-convolutional-neural-networks.html}
-}
-
-@article{kingma_adam_2014,
-  archivePrefix = {arXiv},
-  eprinttype = {arxiv},
-  eprint = {1412.6980},
-  primaryClass = {cs},
-  title = {Adam: {{A Method}} for {{Stochastic Optimization}}},
-  shorttitle = {Adam},
-  abstract = {We introduce Adam, an algorithm for first-order gradient-based optimization of stochastic objective functions, based on adaptive estimates of lower-order moments. The method is straightforward to implement, is computationally efficient, has little memory requirements, is invariant to diagonal rescaling of the gradients, and is well suited for problems that are large in terms of data and/or parameters. The method is also appropriate for non-stationary objectives and problems with very noisy and/or sparse gradients. The hyper-parameters have intuitive interpretations and typically require little tuning. Some connections to related algorithms, on which Adam was inspired, are discussed. We also analyze the theoretical convergence properties of the algorithm and provide a regret bound on the convergence rate that is comparable to the best known results under the online convex optimization framework. Empirical results demonstrate that Adam works well in practice and compares favorably to other stochastic optimization methods. Finally, we discuss AdaMax, a variant of Adam based on the infinity norm.},
-  journal = {arXiv:1412.6980 [cs]},
-  author = {Kingma, Diederik P. and Ba, Jimmy},
-  month = dec,
-  year = {2014},
-  keywords = {Computer Science - Machine Learning},
-  file = {/Users/jdayton3/Zotero/storage/6AQ9XDPY/Kingma and Ba - 2014 - Adam A Method for Stochastic Optimization.pdf;/Users/jdayton3/Zotero/storage/XFUWQ7VA/1412.html},
-  annote = {Comment: Published as a conference paper at the 3rd International Conference for Learning Representations, San Diego, 2015}
-}
-
-@article{kingma_auto-encoding_2013,
-  archivePrefix = {arXiv},
-  eprinttype = {arxiv},
-  eprint = {1312.6114},
-  primaryClass = {cs, stat},
-  title = {Auto-{{Encoding Variational Bayes}}},
-  abstract = {How can we perform efficient inference and learning in directed probabilistic models, in the presence of continuous latent variables with intractable posterior distributions, and large datasets? We introduce a stochastic variational inference and learning algorithm that scales to large datasets and, under some mild differentiability conditions, even works in the intractable case. Our contributions is two-fold. First, we show that a reparameterization of the variational lower bound yields a lower bound estimator that can be straightforwardly optimized using standard stochastic gradient methods. Second, we show that for i.i.d. datasets with continuous latent variables per datapoint, posterior inference can be made especially efficient by fitting an approximate inference model (also called a recognition model) to the intractable posterior using the proposed lower bound estimator. Theoretical advantages are reflected in experimental results.},
-  journal = {arXiv:1312.6114 [cs, stat]},
-  author = {Kingma, Diederik P. and Welling, Max},
-  month = dec,
   year = {2013},
-  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning},
-  file = {/Users/jdayton3/Zotero/storage/484HCSZU/Kingma and Welling - 2013 - Auto-Encoding Variational Bayes.pdf;/Users/jdayton3/Zotero/storage/WJVPPGIL/1312.html}
+  pages = {1113-1120},
+  file = {/home/jdayton3/.zotero/library/storage/RQUNAYYZ/The Cancer Genome Atlas Research Network et al. - 2013 - The Cancer Genome Atlas Pan-Cancer analysis projec.pdf;/home/jdayton3/.zotero/library/storage/BDDXZ7V7/ng.html}
 }
 
-@article{agarap_deep_2018,
-  archivePrefix = {arXiv},
-  eprinttype = {arxiv},
-  eprint = {1803.08375},
-  primaryClass = {cs, stat},
-  title = {Deep {{Learning}} Using {{Rectified Linear Units}} ({{ReLU}})},
-  abstract = {We introduce the use of rectified linear units (ReLU) as the classification function in a deep neural network (DNN). Conventionally, ReLU is used as an activation function in DNNs, with Softmax function as their classification function. However, there have been several studies on using a classification function other than Softmax, and this study is an addition to those. We accomplish this by taking the activation of the penultimate layer \$h\_\{n - 1\}\$ in a neural network, then multiply it by weight parameters \$$\backslash$theta\$ to get the raw scores \$o\_\{i\}\$. Afterwards, we threshold the raw scores \$o\_\{i\}\$ by \$0\$, i.e. \$f(o) = $\backslash$max(0, o\_\{i\})\$, where \$f(o)\$ is the ReLU function. We provide class predictions \$$\backslash$hat\{y\}\$ through argmax function, i.e. argmax \$f(x)\$.},
-  journal = {arXiv:1803.08375 [cs, stat]},
-  author = {Agarap, Abien Fred},
-  month = mar,
-  year = {2018},
-  keywords = {Statistics - Machine Learning,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing},
-  file = {/Users/jdayton3/Zotero/storage/2JK2JXZ8/Agarap - 2018 - Deep Learning using Rectified Linear Units (ReLU).pdf;/Users/jdayton3/Zotero/storage/5DJ8J5J6/1803.html},
-  annote = {Comment: 7 pages, 11 figures, 9 tables}
-}
-
-@article{klambauer_self-normalizing_2017,
-  archivePrefix = {arXiv},
-  eprinttype = {arxiv},
-  eprint = {1706.02515},
-  primaryClass = {cs, stat},
-  title = {Self-{{Normalizing Neural Networks}}},
-  abstract = {Deep Learning has revolutionized vision via convolutional neural networks (CNNs) and natural language processing via recurrent neural networks (RNNs). However, success stories of Deep Learning with standard feed-forward neural networks (FNNs) are rare. FNNs that perform well are typically shallow and, therefore cannot exploit many levels of abstract representations. We introduce self-normalizing neural networks (SNNs) to enable high-level abstract representations. While batch normalization requires explicit normalization, neuron activations of SNNs automatically converge towards zero mean and unit variance. The activation function of SNNs are "scaled exponential linear units" (SELUs), which induce self-normalizing properties. Using the Banach fixed-point theorem, we prove that activations close to zero mean and unit variance that are propagated through many network layers will converge towards zero mean and unit variance -- even under the presence of noise and perturbations. This convergence property of SNNs allows to (1) train deep networks with many layers, (2) employ strong regularization, and (3) to make learning highly robust. Furthermore, for activations not close to unit variance, we prove an upper and lower bound on the variance, thus, vanishing and exploding gradients are impossible. We compared SNNs on (a) 121 tasks from the UCI machine learning repository, on (b) drug discovery benchmarks, and on (c) astronomy tasks with standard FNNs and other machine learning methods such as random forests and support vector machines. SNNs significantly outperformed all competing FNN methods at 121 UCI tasks, outperformed all competing methods at the Tox21 dataset, and set a new record at an astronomy data set. The winning SNN architectures are often very deep. Implementations are available at: github.com/bioinf-jku/SNNs.},
-  journal = {arXiv:1706.02515 [cs, stat]},
-  author = {Klambauer, G\"unter and Unterthiner, Thomas and Mayr, Andreas and Hochreiter, Sepp},
-  month = jun,
-  year = {2017},
-  keywords = {Statistics - Machine Learning,Computer Science - Machine Learning},
-  file = {/Users/jdayton3/Zotero/storage/SPB3FFYM/Klambauer et al. - 2017 - Self-Normalizing Neural Networks.pdf;/Users/jdayton3/Zotero/storage/Y3P5FS4S/1706.html},
-  annote = {Comment: 9 pages (+ 93 pages appendix)}
-}
-
-@article{ronneberger_u-net_2015,
-  archivePrefix = {arXiv},
-  eprinttype = {arxiv},
-  eprint = {1505.04597},
-  primaryClass = {cs},
-  title = {U-{{Net}}: {{Convolutional Networks}} for {{Biomedical Image Segmentation}}},
-  shorttitle = {U-{{Net}}},
-  abstract = {There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net .},
-  journal = {arXiv:1505.04597 [cs]},
-  author = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
-  month = may,
-  year = {2015},
-  keywords = {Computer Science - Computer Vision and Pattern Recognition},
-  file = {/Users/jdayton3/Zotero/storage/4LEVJ4MI/Ronneberger et al. - 2015 - U-Net Convolutional Networks for Biomedical Image.pdf;/Users/jdayton3/Zotero/storage/WG5Q6IKC/1505.html},
-  annote = {Comment: conditionally accepted at MICCAI 2015}
-}
-
-@incollection{baldi_understanding_2013,
-  title = {Understanding {{Dropout}}},
-  booktitle = {Advances in {{Neural Information Processing Systems}} 26},
-  publisher = {{Curran Associates, Inc.}},
-  author = {Baldi, Pierre and Sadowski, Peter J},
-  editor = {Burges, C. J. C. and Bottou, L. and Welling, M. and Ghahramani, Z. and Weinberger, K. Q.},
-  year = {2013},
-  pages = {2814--2822},
-  file = {/Users/jdayton3/Zotero/storage/CZ55YD2U/Baldi and Sadowski - 2013 - Understanding Dropout.pdf;/Users/jdayton3/Zotero/storage/78YNCB5S/4878-understanding-dropout.html}
-}
-
-@article{shaham_batch_2018,
-  title = {Batch {{Effect Removal}} via {{Batch}}-{{Free Encoding}}},
-  doi = {10.1101/380816},
-  abstract = {Biological measurements often contain systematic errors, also known as ``batch effects'', which may invalidate downstream analysis when not handled correctly. The problem of removing batch effects is of major importance in the biological community. Despite recent advances in this direction via deep learning techniques, most current methods may not fully preserve the true biological patterns the data contains. In this work we propose a deep learning approach for batch effect removal. The crux of our approach is learning a batch-free encoding of the data, representing its intrinsic biological properties, but not batch effects. In addition, we also encode the systematic factors through a decoding mechanism and require accurate reconstruction of the data. Altogether, this allows us to fully preserve the true biological patterns represented in the data. Experimental results are reported on data obtained from two high throughput technologies, mass cytometry and single-cell RNA-seq. Beyond good performance on training data, we also observe that our system performs well on test data obtained from new patients, which was not available at training time. Our method is easy to handle, a publicly available code can be found at https://github.com/ushaham/BatchEffectRemoval2018.},
-  language = {en},
-  journal = {bioRxiv},
-  author = {Shaham, Uri},
-  month = jul,
-  year = {2018},
-  file = {/Users/jdayton3/Zotero/storage/L3S8TLDL/Shaham - 2018 - Batch Effect Removal via Batch-Free Encoding.pdf}
-}
-
-@article{shaham_removal_2017,
-  title = {Removal of Batch Effects Using Distribution-Matching Residual Networks},
-  volume = {33},
-  issn = {1367-4811},
-  doi = {10.1093/bioinformatics/btx196},
-  abstract = {Motivation: Sources of variability in experimentally derived data include measurement error in addition to the physical phenomena of interest. This measurement error is a combination of systematic components, originating from the measuring instrument and random measurement errors. Several novel biological technologies, such as mass cytometry and single-cell RNA-seq (scRNA-seq), are plagued with systematic errors that may severely affect statistical analysis if the data are not properly calibrated.
-Results: We propose a novel deep learning approach for removing systematic batch effects. Our method is based on a residual neural network, trained to minimize the Maximum Mean Discrepancy between the multivariate distributions of two replicates, measured in different batches. We apply our method to mass cytometry and scRNA-seq datasets, and demonstrate that it effectively attenuates batch effects.
-Availability and Implementation: our codes and data are publicly available at https://github.com/ushaham/BatchEffectRemoval.git.
-Contact: yuval.kluger@yale.edu.
-Supplementary information: Supplementary data are available at Bioinformatics online.},
-  language = {eng},
-  number = {16},
-  journal = {Bioinformatics (Oxford, England)},
-  author = {Shaham, Uri and Stanton, Kelly P. and Zhao, Jun and Li, Huamin and Raddassi, Khadir and Montgomery, Ruth and Kluger, Yuval},
-  month = aug,
-  year = {2017},
-  keywords = {Humans,Computational Biology,Cytophotometry,Data Accuracy,Machine Learning,Sequence Analysis; RNA,Single-Cell Analysis,Statistics as Topic},
-  pages = {2539-2546},
-  pmid = {28419223},
-  pmcid = {PMC5870543}
-}
-
-@article{leek_capturing_2007,
-  title = {Capturing {{Heterogeneity}} in {{Gene Expression Studies}} by {{Surrogate Variable Analysis}}},
-  volume = {3},
-  issn = {1553-7404},
-  doi = {10.1371/journal.pgen.0030161},
-  abstract = {It has unambiguously been shown that genetic, environmental, demographic, and technical factors may have substantial effects on gene expression levels. In addition to the measured variable(s) of interest, there will tend to be sources of signal due to factors that are unknown, unmeasured, or too complicated to capture through simple models. We show that failing to incorporate these sources of heterogeneity into an analysis can have widespread and detrimental effects on the study. Not only can this reduce power or induce unwanted dependence across genes, but it can also introduce sources of spurious signal to many genes. This phenomenon is true even for well-designed, randomized studies. We introduce ``surrogate variable analysis'' (SVA) to overcome the problems caused by heterogeneity in expression studies. SVA can be applied in conjunction with standard analysis techniques to accurately capture the relationship between expression and any modeled variables of interest. We apply SVA to disease class, time course, and genetics of gene expression studies. We show that SVA increases the biological accuracy and reproducibility of analyses in genome-wide expression studies.},
-  number = {9},
-  journal = {PLOS Genetics},
-  author = {Leek, Jeffrey T. and Storey, John D.},
-  month = sep,
-  year = {2007},
-  keywords = {Gene expression,Algorithms,Genetic causes of cancer,Genetic loci,Genomic signal processing,Microarrays,Trait locus analysis,Vector spaces},
-  pages = {e161},
-  file = {/Users/jdayton3/Zotero/storage/Y7WRCJES/Leek and Storey - 2007 - Capturing Heterogeneity in Gene Expression Studies.pdf;/Users/jdayton3/Zotero/storage/ZENL2MY6/article.html}
-}
-
-@article{johnson_adjusting_2007,
-  title = {Adjusting Batch Effects in Microarray Expression Data Using Empirical {{Bayes}} Methods},
-  volume = {8},
-  issn = {1465-4644},
-  doi = {10.1093/biostatistics/kxj037},
-  abstract = {Non-biological experimental variation or "batch effects" are commonly observed across multiple batches of microarray experiments, often rendering the task of combining data from these batches difficult. The ability to combine microarray data sets is advantageous to researchers to increase statistical power to detect biological phenomena from studies where logistical considerations restrict sample size or in studies that require the sequential hybridization of arrays. In general, it is inappropriate to combine data sets without adjusting for batch effects. Methods have been proposed to filter batch effects from data, but these are often complicated and require large batch sizes ( $>$ 25) to implement. Because the majority of microarray studies are conducted using much smaller sample sizes, existing methods are not sufficient. We propose parametric and non-parametric empirical Bayes frameworks for adjusting data for batch effects that is robust to outliers in small sample sizes and performs comparable to existing methods for large samples. We illustrate our methods using two example data sets and show that our methods are justifiable, easy to apply, and useful in practice. Software for our method is freely available at: http://biosun1.harvard.edu/complab/batch/.},
-  language = {eng},
-  number = {1},
-  journal = {Biostatistics (Oxford, England)},
-  author = {Johnson, W. Evan and Li, Cheng and Rabinovic, Ariel},
-  month = jan,
-  year = {2007},
-  keywords = {Gene Expression Profiling,Humans,Oligonucleotide Array Sequence Analysis,Bayes Theorem,Data Interpretation; Statistical},
-  pages = {118-127},
-  pmid = {16632515}
+@book{r_core_team_r_2014,
+  address = {Vienna, Austria},
+  title = {R: {{A Language}} and {{Environment}} for {{Statistical Computing}}},
+  publisher = {{R Foundation for Statistical Computing}},
+  author = {{R Core Team}},
+  year = {2014}
 }
 
 
