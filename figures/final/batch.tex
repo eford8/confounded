@@ -1,0 +1,54 @@
+\centering\rowcolors{2}{gray!6}{white}
+
+\begin{tabular}{l|l|r|r|r|r|r}
+\hiderowcolors
+\hline
+Dataset & Adjustment & Baseline & GaussianNB & KNeighbors & RandomForest & SVC\\
+\hline
+\showrowcolors
+ & Unadjusted &  & 0.6255952 & 0.7636905 & 0.6613095 & 0.5779762\\
+\cline{2-2}
+\cline{4-7}
+ & Scale &  & 0.3150794 & 0.4916667 & 0.5140873 & 0.4724206\\
+\cline{2-2}
+\cline{4-7}
+ & ComBat &  & 0.0000000 & 0.1575397 & 0.1827381 & 0.1587302\\
+\cline{2-2}
+\cline{4-7}
+\multirow[t]{-4}{*}{\raggedright\arraybackslash Bladder Batch} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.3333333} & 0.1797619 & 0.0668651 & 0.2244048 & 0.2750000\\
+\cline{1-7}
+ & Unadjusted &  & 0.8031401 & 0.7047101 & 0.8725845 & 0.5350242\\
+\cline{2-2}
+\cline{4-7}
+ & Scale &  & 0.9299517 & 0.8303140 & 1.0000000 & 0.5350242\\
+\cline{2-2}
+\cline{4-7}
+ & ComBat &  & 0.2379227 & 0.5344203 & 0.4939614 & 0.5350242\\
+\cline{2-2}
+\cline{4-7}
+\multirow[t]{-4}{*}{\raggedright\arraybackslash GSE37199} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.5376344} & 0.4088164 & 0.4076087 & 0.4094203 & 0.5350242\\
+\cline{1-7}
+ & Unadjusted &  & 1.0000000 & 0.8992000 & 1.0000000 & 1.0000000\\
+\cline{2-2}
+\cline{4-7}
+ & Scale &  & 0.9918667 & 0.7600000 & 1.0000000 & 1.0000000\\
+\cline{2-2}
+\cline{4-7}
+ & ComBat &  & 0.4662667 & 0.4992000 & 0.9992000 & 0.5277333\\
+\cline{2-2}
+\cline{4-7}
+\multirow[t]{-4}{*}{\raggedright\arraybackslash MNIST} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.5000000} & 0.6877333 & 0.5194667 & 0.6366667 & 0.5606667\\
+\cline{1-7}
+ & Unadjusted &  & 0.8323952 & 0.7576065 & 0.8763214 & 0.1168618\\
+\cline{2-2}
+\cline{4-7}
+ & Scale &  & 0.8455972 & 0.7790528 & 0.9628929 & 0.1168618\\
+\cline{2-2}
+\cline{4-7}
+ & ComBat &  & 0.2926662 & 0.3579808 & 0.9707158 & 0.1168618\\
+\cline{2-2}
+\cline{4-7}
+\multirow[t]{-4}{*}{\raggedright\arraybackslash TCGA} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.1169122} & 0.0780545 & 0.0860069 & 0.0880098 & 0.1168618\\
+\hline
+\end{tabular}
+\rowcolors{2}{white}{white}

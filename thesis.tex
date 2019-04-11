@@ -7,6 +7,8 @@
 \renewcommand{\efloatseparator}{\mbox{}} % multiple figures per page
 \usepackage[letterpaper,left=1in,right=1in,top=1in,bottom=1in,footskip=0.25in]{geometry}
 \usepackage{csvsimple}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
 \linespread{1.5}
 \bibliographystyle{unsrtnat}
 
@@ -28,6 +30,7 @@
 
 When working with biological data, problems can arise from combining data from multiple sources.
 For example, if two labs quantify the sequences of the same RNA samples for the same lung cancer patients but use different equipment to do so, each lab will come up with slightly different measurements (see Figure \ref{fig:workflow}).
+% Is this ^ the best way to reference figures?
 If a third party were to then study the patients using data from both labs, the differences in measurements could alter their analysis.
 These systemic effects are known as ``batch effects'' and are understood to have a nontrivial impact on high-throughput biological data \citep{leek_tackling_2010}.
 In one study, researchers found that, contrary to previous knowledge, molecular data from mice and humans clustered more closely by species than by tissue type \citep{yue_comparative_2014};
@@ -36,7 +39,7 @@ Systemic bias can be even more pronounced when using data collected from differe
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/adjuster_workflow}
+	\includegraphics[width=\columnwidth]{figures/final/adjuster_workflow}
 	\caption{\textbf{Batch adjustment justification and steps}
 	(a) When measurements are collected from a sample ($X$), systematic effects ($H$) also affect the measurements.
 	(b) If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements.
@@ -96,7 +99,7 @@ We welcome any future intellectual advances that may allow convolutional network
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/network}
+	\includegraphics[width=\columnwidth]{figures/final/network}
 	\caption{\textbf{Network architecture} of Confounded.
 	Data with batch effects (represented by different colors) are input into an autoencoder.
 	The output of the autoencoder is classified by a discriminator network based on batch.
@@ -144,7 +147,7 @@ This training typically took roughly 30 minutes to complete, including time spen
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/training_loss}
+	\includegraphics[width=\columnwidth]{figures/rough/training_loss}
 	\caption{Autoencoder and discriminator loss over time for one run of Confounded.
 	Over the course of training, the autoencoder more faithfully replicates the input data.
 	The autoencoder also seems to introduce noise (see around iteration 3100) in response to the discriminator's slight improvements.}
@@ -310,13 +313,13 @@ Additionally, Confounded seems to change the overall shape of the distribution i
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/pca}
+	\includegraphics[width=\columnwidth]{figures/final/pca}
 	\caption{\textbf{Principal components analysis} (PCA) of the GSE37199 dataset before and after batch adjustment with various adjusters.}
 	\label{fig:pca}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/tsne}
+	\includegraphics[width=\columnwidth]{figures/final/tsne}
 	\caption{\textbf{T-distributed Stochastic Neighbor Embedding} (t-SNE) plot for the GSE37199 dataset before and after adjustment with several algorithms.}
 	\label{fig:tsne}
 \end{figure}
@@ -326,13 +329,13 @@ The MSE and MMD metrics show mixed success (see Figures \ref{mse} and \ref{mmd})
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/mse}
+	\includegraphics[width=\columnwidth]{figures/final/mse}
 	\caption{\textbf{Mean squared error} (MSE) between the data prior to and after adjustment with various algorithms.}
 	\label{fig:mse}
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/mmd}
+	\includegraphics[width=\columnwidth]{figures/final/mmd}
 	\caption{\textbf{Maximum mean discrepancy} (MMD) between different batches.
 	In cases with more than two batches, MMD is computed pairwise between each batch and averaged.}
 	\label{fig:mmd}
@@ -351,14 +354,14 @@ Although ComBat removes batch well enough to greatly decrease the accuracy of Na
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/batch_accuracy}
+	\includegraphics[width=\columnwidth]{figures/final/batch_accuracy}
 	\caption{\textbf{Batch classification accuracy} Accuracies for batch classification for 4-fold cross validation repeated 10 times for several classifiers.
 	See also Table \ref{tab:batch}.}
 	\label{fig:batch}
 \end{figure}
 \begin{table}
 	\centering
-	\csvautotabular{figures/rough/batch.csv}
+	\input{figures/final/batch.tex}
 	\caption{\textbf{Batch classification accuracy} for several datasets and adjusters.
 	The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers.
 	See also Figure \ref{fig:batch}.}
@@ -376,17 +379,17 @@ Figure \ref{fig:true_class}, Table \ref{tab:true_class}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/true_class_accuracy}
+	\includegraphics[width=\columnwidth]{figures/final/true_class_accuracy}
 	\caption{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross validation repeated 10 times.
 	See also Table \ref{tab:true_class}.}
 	\label{fig:true_class}
 \end{figure}
 \begin{table}
 	\centering
-	\csvautotabular{figures/rough/true_class.csv}
+	\input{figures/final/true_class.tex}
 	\caption{\textbf{True class classification accuracy} for several datasets and adjusters.
 	After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment.
-	See also Figure \ref{fig:true_class}}
+	See also Figure \ref{fig:true_class}.}
 	\label{tab:true_class}
 \end{table}
 
@@ -395,7 +398,7 @@ Figure \ref{fig:mnist}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=4.5in]{figures/rough/mnist}
+	\includegraphics[width=\columnwidth]{figures/rough/mnist}
 	\caption{\textbf{MNIST handwritten digits} (a) before any adjustment,
 	(b) with artificial noise added,
 	(c) adjusted for noise by ComBat, and
@@ -414,11 +417,10 @@ Most exciting takeaways
 \begin{enumerate}
 	\item Nonlinear interactions still remain after ComBat for larger datasets
 	\item Simple metrics aren't enough to identify the nonlinear interactions, but different classifiers help
-	\item ComBat works really well for small, traditional datasets
+	\item ComBat works really well for small, traditional datasets % include flip side for #s 3&4
 	\item Confounded removes nonlinear effects in larger datasets
+	\item Confounded shows promise for other confounders, not just batch effects (could work with combining rnaseq + microarray) and seems to work with multiple types of data
 \end{enumerate}
-
-\section{Conclusions} \label{sec:conclusion}
 
 \bibliography{references}
 

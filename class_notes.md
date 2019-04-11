@@ -47,3 +47,62 @@ We'll then keep the 3 most important things. *Don't* talk about every single imp
 
 - Find 3 papers I love & figure out why
 - Bring the 4 most important implications
+
+## 2019-03-05
+
+Funnel starts wide to get more readers, discussion is the payoff for those readers.
+
+Ask: what is the value added from discussion over results?
+
+- Put in context of other studies (Like Smith et al, we find; This connects studies [X, Y, Z], we did something that other studies didn't do)
+- Next steps (it's still a problem that many tools aren't usable, maybe put it in a docker?)
+- Call to action
+- Explanation
+  - Pattern (we found y, what are the x's that cause it?)
+- Implications
+
+Cool if you can mix a few of the above types of points.
+
+(Don't apologize for problems in your study)
+
+**Next week**:
+
+- We'll eat pizza together
+- Discussion is due in 2 weeks
+
+## 2019-03-19
+
+### Title
+
+- First recruiting pitch for your paper
+- "Cast a broad net with your title"
+  - Try to start more broad; the journal will ask you to change it if they want
+- Different title ploys
+  - Brief question & answer
+  - Action title (what's the verb?) (instead of "Effects of X on Y")
+  - Check out the conventions (length & nature) of titles in the journal
+- Does the title of papers affect impact factor / citations?
+
+### Abstract
+
+- Shortened version of your paper, order should be consistent with sections of your paper (like one sentence per section)
+- Keywords are there to help people find your work. Who do you want to find & read your paper?
+
+### Cover letter
+
+- "Speed dating" / cold contact with the editor
+- Tell them:
+  - The paper isn't being considered elsewhere
+  - A summary of the interesting findings in the paper
+  - People who might be good reviewers (qualifications, names, & "none of these researchers is aware of this work")
+
+#### Dr. Piccolo
+
+- Formalities
+- High level intro, context in the field
+- Reviewers - Jeff Leek, Evan Johnson, Guy at Yale
+
+### Next week
+
+- Finish discussion
+- Work on title, abstract
