@@ -23,7 +23,14 @@
 \maketitle
 
 \begin{abstract}
-	The abstract text goes here.
+	Many biological studies, particularly studies involving the genetics of human disease, could discover items of greater statistical and biological significance if performed with larger data sets.
+	Many data sets are publicly available and could be combined in order to increase these studies' significance, but even when the same type of data are collected by multiple studies, minor differences in collection methodologies and environments can lead to confounding effects in the data which can in turn cause incorrect results.
+	In order to do so, we would like to apply deep learning to remove these effects and combine molecular biological data sets.
+	We will create a neural network with a dual loss function in order to remove confounding effects from the data while minimizing the amount of change to the input data.
+	This model will output data the same shape and size as the input data but with confounding effects removed.
+	We plan to test the model on artificially constructed data and commonly used real biological data sets and compare the output with the output from other common batch adjustment algorithms.
+	We will also apply the model to combine microarray and RNA-Seq data sets and to remove the tissue signal from pan-cancer data.
+	We will publish our software to enable other scientists to remove confounding effects from their own data using our methodologies.
 \end{abstract}
 
 \section{Background} \label{sec:background}
