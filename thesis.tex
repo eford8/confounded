@@ -422,7 +422,13 @@ Most exciting takeaways
 
 \begin{enumerate}
 	\item Nonlinear interactions still remain after ComBat for larger datasets
+	\begin{enumerate}
+		\item Random Forests often has high batch classification accuracy after ComBat-adjustment.
+	\end{enumerate}
 	\item Simple metrics aren't enough to identify the nonlinear interactions, but different classifiers help
+	\begin{enumerate}
+		\item Figs \ref{fig:mmd} and \ref{fig:mse} both show that ComBat performed better than Confounded for the MNIST dataset, but the effects left after ComBat finished are still identifiable by Random Forests with 99.9\% accuracy (Table \ref{tab:batch}).
+	\end{enumerate}
 	\item ComBat works really well for small, traditional datasets % include flip side for #s 3&4
 	\item Confounded removes nonlinear effects in larger datasets
 	\item Confounded shows promise for other confounders, not just batch effects (could work with combining rnaseq + microarray) and seems to work with multiple types of data
