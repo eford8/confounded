@@ -350,7 +350,7 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/rough/mnist}
-	\caption{\textbf{MNIST handwritten digits} (a) before any adjustment,
+	\caption{\textit{TODO: this is old output data and needs to be updated.} \textbf{MNIST handwritten digits} (a) before any adjustment,
 	(b) with artificial noise added,
 	(c) adjusted for noise by ComBat, and
 	(d) adjusted for noise by Confounded.
@@ -362,23 +362,35 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 
 \subsection{Classification accuracy quantifies batch removal more accurately than MSE and MMD}
 
-Classifier accuracy may be a better indicator of adjuster success than other metrics because many classifiers are able to identify nonlinear interactions;
-therefore, a decrease in classifier accuracy represents that nonlinear batch effects have been removed.
+Our MSE \ref{fig:mse} and MMD \ref{fig:mmd} metrics both show that ComBat performed better than Confounded for the MNIST dataset, but the effects left after ComBat finished are still identifiable by Random Forests with 99.9\% accuracy (Table \ref{tab:batch}).
+Additionally, previous work \cite{dayton_classifying_2017-1} has shown that PCA can be misleading when determining whether batch effects have been sufficiently removed from a dataset.
+Each of these methods seems to focus on linear separability.
 
-Figs \ref{fig:mmd} and \ref{fig:mse} both show that ComBat performed better than Confounded for the MNIST dataset, but the effects left after ComBat finished are still identifiable by Random Forests with 99.9\% accuracy (Table \ref{tab:batch}).
+Many machine learning classification algorithms are able to identify both linear and nonlinear interactions between variables.
+A decrease in classifier accuracy represents that nonlinear batch effects have been decreased.
+Random Forests often has high batch classification accuracy after ComBat-adjustment even when other classifiers are unable to identify differences between batches, whereas SVC often performs no better than baseline (see Figure \ref{fig:batch} and Table \ref{tab:batch}).
+In addition, ComBat often excels at hiding batch effects from Naive Bayes.
+We suggest that it may be important to use several classifiers to identify whether batch effects remain after correction.
 
-\subsection{Dataset size should be considered when applying batch adjustment}
+We encourage future researchers who study batch correction or who use it in their pipelines to use classifier accuracy to determine the degree to which batch effects still remain in their data.
+This is especially important to take into account when analyses will include some type of machine learning that can detect nonlinear effects.
 
-Nonlinear batch effects remain after traditional batch adjustment for larger datasets
+\subsection{Dataset should be considered when applying batch adjustment}
 
-Random Forests often has high batch classification accuracy after ComBat-adjustment.
-This is especially important to take into account when your analysis of your dataset will include some type of machine learning that can detect nonlinear effects.
+Nonlinear batch effects often remain after traditional batch adjustment for larger datasets.
+For the larger datasets in our study, Confounded outperformed the other batch adjustment algorithms according to the batch classification metrics.
+However, Confounded also reduced the amount of true signal in those same datasets more than other algorithms.
+This may be able to be ameliorated by hyperparameter optimization,
+but in cases where batch effects and true signal are not independent, researchers may need to decide the tradeoff between how much true signal loss and remaining batch effects are acceptable.
 
 \subsection{Confounded may have other uses}
 
-Data integration
-
-Other types of data - already shown to work on images, microarray, \& rna seq
+At its root, batch correction is a data integration problem;
+data from multiple batches must have batch-specific confounding effects removed in order to be treated as one dataset.
+Confounded shows promise in removing traditional batch effects from microarray data in the Bladderbatch and GSE37199 datasets.
+It also effectively decreased artificial batch effects in image data and tissue-specific effects in RNA-Seq data.
+Confounded may be effective in other data integration problems, such as combining microarray with RNA-Seq dataset, or merging several large datasets measured under different conditions.
+We invite future researchers to utilize Confounded in any pipelines where data must be integrated from different sources, and to assess the effectiveness of doing so by measuring batch classifier accuracy.
 
 \bibliography{references}
 
