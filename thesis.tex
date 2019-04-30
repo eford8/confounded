@@ -3,6 +3,7 @@
 \usepackage{authblk}
 \usepackage{hyperref}
 \usepackage[square,numbers]{natbib}
+% \usepackage{natbib}
 \usepackage[nomarkers,nolists]{endfloat}
 \renewcommand{\efloatseparator}{\mbox{}} % multiple figures per page
 \usepackage[letterpaper,left=1in,right=1in,top=1in,bottom=1in,footskip=0.25in]{geometry}
@@ -45,7 +46,7 @@ Systemic bias can be even more pronounced when using data collected from differe
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/adjuster_workflow}
+	\includegraphics[width=\columnwidth]{figures/final/adjuster_workflow.pdf}
 	\caption{\textbf{Batch adjustment justification and steps}
 	(a) When measurements are collected from a sample ($X$), systemic effects ($H$) also affect the measurements.
 	(b) If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements.
@@ -94,7 +95,7 @@ All layers in the network were fully connected and all activation functions were
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/network}
+	\includegraphics[width=\columnwidth]{figures/final/network.pdf}
 	\caption{\textbf{Network architecture} of Confounded.
 	Data with batch effects (represented by different colors) are input into an autoencoder.
 	The output of the autoencoder is classified by a discriminator network based on batch.
@@ -124,23 +125,23 @@ Finally, the autoencoder layers were also trained on a combination of the two pr
 
 \begin{equation}
 	\label{dual_loss}
-	L_dual = L_A - \lambda{}(L_D)
+	L_{dual} = L_A - \lambda{}(L_D)
 \end{equation}
 
 The $\lambda$ value represents a tradeoff parameter for tuning the network's tendency for more faithfully replicating the input or for more completely removing batch effects.
 A higher $\lambda$ value indicates that the network should remove batch effects more aggressively, whereas a lower value indicates that the network should instead favor faithfully reconstructing the data.
-$L_A$ was not optimized directly; instead the autoencoder was trained by optimizing $L_dual$.
+$L_A$ was not optimized directly; instead the autoencoder was trained by optimizing $L_{dual}$.
 
 \subsubsection{Training}
 
 In all cases, the network was trained using the Adam Optimizer \cite{kingma_adam_2014} with a training rate of 0.0001 for 10,000 iterations on mini-batches of size 100.
-In each iteration, both $L_D$ and $L_dual$ were optimized.
+In each iteration, both $L_D$ and $L_{dual}$ were optimized.
 When optimizing $L_D$ (i.e. training the discriminator), the autoencoder's weights were frozen, and vice versa.
 For each dataset, training typically took roughly 30 minutes to complete, including the time taken to load the input into memory and to save the output to disk.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/rough/training_loss}
+	\includegraphics[width=\columnwidth]{figures/rough/training_loss.png}
 	\caption{Autoencoder and discriminator loss over time for one run of Confounded.
 	Over the course of training, the autoencoder more faithfully replicates the input data.
 	The autoencoder also seems to introduce noise (see around iteration 3100) in response to the discriminator's slight improvements.}
@@ -255,7 +256,7 @@ This may indicate an effective removal of nonlinear effects in both cases.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/pca}
+	\includegraphics[width=\columnwidth]{figures/final/pca.pdf}
 	\caption{\textbf{Principal components analysis} (PCA) of the GSE37199 dataset before and after batch adjustment with various adjusters.
 	None of the datasets appear to be linearly separable.
 	Confounded appears to maintain the same distribution of data overall as the unadjusted data while perhaps aligning the batches' distributions.}
@@ -263,7 +264,7 @@ This may indicate an effective removal of nonlinear effects in both cases.
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/tsne}
+	\includegraphics[width=\columnwidth]{figures/final/tsne.pdf}
 	\caption{\textbf{T-distributed Stochastic Neighbor Embedding} (t-SNE) plot for the GSE37199 dataset before and after adjustment with several algorithms.
 	The data seem to cluster less by batch for both Confounded and ComBat, indicating that both adjusters may be removing nonlinear effects in this dataset.}
 	\label{fig:tsne}
@@ -273,7 +274,7 @@ Confounded shows mixed success with the MSE and MMD metrics, but both values wer
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/mse}
+	\includegraphics[width=\columnwidth]{figures/final/mse.pdf}
 	\caption{\textbf{Mean squared error} (MSE) between the data prior to and after adjustment with various algorithms.
 	Lower MSE represents that the adjuster has more faithfully reproduced the input data.
 	MSE for unadjusted data will always be 0 because the input data is identical to the output data.
@@ -282,7 +283,7 @@ Confounded shows mixed success with the MSE and MMD metrics, but both values wer
 \end{figure}
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/mmd}
+	\includegraphics[width=\columnwidth]{figures/final/mmd.pdf}
 	\caption{\textbf{Maximum mean discrepancy} (MMD) between different batches. Lower MMD indicates that the distributions of the different batches are more similar.
 	In cases with more than two batches, MMD is computed pairwise between each batch and averaged.
 	In each case, Confounded usually performs better than the scale adjuster and somewhat worse than ComBat when measuring MSE.}
@@ -300,7 +301,7 @@ This indicates that while ComBat's performance may work at least as well as Conf
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/batch_accuracy}
+	\includegraphics[width=\columnwidth]{figures/final/batch_accuracy.pdf}
 	\caption{\textbf{Batch classification accuracy} from 4-fold cross-validation repeated 3 times for several classifiers.
 	Lower batch accuracy indicates that more batch-related signal has been removed and therefore indicates better performance.
 	Confounded's performance is similar to ComBat's for the smaller datasets and is improved for the larger datasets.
@@ -333,7 +334,7 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/true_class_accuracy}
+	\includegraphics[width=\columnwidth]{figures/final/true_class_accuracy.pdf}
 	\caption{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross-validation repeated 3 times.
 	See also Table \ref{tab:true_class}.}
 	\label{fig:true_class}
@@ -349,7 +350,7 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/rough/mnist}
+	\includegraphics[width=\columnwidth]{figures/rough/mnist.png}
 	\caption{\textit{TODO: this is old output data and needs to be updated.} \textbf{MNIST handwritten digits} (a) before any adjustment,
 	(b) with artificial noise added,
 	(c) adjusted for noise by ComBat, and
