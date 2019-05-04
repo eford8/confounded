@@ -15,7 +15,7 @@
 
 \begin{document}
 
-\title{Removing nonlinear batch effects using adversarial deep neural networks}
+\title{Removing nonlinear batch effects from gene-expression data using adversarial deep neural networks}
 \author[1]{Jonathan B. Dayton}
 \author[1]{Stephen R. Piccolo}
 \affil[1]{Department of Biology, Brigham Young University, Provo, UT 84602 USA}
@@ -30,7 +30,7 @@
 	We created an adversarial variational autoencoder in order to remove confounding effects from the data while minimizing the amount of change to the input data.
 	We tested the model on artificially constructed data and commonly used real biological data sets and compared the output with the output from other common batch adjustment algorithms.
 	We also applied the model to remove the tissue signal from pan-cancer data.
-	Our software is available on GitHub to enable other scientists to remove confounding effects from their own data using our methodologies.
+	Our software is available at \href{https://github.com/jdayton3/Confounded}{https://github.com/jdayton3/Confounded} to enable other scientists to remove confounding effects from their own data using our methodologies.
 \end{abstract}
 
 \section{Background} \label{sec:background}
@@ -88,9 +88,9 @@ We also explore the extent to which batch effects still remain in different data
 \subsection{Network Structure}
 
 We used an adversarial autoencoder network to model and remove the batch effects.
-This network was structured in two parts: a variational autoencoder \cite{louizos_variational_2015} to replicate the input (expression) data and a discriminator to detect remaining batch effects in the autoencoder's output.
+We structured this network in two parts: a variational autoencoder \cite{louizos_variational_2015} to replicate the input (expression) data and a discriminator to detect remaining batch effects in the autoencoder's output.
 By penalizing the autoencoder for the discriminator's success, the autoencoder subnetwork learned over the course of training to output the expression data free of batch effects.
-The neural network was implemented in TensorFlow 1.11.0 \cite{abadi_tensorflow_2015} with Python 3.6 \cite{python_software_foundation_python_2019}.
+We implemented the neural network in TensorFlow 1.11.0 \cite{abadi_tensorflow_2015} with Python 3.6 \cite{python_software_foundation_python_2019}.
 All layers in the network were fully connected and all activation functions were ReLUs \cite{agarap_deep_2018} except the final layers in the autoencoder and the discriminator, which used the sigmoid function.
 
 \begin{figure}
@@ -107,21 +107,21 @@ All layers in the network were fully connected and all activation functions were
 \subsubsection{Autoencoder}
 
 We implemented the variational autoencoder \cite{louizos_variational_2015} described by Géron \cite{geron_hands-machine_2017}.
-Additional information can be found in the supplementary material.
+Additional information can be found in our supplementary material.
 
 \subsubsection{Discriminator}
 
-The discriminator was trained to determine the original batch of the autoencoder's output.
+We trained the discriminator to determine the original batch of the autoencoder's output.
 The discriminator subnetwork consists of an input layer; four fully connected hidden layers of sizes 1024, 512, 512, and 128, respectively; and an output layer sized based on the number of batches.
 In order to combat overfitting and improve training, we also added 50\%-probability dropout \cite{srivastava_dropout_2014} and batch normalization \cite{ioffe_batch_2015} to each layer of the discriminator.
 These additions seemed to reduce overfitting in the discriminator.
 
 \subsubsection{Loss functions}
 
-Three loss functions were used to train the network.
-First, the autoencoder's loss ($L_A$) was calculated by summing the reconstruction loss (sigmoid cross entropy between the autoencoder's input and output) and the latent loss (Kullback-Leibler divergence of the code layer).
-Second, the discriminator's loss ($L_D$) was trained on sigmoid cross entropy between its output and a one-hot encoding of the samples' batch labels.
-Finally, the autoencoder layers were also trained on a combination of the two previous losses,
+We trained the network using three loss functions.
+First, we calculated the autoencoder's loss ($L_A$) by summing the reconstruction loss (sigmoid cross entropy between the autoencoder's input and output) and the latent loss (Kullback-Leibler divergence \cite{kullback_information_1951} of the code layer).
+Second, we calculated the discriminator's loss ($L_D$) as sigmoid cross entropy between its output and a one-hot encoding of the samples' batch labels.
+Finally, we also trained the autoencoder layers on a combination of the two previous losses,
 
 \begin{equation}
 	\label{dual_loss}
@@ -130,13 +130,14 @@ Finally, the autoencoder layers were also trained on a combination of the two pr
 
 The $\lambda$ value represents a tradeoff parameter for tuning the network's tendency for more faithfully replicating the input or for more completely removing batch effects.
 A higher $\lambda$ value indicates that the network should remove batch effects more aggressively, whereas a lower value indicates that the network should instead favor faithfully reconstructing the data.
-$L_A$ was not optimized directly; instead the autoencoder was trained by optimizing $L_{dual}$.
+We did not optimize $L_A$ directly; instead we trained the autoencoder by optimizing $L_{dual}$.
 
 \subsubsection{Training}
 
-In all cases, the network was trained using the Adam Optimizer \cite{kingma_adam_2014} with a training rate of 0.0001 for 10,000 iterations on mini-batches of size 100.
-In each iteration, both $L_D$ and $L_{dual}$ were optimized.
-When optimizing $L_D$ (i.e. training the discriminator), the autoencoder's weights were frozen, and vice versa.
+In all cases, we trained the network using the Adam Optimizer \cite{kingma_adam_2014} with a training rate of 0.0001 for 10,000 iterations on mini-batches of size 100.
+In each iteration, we optimized on both $L_D$ and $L_{dual}$.
+When optimizing $L_D$ (i.e. training the discriminator), we froze the autoencoder's weights, and vice versa.
+We trained the network on a 2017 Dell XPS 15 9560 with an 8-core Intel i7-7700HQ CPU and 16 GB of RAM.
 For each dataset, training typically took roughly 30 minutes to complete, including the time taken to load the input into memory and to save the output to disk.
 
 \begin{figure}
@@ -163,10 +164,9 @@ In order to test both theoretical and practical differences between Confounded a
 
 The MNIST digits dataset \cite{lecun_mnist_nodate} is a database of images of handwritten digits that are size-normalized and centered.
 It contains 60,000 training images and 10,000 test images.
+We used MNIST so we could visually assess how well the true signal (in this case, the shape and digit of each handwritten digit image) was preserved after batch adjustment.
 In order to use this dataset, we flattened each 28 by 28 image into a 1D vector of size 784 and put each in a CSV file along with the accompanying digit information.
 We limited our dataset to only the 10,000 test images.
-
-Using MNIST allowed us to visually assess how much true signal (in this case, the shape and digit of each handwritten digit image) was preserved after batch adjustment.
 Although convolutional layers are typically used when working with image data, we only used fully connected layers even for this image dataset.
 In this way, we show that the autoencoder is still able to find and represent spatial relationships without explicitly defining spatial relationships in the model while testing the same network we use on expression data, where no spatial relationships are inherent.
 
@@ -176,28 +176,29 @@ Because there is no batch information in the MNIST digits dataset, we had to sim
 To do so, we wrote a Python script to take the MNIST data in, apply a nonlinear effect, and output the adjusted data.
 We applied nonlinear effects by iteratively realizing vectors of normally distributed values, multiplying and adding these vectors to the ``expression'' vectors, and applying nonlinearity to the adjusted vector.
 We split the image data into two batches while keeping the batches balanced (5,000 images for each batch) and including the same number of each digit in each batch.
-The same random vectors were applied to each image in a batch.
-Finally, random noise was added to each image in order to prevent images in a batch from being overly similar to each other.
+We applied the same random vectors to each image in a batch.
+Finally, we added random noise to each image in order to prevent images in a batch from being overly similar to each other.
 
 \subsubsection{Bladderbatch}
 
 The bladderbatch dataset is a microarray transcriptome expression dataset from a study of patients with bladder cancer \cite{dyrskjot_gene_2004}.
 It has been made available as an R package \cite{leek_bladderbatch_2017} and is used in the documentation of the sva R package \cite{leek_sva_2017} to illustrate how to batch-adjust using ComBat.
 It contains expression values for 57 tissue samples from patients with and without bladder cancer across 5 unbalanced batches.
-Because it is such a small dataset in terms of typical deep learning datasets, we selected it as a way to test whether our network was overfitting.
+The dataset also has a cancer status (cancerous vs. normal tissue) column, which we used for ``true class'' classification, and a batch column.
+Because bladderbatch is such a small dataset in terms of typical deep learning datasets, we selected it as a way to test whether our network was overfitting.
 
 \subsubsection{GSE37199}
 
 The GSE37199 dataset contains microarray data from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
-We accessed a version of this data from the Open Science Framework that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
-This represents a slightly larger dataset than bladderbatch with only two batches that are closer to being balanced.
+We accessed a version of this data from \href{http://doi.org/10.17605/OSF.IO/SSK3T}{http://doi.org/10.17605/OSF.IO/SSK3T} that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
+This represents a slightly larger dataset than bladderbatch with only two batches that are closer to being balanced (with batch counts of $\{4, 5, 11, 18, 19\}$ and $\{43, 50\}$, respectively).
 
 \subsubsection{TCGA Pan-cancer Data}
 
 The Cancer Genome Atlas (TCGA) Pan-Cancer project produced expression data for thousands of tumors across many cancer types \cite{the_cancer_genome_atlas_research_network_cancer_2013}.
 In a previous study, we used this dataset and attempted to adjust for the effect of tissue type using ComBat \cite{dayton_classifying_2017-1}.
 However, we found that a strong nonlinear signal could still be identified in the data after adjustment.
-We used the same dataset that we tidied in this study to see if we could remove the nonlinear batch effect more completely.
+We used the same dataset that we tidied in this study (available at \href{https://osf.io/7xjdn/}{https://osf.io/7xjdn/}) to see if we could remove the nonlinear batch effect more completely.
 This dataset has RNA-Seq expression values for 9,365 samples across 25 distinct cancer types.
 We used this dataset as a way to test whether Confounded works on RNA-Seq data as well as to test whether we could remove batch effects that we know ComBat cannot.
 
@@ -233,9 +234,9 @@ In cases where there were more than two batches, we averaged all pairwise MMD va
 \subsubsection{Classification accuracy}
 
 We used four classifiers from the scikit-learn 0.19.1 Python library \cite{pedregosa_scikit-learn_2011} in order to classify on batch and true class before and after adjustment: Naive Bayes, Random Forests, k-Nearest Neighbors, and SVM with a radial basis kernel.
-See Table \ref{tab:datasets} for details on which columns were used for training.
+Table \ref{tab:datasets} details which columns were used for training.
 
-We calculated the average of classification accuracies for four-fold cross-validation repeated 3 times.
+We calculated the average of classification accuracies for four-fold cross-validation repeated three times.
 We interpret lower accuracy for batch classification as meaning that the batch is removed more effectively.
 We also interpret higher true class classification as meaning that the important signal is not lost during the process of adjustment.
 Therefore, given output data from the ideal batch adjuster, batch classification would be no better than random for any classification algorithm, and true class accuracy would be no lower than accuracy for the unadjusted data.
