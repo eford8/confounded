@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{authblk}
 \usepackage{hyperref}
+\usepackage[inline,shortlabels]{enumitem}
 \usepackage[square,numbers]{natbib}
 % \usepackage{natbib}
 \usepackage[nomarkers,nolists]{endfloat}
@@ -47,11 +48,14 @@ Systemic bias can be even more pronounced when using data collected from differe
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/adjuster_workflow.pdf}
-	\caption{\textbf{Batch adjustment justification and steps}
-	(a) When measurements are collected from a sample ($X$), systemic effects ($H$) also affect the measurements.
-	(b) If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements.
-	(c) In order to normalize batches of data relative to one another, we first estimate the effect of the hidden variables based on differences in measurements between batches.
-	(d) Second, we remove the estimated effects in order to normalize the batches relative to one another.}
+	\caption[]{\textbf{Batch adjustment justification and steps}
+	\begin{enumerate*}[(a)]
+		\item When measurements are collected from a sample ($X$), systemic effects ($H$) also affect the measurements.
+		\item If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements.
+		\item In order to normalize batches of data relative to one another, we first estimate the effect of the hidden variables based on differences in measurements between batches.
+		\item Second, we remove the estimated effects in order to normalize the batches relative to one another.
+	\end{enumerate*}
+	}
 	\label{fig:workflow}
 \end{figure}
 
@@ -65,7 +69,7 @@ These networks have proven effective in removing irrelevant, domain-specific sig
 Recent work \cite{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019} has applied neural networks to batch effects.
 However, these recent programs have several items that complicate their usability on many real-world datasets:
 they require that the input data only contains two batches, that the batches are sufficiently large, and that the batches are perfectly balanced.
-These requirements rarely hold in existing datasets; for example, the bladderbatch dataset used in the documentation for the R SVA package \cite{leek_bladderbatch_2017,leek_sva_2017} has 5 batches, only 57 samples, and between 4 and 19 samples per batch.
+These requirements rarely hold in existing datasets; for example, the bladderbatch dataset used in the documentation for the R sva package \cite{leek_bladderbatch_2017,leek_sva_2017} has 5 batches, only 57 samples, and between 4 and 19 samples per batch.
 Additionally, the statistics these studies have used to validate results don't test whether complex interactions still remain in the data.
 
 To address these issues, we implemented a deep neural network approach to batch correction that works on real-world datasets, and we calculated batch removal measurements based on machine learning algorithms to test for remaining nonlinear effects.
@@ -106,7 +110,7 @@ All layers in the network were fully connected and all activation functions were
 
 \subsubsection{Autoencoder}
 
-We implemented the variational autoencoder \cite{louizos_variational_2015} described by Géron \cite{geron_hands-machine_2017}.
+We implemented the variational autoencoder \cite{louizos_variational_2015} described by \citet[Chapter 15]{geron_hands-machine_2017}.
 Additional information can be found in our supplementary material.
 
 \subsubsection{Discriminator}
@@ -183,38 +187,41 @@ Finally, we added random noise to each image in order to prevent images in a bat
 
 The bladderbatch dataset is a microarray transcriptome expression dataset from a study of patients with bladder cancer \cite{dyrskjot_gene_2004}.
 It has been made available as an R package \cite{leek_bladderbatch_2017} and is used in the documentation of the sva R package \cite{leek_sva_2017} to illustrate how to batch-adjust using ComBat.
-It contains expression values for 57 tissue samples from patients with and without bladder cancer across 5 unbalanced batches.
-The dataset also has a cancer status (cancerous vs. normal tissue) column, which we used for ``true class'' classification, and a batch column.
+It contains expression values for 57 tissue samples with and without bladder cancer across 5 unbalanced batches.
+The dataset has a cancer status (cancerous vs. normal tissue) column, which we used for ``true class'' classification, and a batch column.
 Because bladderbatch is such a small dataset in terms of typical deep learning datasets, we selected it as a way to test whether our network was overfitting.
 
 \subsubsection{GSE37199}
 
-The GSE37199 dataset contains microarray data from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
+The GSE37199 dataset contains Affymetrix microarray gene-expression data from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
 We accessed a version of this data from \href{http://doi.org/10.17605/OSF.IO/SSK3T}{http://doi.org/10.17605/OSF.IO/SSK3T} that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
-This represents a slightly larger dataset than bladderbatch with only two batches that are closer to being balanced (with batch counts of $\{4, 5, 11, 18, 19\}$ and $\{43, 50\}$, respectively).
+It contains expression values for 93 tissue samples categorized as either ``Advanced castration resistant'' or ``good prognosis.''
+We used this cancer status variable as the ``true class'' for classification.
+It has two types of batch variables: ``plate'' and ``centre.''
+We adjusted against the ``plate'' variable because it was more balanced than ``centre'' (with counts of $\{43, 50\}$ compared to $\{27, 66\}$).
+The GSE37199 dataset represents a slightly larger dataset than bladderbatch, with only two batches that are closer to being balanced (with batch counts of $\{4, 5, 11, 18, 19\}$ and $\{43, 50\}$, respectively).
 
 \subsubsection{TCGA Pan-cancer Data}
 
 The Cancer Genome Atlas (TCGA) Pan-Cancer project produced expression data for thousands of tumors across many cancer types \cite{the_cancer_genome_atlas_research_network_cancer_2013}.
-In a previous study, we used this dataset and attempted to adjust for the effect of tissue type using ComBat \cite{dayton_classifying_2017-1}.
-However, we found that a strong nonlinear signal could still be identified in the data after adjustment.
-We used the same dataset that we tidied in this study (available at \href{https://osf.io/7xjdn/}{https://osf.io/7xjdn/}) to see if we could remove the nonlinear batch effect more completely.
+In a previous study \cite{dayton_classifying_2017-1}, we classified this dataset based on the presence or absence of mutations in several known cancer genes.
+We attempted to adjust for the confounding effect of cancer type using ComBat prior to classification.
+However, we found that a strong nonlinear signal could still be identified by the Random Forests algorithm after adjustment.
+Here, we used the same version of the dataset that we tidied in this previous study (available at \href{https://osf.io/7xjdn/}{https://osf.io/7xjdn/}).
 This dataset has RNA-Seq expression values for 9,365 samples across 25 distinct cancer types.
-We used this dataset as a way to test whether Confounded works on RNA-Seq data as well as to test whether we could remove batch effects that we know ComBat cannot.
+We used this dataset as a way to test whether Confounded works on RNA-Seq data and to test whether we could remove batch effects that ComBat cannot remove.
 
 \subsection{Comparison to other methods}
 
 We compared our method to two other batch adjusters: a mean and scale adjuster and ComBat \cite{johnson_adjusting_2007}.
 We implemented the mean and scale adjuster in the R programming language \cite{r_core_team_r_2014}.
 We used the ComBat implementation from the sva package \cite{leek_sva_2017} with some modifications to allow it to work on columns without variance in the MNIST dataset.
+There are a number of other methods for batch adjustment that do and do not use deep neural networks (for example, see \cite{leek_capturing_2007,espin-perez_comparison_2018,shaham_removal_2017,shaham_batch_2018}). % TODO: add like 8 more methods
+Unfortunately, most of these methods lack a common interface and common assumptions that input datasets must meet.
+For these reasons, we compared Confounded only to the two methods listed above.
+Future batch adjustment research may benefit from standardization of input formats, user interfaces, and validation datasets.
 
 \subsection{Statistics and Metrics}
-
-In order to determine how well Confounded removes batch effects compared to other methods, we calculated several metrics.
-First, we calculated mean squared error to see how different the output is from the input.
-Second, we calculated sample maximum mean discrepancy to see how differently distributed the batches are from each other.
-Third, we determined classification accuracy based on batch for several machine learning classifiers in order to determine whether batch can still be identified post-adjustment.
-Finally, we used the same classifiers to predict ``true class'' labels in order to determine how well important signal is maintained after adjustment.
 
 \subsubsection{Mean squared error}
 
@@ -224,30 +231,34 @@ We wanted to see how well Confounded and other batch correction software maintai
 
 \subsubsection{Maximum mean discrepancy} \label{section:mmd}
 
-A recent paper also used neural networks to remove batch effects \cite{shaham_removal_2017}.
+In a recent paper, \citet{shaham_removal_2017} used neural networks to remove batch effects.
 Instead of constraining the autoencoder to remove batch effects based on a discriminator, these researchers trained their network to minimize maximum mean discrepancy (MMD) between batches in an embedded layer of their network.
-We calculated MMD to determine whether batches looked like they came from the same distribution after adjustment.
-We calculated MMD using the formula in this recent paper.
+We calculated MMD using the same formula as \citeauthor{shaham_removal_2017} to determine whether batches looked like they came from the same distribution after adjustment.
 For the kernel, we used the Gaussian kernel between two batches as implemented in \texttt{sklearn.metrics.pairwise.rbf\_kernel} \cite{pedregosa_scikit-learn_2011}.
 In cases where there were more than two batches, we averaged all pairwise MMD values to calculate an overall MMD.
 
 \subsubsection{Classification accuracy}
 
-We used four classifiers from the scikit-learn 0.19.1 Python library \cite{pedregosa_scikit-learn_2011} in order to classify on batch and true class before and after adjustment: Naive Bayes, Random Forests, k-Nearest Neighbors, and SVM with a radial basis kernel.
+In order to determine \begin{enumerate*}[(a)]
+	\item whether batch can still be identified post-adjustment and
+	\item how well important signal is maintained after adjustment,
+\end{enumerate*}
+we determined classification accuracy based on batch and ``true class'' labels using several machine learning classifiers.
+
+We used four classifiers from the scikit-learn 0.19.1 Python library \cite{pedregosa_scikit-learn_2011} in order to classify on batch and true class before and after adjustment: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and SVM \citep{cortes_support-vector_1995} with a radial basis kernel.
 Table \ref{tab:datasets} details which columns were used for training.
 
 We calculated the average of classification accuracies for four-fold cross-validation repeated three times.
 We interpret lower accuracy for batch classification as meaning that the batch is removed more effectively.
 We also interpret higher true class classification as meaning that the important signal is not lost during the process of adjustment.
 Therefore, given output data from the ideal batch adjuster, batch classification would be no better than random for any classification algorithm, and true class accuracy would be no lower than accuracy for the unadjusted data.
-We report these values in section \ref{sec:results}.
 
 \section{Results} \label{sec:results}
 
-\subsection{Some batch effects not removed by other adjusters are removed by Confounded}
+\subsection{Confounded removes nonlinear batch effects that other adjusters miss}
 
 Various previous studies use differing methods to show qualitatively and quantitatively how well batch effects have been removed.
-We used several plots and metrics to compare adjusters, including PCA, t-SNE, MSE, MMD, and classifier batch prediction accuracy (for various classifiers).
+To compare Confounded to other batch adjustment methods, we compared PCA and t-SNE plots along with MSE, MMD, and classifier batch prediction accuracy (using various classifiers).
 
 PCA and t-SNE plots seem to show a decrease in separability after adjustment with various methods for the GSE37199 dataset (see Figures \ref{fig:pca} and \ref{fig:tsne}).
 However, previous research has shown that these plots are not completely trustworthy in representing nonlinear effects \cite{dayton_classifying_2017-1}.
@@ -271,7 +282,11 @@ This may indicate an effective removal of nonlinear effects in both cases.
 	\label{fig:tsne}
 \end{figure}
 
-Confounded shows mixed success with the MSE and MMD metrics, but both values were typically lower for Confounded than for the scale adjuster and lower for ComBat than for any other adjuster we tested (See Figures \ref{fig:mse} and \ref{fig:mmd}).
+Confounded shows mixed success with the MSE and MMD metrics.
+With MSE, Confounded outperformed the scale adjuster in 3 of the 4 datasets by a factor of $\frac{1}{2}$ to $\frac{1}{6}$ but scored drastically higher on the fourth dataset.
+With MMD, Confounded outperformed the scale adjuster again in 3 of the 4 datasets, this time by a factor of $\frac{1}{2}$ to $\frac{1}{10}$ and tied the scale adjuster on the fourth dataset.
+With both metrics, Confounded consistently performed somewhat more poorly than ComBat.
+(See Figures \ref{fig:mse} and \ref{fig:mmd}.)
 
 \begin{figure}
 	\centering
@@ -352,10 +367,13 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/rough/mnist.png}
-	\caption{\textit{TODO: this is old output data and needs to be updated.} \textbf{MNIST handwritten digits} (a) before any adjustment,
-	(b) with artificial noise added,
-	(c) adjusted for noise by ComBat, and
-	(d) adjusted for noise by Confounded.
+	\caption[]{\textit{TODO: this is old output data and needs to be updated.} \textbf{MNIST handwritten digits}
+	\begin{enumerate*}[(a)]
+		\item before any adjustment,
+		\item with artificial noise added,
+		\item adjusted for noise by ComBat, and
+		\item adjusted for noise by Confounded.
+	\end{enumerate*}
 	Although Confounded seems to remove more noise from the background and make it look more like the original background, it struggles in some cases to accurately replicate the input data.}
 	\label{fig:mnist}
 \end{figure}
