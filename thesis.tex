@@ -1,7 +1,7 @@
 \documentclass[notitlepage]{article}
 \usepackage{graphicx}
 \usepackage{authblk}
-\usepackage{hyperref}
+\usepackage{url}
 \usepackage[inline,shortlabels]{enumitem}
 \usepackage[square,numbers]{natbib}
 % \usepackage{natbib}
@@ -27,21 +27,21 @@
 \begin{abstract}
 	Many biological studies, particularly studies involving the genetics of human disease, could discover items of greater statistical and biological significance if performed with larger data sets.
 	Many data sets are publicly available and could be combined in order to increase these studies' significance, but even when the same type of data are collected by multiple studies, minor differences in collection methodologies and environments can lead to confounding effects in the data which can in turn cause incorrect results.
-	In order to combine date produced under different conditions, we applied deep learning to remove these effects and combine molecular biological data sets.
+	In order to combine date produced under different conditions, we applied deep learning to remove these effects and combine gene expression datasets.
 	We created an adversarial variational autoencoder in order to remove confounding effects from the data while minimizing the amount of change to the input data.
-	We tested the model on artificially constructed data and commonly used real biological data sets and compared the output with the output from other common batch adjustment algorithms.
-	We also applied the model to remove the tissue signal from pan-cancer data.
-	Our software is available at \href{https://github.com/jdayton3/Confounded}{https://github.com/jdayton3/Confounded} to enable other scientists to remove confounding effects from their own data using our methodologies.
+	We tested the model on artificially constructed data and commonly used real gene expression datasets and compared the output with the output from other common batch adjustment algorithms.
+	We also applied the model to remove the cancer-type-specific signal from pan-cancer expression data.
+	Our software is available at \url{https://github.com/jdayton3/Confounded} to enable other scientists to remove confounding effects from their own data using our methodologies.
 \end{abstract}
 
 \section{Background} \label{sec:background}
 
-When working with biological data, problems can arise from combining data from multiple sources.
+When working with gene expression data, problems can arise from combining data from multiple sources.
 For example, if two labs sequence and quantify the same RNA samples for the same lung cancer patients but use different equipment to do so, each lab will come up with slightly different measurements (see Figure \ref{fig:workflow}).
 % Is this ^ the best way to reference figures?
 If a third party were to then study the patients using data from both labs, the differences in measurements could alter their analysis.
-These systemic effects are known as ``batch effects'' and are understood to have a nontrivial impact on high-throughput biological data \citep{leek_tackling_2010}.
-In one study, researchers found that, contrary to previous knowledge, molecular data from mice and humans clustered more closely by species than by tissue type \citep{yue_comparative_2014};
+These systemic effects are known as ``batch effects'' and are understood to have a nontrivial impact on high-throughput expression data \citep{leek_tackling_2010}.
+In one study, researchers found that, contrary to previous knowledge, expression values from mice and humans clustered more closely by species than by tissue type \citep{yue_comparative_2014};
 however, referees showed in a rebuttal that when accounting for batch effects, these data actually clustered more closely by tissue type, as initially expected \citep{gilad_reanalysis_2015}.
 Systemic bias can be even more pronounced when using data collected from different tissue types and can skew results, such as in pan-cancer analyses \citep{dayton_classifying_2017-1}.
 
@@ -59,7 +59,7 @@ Systemic bias can be even more pronounced when using data collected from differe
 	\label{fig:workflow}
 \end{figure}
 
-Several methods exist for removing batch effects from biological datasets.
+Several methods exist for removing batch effects from gene expression datasets.
 Two commonly used methods are ComBat \citep{johnson_adjusting_2007} and SVA \citep{leek_capturing_2007}.
 ComBat uses an empirical Bayes method to estimate batch effect parameters and then uses linear regression to remove the effects, and SVA uses singular value decomposition to model batch effects which can then be accounted for in statistical analyses.
 Since both of these methods use linear adjustments to remove batch effects, they cannot account for nonlinear effects, such as complex interactions in gene pathways in response to environmental changes.
@@ -70,12 +70,12 @@ Recent work \cite{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019} h
 However, these recent programs have several items that complicate their usability on many real-world datasets:
 they require that the input data only contains two batches, that the batches are sufficiently large, and that the batches are perfectly balanced.
 These requirements rarely hold in existing datasets; for example, the bladderbatch dataset used in the documentation for the R sva package \cite{leek_bladderbatch_2017,leek_sva_2017} has 5 batches, only 57 samples, and between 4 and 19 samples per batch.
-Additionally, the statistics these studies have used to validate results don't test whether complex interactions still remain in the data.
+Additionally, the metrics these studies have used to validate results don't test whether complex interactions still remain in the data.
 
 To address these issues, we implemented a deep neural network approach to batch correction that works on real-world datasets, and we calculated batch removal measurements based on machine learning algorithms to test for remaining nonlinear effects.
 Artificial neural networks are a machine learning tool inspired by the way human brains function; input values pass through layers of linear and nonlinear functions, the final output values are measured against objectives, and the layers of functions are adjusted to bring the outputs closer to the objectives.
 This process is repeated until the outputs are sufficiently close to their targets \citep{schmidhuber_deep_2015}.
-Research has shown that neural networks are effective in working with biological data; for example, neural networks have been applied to extract biologically relevant latent spaces in RNA-Seq data with as few as 10,000 samples \citep{way_extracting_2017}, and some researchers have used that latent space to generate realistic synthetic biomedical data for other scientific studies \citep{beaulieu-jones_privacy-preserving_2017}.
+Research has shown that neural networks are effective in working with gene expression data; for example, neural networks have been applied to extract biologically relevant latent spaces in RNA-Seq data with as few as 10,000 samples \citep{way_extracting_2017}, and some researchers have used that latent space to generate realistic synthetic biomedical data for other scientific studies \citep{beaulieu-jones_privacy-preserving_2017}.
 Autoencoders are a type of neural network that encode and then reconstruct their input, and their traditional objective function is to construct the output to be as similar to the input as possible \citep{hinton_reducing_2006}.
 Neural networks have historically decreased in effectiveness when working with data from multiple research domains \citep{ganin_domain-adversarial_2015}, in part because they may learn based on dataset-specific confounding effects (e.g. which researcher collected the data) instead of learning based on practically meaningful causal effects (e.g. which gene is consistently upregulated in a disease) \citep{louizos_causal_2017-2}.
 Recently, researchers have experimented with discouraging neural networks from learning based on domain-specific information by giving them two objective functions:
@@ -133,7 +133,7 @@ Finally, we also trained the autoencoder layers on a combination of the two prev
 \end{equation}
 
 The $\lambda$ value represents a tradeoff parameter for tuning the network's tendency for more faithfully replicating the input or for more completely removing batch effects.
-A higher $\lambda$ value indicates that the network should remove batch effects more aggressively, whereas a lower value indicates that the network should instead favor faithfully reconstructing the data.
+A higher $\lambda$ value indicates that the network should remove batch effects more aggressively, whereas a lower value indicates that the network should instead favor faithfully reconstructing the input data.
 We did not optimize $L_A$ directly; instead we trained the autoencoder by optimizing $L_{dual}$.
 
 \subsubsection{Training}
@@ -185,7 +185,7 @@ Finally, we added random noise to each image in order to prevent images in a bat
 
 \subsubsection{Bladderbatch}
 
-The bladderbatch dataset is a microarray transcriptome expression dataset from a study of patients with bladder cancer \cite{dyrskjot_gene_2004}.
+The bladderbatch dataset is a microarray transcriptomic expression dataset from a study of patients with bladder cancer \cite{dyrskjot_gene_2004}.
 It has been made available as an R package \cite{leek_bladderbatch_2017} and is used in the documentation of the sva R package \cite{leek_sva_2017} to illustrate how to batch-adjust using ComBat.
 It contains expression values for 57 tissue samples with and without bladder cancer across 5 unbalanced batches.
 The dataset has a cancer status (cancerous vs. normal tissue) column, which we used for ``true class'' classification, and a batch column.
@@ -194,7 +194,7 @@ Because bladderbatch is such a small dataset in terms of typical deep learning d
 \subsubsection{GSE37199}
 
 The GSE37199 dataset contains Affymetrix microarray gene-expression data from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
-We accessed a version of this data from \href{http://doi.org/10.17605/OSF.IO/SSK3T}{http://doi.org/10.17605/OSF.IO/SSK3T} that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
+We accessed a version of this data from \url{http://doi.org/10.17605/OSF.IO/SSK3T} that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
 It contains expression values for 93 tissue samples categorized as either ``Advanced castration resistant'' or ``good prognosis.''
 We used this cancer status variable as the ``true class'' for classification.
 It has two types of batch variables: ``plate'' and ``centre.''
@@ -207,7 +207,7 @@ The Cancer Genome Atlas (TCGA) Pan-Cancer project produced expression data for t
 In a previous study \cite{dayton_classifying_2017-1}, we classified this dataset based on the presence or absence of mutations in several known cancer genes.
 We attempted to adjust for the confounding effect of cancer type using ComBat prior to classification.
 However, we found that a strong nonlinear signal could still be identified by the Random Forests algorithm after adjustment.
-Here, we used the same version of the dataset that we tidied in this previous study (available at \href{https://osf.io/7xjdn/}{https://osf.io/7xjdn/}).
+Here, we used the same version of the dataset that we tidied in this previous study (available at \url{https://osf.io/7xjdn/}).
 This dataset has RNA-Seq expression values for 9,365 samples across 25 distinct cancer types.
 We used this dataset as a way to test whether Confounded works on RNA-Seq data and to test whether we could remove batch effects that ComBat cannot remove.
 
@@ -407,9 +407,9 @@ but in cases where batch effects and true signal are not independent, researcher
 
 At its root, batch correction is a data integration problem;
 data from multiple batches must have batch-specific confounding effects removed in order to be treated as one dataset.
-Confounded shows promise in removing traditional batch effects from microarray data in the Bladderbatch and GSE37199 datasets.
+Confounded shows promise in removing traditional batch effects from microarray expression data in the Bladderbatch and GSE37199 datasets.
 It also effectively decreased artificial batch effects in image data and tissue-specific effects in RNA-Seq data.
-Confounded may be effective in other data integration problems, such as combining microarray with RNA-Seq dataset, or merging several large datasets measured under different conditions.
+Confounded may be effective in other data integration problems, such as combining microarray with RNA-Seq datasets, or merging several large datasets measured under different conditions.
 We invite future researchers to utilize Confounded in any pipelines where data must be integrated from different sources, and to assess the effectiveness of doing so by measuring batch classifier accuracy.
 
 \bibliography{references}
