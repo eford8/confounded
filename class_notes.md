@@ -106,3 +106,51 @@ Cool if you can mix a few of the above types of points.
 
 - Finish discussion
 - Work on title, abstract
+
+## 2019-05-08 - Meeting with Dr. Piccolo
+
+- Change every "genetic data", "biological data" -> "gene expression"
+
+### Abstract
+
+- Funnel:
+  - Gene expression data
+  - Confounding effects
+    - Different conditions
+    - Covariates like cancer type that we're not interested in and have a strong effect on the data
+    - Combining across datasets
+
+### Intro
+
+- Have at least 5 references on gene expression + neural networks (show there's breadth to the claim)
+
+### Methods
+
+- Add a few words about louizos findings (show DVAEs are effective and cool)
+- ReLU - say what it stands for
+- Dropout & batch norm - how do they reduce overfitting? at most 1 sentence on the mechanism
+- TCGA - batch -> confounding
+
+### Results
+
+- MSE/MMD - put actual numbers instead of "by a factor of..."
+- Important signal -> class-related signal
+
+### Discussion
+
+- Usually there aren't subsections
+- General flow / outline
+  - Talk about motivation for using NNs - confounding effects in any gene expression experiment. We assume these are both linear & nonlinear.
+  - High level description of our results
+  - Caveats (which scenarios were good?) - limitations of NNs in general
+  - Every dataset might need a different
+
+- Observations for people who use batch adjusters
+- Observations for people who write batch adjusters
+
+- Dr. Piccolo is OK with using questions:
+  - How can I tell how well batch adjustment worked?
+  - Which batch adjuster should I use?
+  - What limitations does Confounded have?
+    - Limitation, then idea for addressing the limitation
+  - What else might Confounded be used for?
