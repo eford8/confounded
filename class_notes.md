@@ -154,3 +154,18 @@ Cool if you can mix a few of the above types of points.
   - What limitations does Confounded have?
     - Limitation, then idea for addressing the limitation
   - What else might Confounded be used for?
+
+## What I've done
+
+- Changed the title
+- Reworked the abstract
+- Reworked the first "Background" paragraph
+- Added about 5 references to the claim that DNNs work with expression data
+- Added a few words about the Louizos findings (VFAE) showing that it's effective
+- Added what ReLU stands for
+- Added R & RStudio version numbers
+- Added explanations about dropout and batch norm
+- Changed TCGA wording "batch effect"->"confounding effect"
+- Changed "important signal"->"class-related signal"
+- Updated the MNIST digits image and the caption
+- Put actual numbers instead of improvement ratios for MSE / MMD
