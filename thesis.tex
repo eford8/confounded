@@ -1,6 +1,7 @@
 \documentclass[notitlepage]{article}
 \usepackage{graphicx}
 \usepackage{authblk}
+\usepackage{hyperref}
 \usepackage{url}
 \usepackage[inline,shortlabels]{enumitem}
 \usepackage[square,numbers]{natbib}
@@ -25,10 +26,14 @@
 \maketitle
 
 \begin{abstract}
-	Many biological studies, particularly studies involving the genetics of human disease, could discover items of greater statistical and biological significance if performed with larger data sets.
-	Many data sets are publicly available and could be combined in order to increase these studies' significance, but even when the same type of data are collected by multiple studies, minor differences in collection methodologies and environments can lead to confounding effects in the data which can in turn cause incorrect results.
-	In order to combine date produced under different conditions, we applied deep learning to remove these effects and combine gene expression datasets.
-	We created an adversarial variational autoencoder in order to remove confounding effects from the data while minimizing the amount of change to the input data.
+	Gene expression data has many uses.
+	However, because of the high dimensionality of this data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analysis.
+	For example, collecting data in multiple runs causes nontrivial differences in the data (known as batch effects),
+	known covariates that are not of interest to the study may have strong effects,
+	and there may be large systemic effects when integrating multiple expression datasets.
+	Additionally, many of these confounding effects represent higher-order interactions and cannot be removed with linear methodologies.
+	We created Confounded in order to remove these effects from expression data
+	Confounded is an adversarial variational autoencoder that removes confounding effects while minimizing the amount of change to the input data.
 	We tested the model on artificially constructed data and commonly used real gene expression datasets and compared the output with the output from other common batch adjustment algorithms.
 	We also applied the model to remove the cancer-type-specific signal from pan-cancer expression data.
 	Our software is available at \url{https://github.com/jdayton3/Confounded} to enable other scientists to remove confounding effects from their own data using our methodologies.
