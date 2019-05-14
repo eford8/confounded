@@ -1,37 +1,43 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage{titling}
 
-\title{Adversarial Deep Neural Networks Effectively Remove Nonlinear Batch Effects from Gene-expression Data}
+\title{Adversarial Deep Neural Networks Effectively Remove Nonlinear Batch Effects from Gene-Expression Data}
 \author{Jonathan B. Dayton}
 % \author[1]{Jonathan B. Dayton}
 % \author[1]{Stephen R. Piccolo}
 % \affil[1]{Department of Biology, Brigham Young University, Provo, UT 84602 USA}
 \date{2019}
 
+% Times New Roman for the thesis submission
+% \usepackage{mathptmx}
 \usepackage{graphicx}
+\usepackage{setspace}
 \usepackage{authblk}
-\usepackage{hyperref}
 \usepackage{url}
+\usepackage{hyperref}
 \usepackage[inline,shortlabels]{enumitem}
 \usepackage[square,numbers]{natbib}
 % \usepackage{natbib}
-\usepackage[nomarkers,nolists]{endfloat}
+\usepackage[nomarkers,nolists,tabhead,fighead]{endfloat}
 \renewcommand{\efloatseparator}{\mbox{}} % multiple figures per page
-\usepackage[letterpaper,left=1in,right=1in,top=1in,bottom=1in,footskip=0.25in]{geometry}
+\usepackage[letterpaper,left=1in,right=1in,top=1in,bottom=1in]{geometry}
 \usepackage{csvsimple}
 \usepackage{multirow}
 \usepackage[table]{xcolor}
+\usepackage{changepage}
 \bibliographystyle{unsrtnat}
-
-
 
 \begin{document}
 
-\newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}
+\pagenumbering{roman}
 % Cover page
 \begin{titlingpage}
 	\begin{center}
-		\thetitle\\
+		\begin{adjustwidth}{+0.5in}{+0.5in}
+			\begin{center}
+				\doublespacing \thetitle\\ \singlespacing
+			\end{center}
+		\end{adjustwidth}
 		\vfill
 		\theauthor\\
 		\vfill
@@ -40,11 +46,11 @@
 		in partial fulfillment of the requirements for the degree of\\
 		\vspace{1em}
 		Master of Science\\
-		\vspace{3em}
+		\vfill
 		Stephen R. Piccolo, Chair\\
 		Mark Clement\\
 		David Wingate\\
-		\vspace{4em}
+		\vfill
 		Department of Biology\\
 		\vspace{1em}
 		Brigham Young University
@@ -56,13 +62,22 @@
 
 \end{titlingpage}
 
-% Title page
+% Title / abstract page
 \begin{titlingpage}
 	\begin{center}
-		ABSTRACT
+		ABSTRACT\\
+		\vspace{1em}
+		\begin{adjustwidth}{+0.5in}{+0.5in}
+			\begin{center}
+				\thetitle\\
+			\end{center}
+		\end{adjustwidth}
+		\vspace{1em}
+		\theauthor\\
+		Department of Biology, BYU\\
+		Master of Science
 	\end{center}
-	\maketitle
-	\begin{abstract}
+	% \begin{abstract}
 		Gene-expression profiling enables researchers to quantify transcription levels in cells, thus providing insight into functional mechanisms of diseases and other biological processes.
 		However, because of the high dimensionality of this data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analysis.
 		For example, collecting data in multiple runs causes nontrivial differences in the data (known as batch effects),
@@ -74,13 +89,28 @@
 		We tested the model on artificially constructed data and commonly used real gene expression datasets and compared the output with the output from other common batch adjustment algorithms.
 		We also applied the model to remove the cancer-type-specific signal from pan-cancer expression data.
 		Our software is available at \url{https://github.com/jdayton3/Confounded} to enable other scientists to remove confounding effects from their own data using our methodologies.
-	\end{abstract}
+	% \end{abstract}
+	\vfill
+	\noindent
+	Keywords: batch effects, batch correction, gene expression, transcriptomics, deep learning, adversarial neural network, variational autoencoder
 \end{titlingpage}
 
-\restoregeometry
-\linespread{2}
+\doublespacing
 
+\begin{titlingpage}
+	\begin{center}
+		ACKNOWLEDGMENTS\\
+		This page is optional.
+	\end{center}
+\end{titlingpage}
 
+\setcounter{page}{4}
+\tableofcontents
+\listoftables
+\listoffigures
+\pagebreak
+
+\pagenumbering{arabic}
 \section{Background} \label{sec:background}
 
 Gene expression data can be applied in many ways to advance our understanding of medicine and biology.
@@ -106,7 +136,7 @@ Each of these problems---batch effects, known covariates, and dataset integratio
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/adjuster_workflow.pdf}
-	\caption[]{\textbf{Batch adjustment justification and steps}
+	\caption[Batch adjustment steps]{\textbf{Batch adjustment justification and steps}
 	\begin{enumerate*}[(a)]
 		\item When measurements are collected from a sample ($X$), systemic effects ($H$) also affect the measurements.
 		\item If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements.
@@ -166,7 +196,7 @@ All layers in the network were fully connected and all activation functions were
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/network.pdf}
-	\caption{\textbf{Network architecture} of Confounded.
+	\caption[Network architecture of Confounded]{\textbf{Network architecture} of Confounded.
 	Data with batch effects (represented by different colors) are input into an autoencoder.
 	The output of the autoencoder is classified by a discriminator network based on batch.
 	The autoencoder is then penalized based on the success of the discriminator.
@@ -212,10 +242,10 @@ For each dataset, training typically took roughly 30 minutes to complete, includ
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/rough/training_loss.png}
-	\caption{Autoencoder and discriminator loss over time for one run of Confounded.
+	\includegraphics[width=\columnwidth]{figures/final/training_loss.pdf}
+	\caption[Autoencoder and discriminator loss]{\textbf{Autoencoder and discriminator loss} over time for one run of Confounded.
 	Over the course of training, the autoencoder more faithfully replicates the input data.
-	The autoencoder also seems to introduce noise (see around iteration 3100) in response to the discriminator's slight improvements.}
+	The autoencoder also seems to introduce noise (see the red dashed line around iteration 3100) in response to the discriminator's slight improvements.}
 	\label{fig:training_loss}
 \end{figure}
 
@@ -226,7 +256,7 @@ In order to test both theoretical and practical differences between Confounded a
 \begin{table}
 	\centering
 	\input{figures/final/datasets.tex}
-	\caption{\textbf{Dataset information} for each dataset used.}
+	\caption[Dataset information]{\textbf{Dataset information} for each dataset used.}
 	\label{tab:datasets}
 \end{table}
 
@@ -335,7 +365,7 @@ This may indicate an effective removal of nonlinear effects in both cases.
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/pca.pdf}
-	\caption{\textbf{Principal components analysis} (PCA) of the GSE37199 dataset before and after batch adjustment with various adjusters.
+	\caption[Principal components analysis (PCA)]{\textbf{Principal components analysis} (PCA) of the GSE37199 dataset before and after batch adjustment with various adjusters.
 	None of the datasets appear to be linearly separable.
 	Confounded appears to maintain the same distribution of data overall as the unadjusted data while perhaps aligning the batches' distributions.}
 	\label{fig:pca}
@@ -343,21 +373,21 @@ This may indicate an effective removal of nonlinear effects in both cases.
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/tsne.pdf}
-	\caption{\textbf{T-distributed Stochastic Neighbor Embedding} (t-SNE) plot for the GSE37199 dataset before and after adjustment with several algorithms.
+	\caption[T-distributed Stochastic Neighbor Embedding (t-SNE)]{\textbf{T-distributed Stochastic Neighbor Embedding} (t-SNE) plot for the GSE37199 dataset before and after adjustment with several algorithms.
 	The data seem to cluster less by batch for both Confounded and ComBat, indicating that both adjusters may be removing nonlinear effects in this dataset.}
 	\label{fig:tsne}
 \end{figure}
 
 Confounded shows mixed success with the MSE and MMD metrics.
-With MSE, Confounded outperformed the scale adjuster in 3 of the 4 datasets but scored drastically worse on the fourth dataset, with score pairs of $\{(0.003, 0.00168), (0.247, 0.0698), (0.00312, 0.0187), (912315, 139458)\}$.
-With MMD, Confounded outperformed the scale adjuster again in 3 of the 4 datasets and tied the scale adjuster on the fourth dataset, with scores of $\{(0.463, 0.258),(0.0906, 0.0376),(0.0653, 0.0117),(0.0942, 0.0942)\}$.
+With MSE, Confounded outperformed the scale adjuster in 3 of the 4 datasets but scored drastically worse on the fourth dataset, with score pairs of \{(0.003, 0.00168), (0.247, 0.0698), (0.00312, 0.0187), (912315, 139458)\}.
+With MMD, Confounded outperformed the scale adjuster again in 3 of the 4 datasets and tied the scale adjuster on the fourth dataset, with scores of \{(0.463, 0.258),(0.0906, 0.0376),(0.0653, 0.0117),(0.0942, 0.0942)\}.
 With both metrics, Confounded consistently performed somewhat worse than ComBat.
 (See Figures \ref{fig:mse} and \ref{fig:mmd}.)
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/mse.pdf}
-	\caption{\textbf{Mean squared error} (MSE) between the data prior to and after adjustment with various algorithms.
+	\caption[Mean squared error]{\textbf{Mean squared error} (MSE) between the data prior to and after adjustment with various algorithms.
 	Lower MSE represents that the adjuster has more faithfully reproduced the input data.
 	MSE for unadjusted data will always be 0 because the input data is identical to the output data.
 	Confounded usually performs better than the scale adjuster and somewhat worse than ComBat when measuring MSE.}
@@ -366,7 +396,7 @@ With both metrics, Confounded consistently performed somewhat worse than ComBat.
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/mmd.pdf}
-	\caption{\textbf{Maximum mean discrepancy} (MMD) between different batches. Lower MMD indicates that the distributions of the different batches are more similar.
+	\caption[Maximum mean discrepancy]{\textbf{Maximum mean discrepancy} (MMD) between different batches. Lower MMD indicates that the distributions of the different batches are more similar.
 	In cases with more than two batches, MMD is computed pairwise between each batch and averaged.
 	In each case, Confounded usually performs better than the scale adjuster and somewhat worse than ComBat when measuring MSE.}
 	\label{fig:mmd}
@@ -384,7 +414,7 @@ This indicates that while ComBat's performance may work at least as well as Conf
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/batch_accuracy.pdf}
-	\caption{\textbf{Batch classification accuracy} from 4-fold cross-validation repeated 3 times for several classifiers.
+	\caption[Batch classification accuracy]{\textbf{Batch classification accuracy} from 4-fold cross-validation repeated 3 times for several classifiers.
 	Lower batch accuracy indicates that more batch-related signal has been removed and therefore indicates better performance.
 	Confounded's performance is similar to ComBat's for the smaller datasets and is improved for the larger datasets.
 	See also Table \ref{tab:batch}.}
@@ -393,7 +423,7 @@ This indicates that while ComBat's performance may work at least as well as Conf
 \begin{table}
 	\centering
 	\input{figures/final/batch.tex}
-	\caption{\textbf{Batch classification accuracy} for several datasets and adjusters.
+	\caption[Batch classification accuracy]{\textbf{Batch classification accuracy} for several datasets and adjusters.
 	The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers.
 	See also Figure \ref{fig:batch}.}
 	\label{tab:batch}
@@ -417,14 +447,14 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/true_class_accuracy.pdf}
-	\caption{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross-validation repeated 3 times.
+	\caption[True class classification accuracy]{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross-validation repeated 3 times.
 	See also Table \ref{tab:true_class}.}
 	\label{fig:true_class}
 \end{figure}
 \begin{table}
 	\centering
 	\input{figures/final/true_class.tex}
-	\caption{\textbf{True class classification accuracy} for several datasets and adjusters.
+	\caption[True class classification accuracy]{\textbf{True class classification accuracy} for several datasets and adjusters.
 	After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment.
 	See also Figure \ref{fig:true_class}.}
 	\label{tab:true_class}
@@ -433,7 +463,7 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/mnist.png}
-	\caption[]{\textbf{MNIST handwritten digits}
+	\caption[MNIST handwritten digits]{\textbf{MNIST handwritten digits}
 	\begin{enumerate*}[(a)]
 		\item before any adjustment,
 		\item with artificial noise added,
@@ -441,7 +471,6 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 		\item adjusted for noise by ComBat, and
 		\item adjusted for noise by Confounded.
 	\end{enumerate*}
-
 	Although Confounded seems to remove more noise from the background, it struggles in some cases to accurately replicate the input data.}
 	\label{fig:mnist}
 \end{figure}
