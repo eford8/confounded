@@ -1,4 +1,13 @@
-\documentclass[notitlepage]{article}
+\documentclass{article}
+\usepackage{titling}
+
+\title{Adversarial Deep Neural Networks Effectively Remove Nonlinear Batch Effects from Gene-expression Data}
+\author{Jonathan B. Dayton}
+% \author[1]{Jonathan B. Dayton}
+% \author[1]{Stephen R. Piccolo}
+% \affil[1]{Department of Biology, Brigham Young University, Provo, UT 84602 USA}
+\date{2019}
+
 \usepackage{graphicx}
 \usepackage{authblk}
 \usepackage{hyperref}
@@ -12,32 +21,65 @@
 \usepackage{csvsimple}
 \usepackage{multirow}
 \usepackage[table]{xcolor}
-\linespread{1.5}
 \bibliographystyle{unsrtnat}
+
+
 
 \begin{document}
 
-\title{Adversarial deep neural networks effectively remove nonlinear batch effects from gene-expression data}
-\author[1]{Jonathan B. Dayton}
-\author[1]{Stephen R. Piccolo}
-\affil[1]{Department of Biology, Brigham Young University, Provo, UT 84602 USA}
-\date{}
+\newgeometry{top=1in, bottom=1in, left=1.25in, right=1.25in}
+% Cover page
+\begin{titlingpage}
+	\begin{center}
+		\thetitle\\
+		\vfill
+		\theauthor\\
+		\vfill
+		A thesis submitted to the faculty of\\
+		Brigham Young University\\
+		in partial fulfillment of the requirements for the degree of\\
+		\vspace{1em}
+		Master of Science\\
+		\vspace{3em}
+		Stephen R. Piccolo, Chair\\
+		Mark Clement\\
+		David Wingate\\
+		\vspace{4em}
+		Department of Biology\\
+		\vspace{1em}
+		Brigham Young University
+		\vfill
+		Copyright \textcopyright \ \thedate \ \theauthor\\
+		\vspace{1em}
+		All Rights Reserved
+	\end{center}
 
-\maketitle
+\end{titlingpage}
 
-\begin{abstract}
-	Gene expression data is really cool.
-	However, because of the high dimensionality of this data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analysis.
-	For example, collecting data in multiple runs causes nontrivial differences in the data (known as batch effects),
-	known covariates that are not of interest to the study may have strong effects,
-	and there may be large systemic effects when integrating multiple expression datasets.
-	Additionally, many of these confounding effects represent higher-order interactions and cannot be removed with linear methodologies.
-	We created Confounded in order to remove these effects from expression data.
-	Confounded is an adversarial variational autoencoder that removes confounding effects while minimizing the amount of change to the input data.
-	We tested the model on artificially constructed data and commonly used real gene expression datasets and compared the output with the output from other common batch adjustment algorithms.
-	We also applied the model to remove the cancer-type-specific signal from pan-cancer expression data.
-	Our software is available at \url{https://github.com/jdayton3/Confounded} to enable other scientists to remove confounding effects from their own data using our methodologies.
-\end{abstract}
+% Title page
+\begin{titlingpage}
+	\begin{center}
+		ABSTRACT
+	\end{center}
+	\maketitle
+	\begin{abstract}
+		Gene-expression profiling enables researchers to quantify transcription levels in cells, thus providing insight into functional mechanisms of diseases and other biological processes.
+		However, because of the high dimensionality of this data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analysis.
+		For example, collecting data in multiple runs causes nontrivial differences in the data (known as batch effects),
+		known covariates that are not of interest to the study may have strong effects,
+		and there may be large systemic effects when integrating multiple expression datasets.
+		Additionally, many of these confounding effects represent higher-order interactions and cannot be removed with linear methodologies.
+		We created Confounded in order to remove these effects from expression data.
+		Confounded is an adversarial variational autoencoder that removes confounding effects while minimizing the amount of change to the input data.
+		We tested the model on artificially constructed data and commonly used real gene expression datasets and compared the output with the output from other common batch adjustment algorithms.
+		We also applied the model to remove the cancer-type-specific signal from pan-cancer expression data.
+		Our software is available at \url{https://github.com/jdayton3/Confounded} to enable other scientists to remove confounding effects from their own data using our methodologies.
+	\end{abstract}
+\end{titlingpage}
+
+\restoregeometry
+\linespread{2}
+
 
 \section{Background} \label{sec:background}
 
@@ -406,47 +448,54 @@ However, preliminary testing indicates that fine-tuning Confounded's parameters 
 
 \section{Discussion} \label{sec:discussion}
 
-\subsection{Why use neural networks for batch adjustment?}
+\textbf{Why should I use a neural network for batch adjustment?}
+The process of measuring data typically leaves confounding effects, especially when the data or measurement process involves living things.
+Imagine an experiment where two researchers measure the length of caterpillars.
+If one researcher is left-eye dominant and the other is right-eye dominant, they may each see lengths as being a millimeter different.
+If both researchers use the same wooden ruler at different relative humidities, the measurements may come out differently due to the wood swelling or due to the caterpillars reactions to humidity.
+These same types of problems exist when measuring expression levels, but to more of an extreme---in addition to the target values and measuring equipment changing slightly due to systemic factors, the target values also change in response to each other.
+Each of the 20,000 transcript levels may influence or be influenced by other transcript levels.
+These cascading network-like effects are extremely likely to have nonlinear components, and our research shows that these nonlinear effects do indeed exist in gene expression data, thus rendering linear batch correction methods insufficient.
+Therefore, some form of nonlinear adjustment must be used in order to correct for real-world confounding effects.
+Rather than individually model each of infinitely many possible nonlinear interactions to see which represent confounders, we can use a neural network to both approximate and remove the confounders, since neural networks are proven to be universal function approximators \citep{csaji_approximation_2001}.
 
-\subsection{How can I tell how well batch adjustment worked?}
+\textbf{How can I tell how well batch adjustment worked?}
+Although the metrics and figures that have been used in the past to validate batch adjustment (such as PCA, MSE, and MMD) represent how well linear effects have been removed, they cannot completely display whether two batches are distinguishable from one another.
+Machine learning algorithms are designed specifically to tease out patterns in data that may distinguish one group from another.
+We suggest to users of batch correction software that they use machine learning classification accuracy before and after correction in order to determine the degree of batch removal.
+We also suggest to researchers in the field of batch correction that classification accuracy be used as a metric in validating their software.
+Specifically, the Random Forests algorithm \citep{tin_kam_ho_random_1995} seems to work very well and runs relatively quickly on gene expression data.
 
-\subsection{Which batch adjuster should I use?}
+\textbf{Which batch adjuster should I use?}
+In our testing, ComBat did very well with small ($n < 100$) datasets, even with removing any identifiable nonlinear effects.
+However, Confounded outperformed ComBat on the larger datasets according to the batch classification accuracy metric.
+In addition to dataset size, researchers selecting a batch adjustment algorithm should consider how important it is for them to accurately replicate their input data.
+Such researchers can adjust Confounded's $\lambda$ parameter in order to balance the tradeoff of removing batch and matching the inputs.
 
-\subsection{What limitations does Confounded have?}
+\textbf{What limitations does Confounded have?}
+\begin{enumerate*}[(a)]
+	\item Confounded uses a variational autoencoder, which are known for often outputting a blurry version of the input data (as can be seen in Figure \ref{fig:mnist}).
+	However, recent work has identified modifications that may be made to the basic VAE structure to make output images sharper and more realistic \citep{hou_deep_2016}.
+	Similar research with variational autoencoders and gene expression data may yield improved reconstruction losses and decrease the blurring effect.
+	\item Confounded takes a long time to run in comparison with ComBat and other linear adjusters.
+	Although we acknowledge this as a downfall of many types of machine learning and of neural network in particular, we believe that 30-60 minutes is a reasonable amount of time for a step that will be run only once per pipeline and that can greatly improve data quality.
+	\item It can be difficult to identify the optimal network structure and parameter set for a neural network.
+	Though this is the case for many applications of neural networks, we feel that Confounded's default structure worked well in our testing and that it will suffice for most batch correction applications.
+	\item Neural networks usually perform better when given large amounts of data, and traditional batch datasets typically have very few samples.
+	We did find that ComBat may outperform Confounded on many smaller, more traditional datasets, but that Confounded performs better on larger datasets.
+	However, Confounded did perform reasonably well with the smaller datasets and appeared to avoid overfitting.
+	In cases where ComBat is unable to completely remove batch effects in a small dataset, Confounded may be a viable replacement method.
+\end{enumerate*}
 
-\subsection{What else might Confounded be used for?}
-
-\subsection{Classification accuracy quantifies batch removal more accurately than MSE and MMD}
-
-Our MSE \ref{fig:mse} and MMD \ref{fig:mmd} metrics both show that ComBat performed better than Confounded for the MNIST dataset, but the effects left after ComBat finished are still identifiable by Random Forests with 99.9\% accuracy (Table \ref{tab:batch}).
-Additionally, previous work \cite{dayton_classifying_2017-1} has shown that PCA can be misleading when determining whether batch effects have been sufficiently removed from a dataset.
-Each of these methods seems to focus on linear separability.
-
-Many machine learning classification algorithms are able to identify both linear and nonlinear interactions between variables.
-A decrease in classifier accuracy represents that nonlinear batch effects have been decreased.
-Random Forests often has high batch classification accuracy after ComBat-adjustment even when other classifiers are unable to identify differences between batches, whereas SVC often performs no better than baseline (see Figure \ref{fig:batch} and Table \ref{tab:batch}).
-In addition, ComBat often excels at hiding batch effects from Naive Bayes.
-We suggest that it may be important to use several classifiers to identify whether batch effects remain after correction.
-
-We encourage future researchers who study batch correction or who use it in their pipelines to use classifier accuracy to determine the degree to which batch effects still remain in their data.
-This is especially important to take into account when analyses will include some type of machine learning that can detect nonlinear effects.
-
-\subsection{Dataset should be considered when applying batch adjustment}
-
-Nonlinear batch effects often remain after traditional batch adjustment for larger datasets.
-For the larger datasets in our study, Confounded outperformed the other batch adjustment algorithms according to the batch classification metrics.
-However, Confounded also reduced the amount of true signal in those same datasets more than other algorithms.
-This may be able to be ameliorated by hyperparameter optimization,
-but in cases where batch effects and true signal are not independent, researchers may need to decide the tradeoff between how much true signal loss and remaining batch effects are acceptable.
-
-\subsection{Confounded may have other uses}
-
-At its root, batch correction is a data integration problem;
+\textbf{What else might Confounded be used for?}
+At its root, batch correction is a data integration problem:
 data from multiple batches must have batch-specific confounding effects removed in order to be treated as one dataset.
 Confounded shows promise in removing traditional batch effects from microarray expression data in the Bladderbatch and GSE37199 datasets.
 It also effectively decreased artificial batch effects in image data and tissue-specific effects in RNA-Seq data.
 Confounded may be effective in other data integration problems, such as combining microarray with RNA-Seq datasets, or merging several large datasets measured under different conditions.
-We invite future researchers to utilize Confounded in any pipelines where data must be integrated from different sources, and to assess the effectiveness of doing so by measuring batch classifier accuracy.
+
+Confounded, and adversarial autoencoders in general, show promise as a valuable way to remove confounding biases from expression datasets.
+Such methods will enable researchers access to larger datasets, therefore increasing the scope of analyses and furthering science as a whole.
 
 \bibliography{references}
 
