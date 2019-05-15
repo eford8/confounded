@@ -17,3 +17,9 @@ latex2rtf thesis
 ```
 
 Then open it up in Word & convert to Docx
+
+## Prepping for Thesis Submission
+
+[This page](https://gradstudies.byu.edu/file/adv-form-11) has a checklist for university requirements.
+
+[This one](http://biology.byu.edu/Portals/10/docs/gradForms/ETD%20College%20of%20Life%20Sciences%20Requirements.pdf) has the college requirements.
