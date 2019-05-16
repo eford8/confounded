@@ -95,7 +95,7 @@
 	\end{center}
 	% \begin{abstract}
 		Gene-expression profiling enables researchers to quantify transcription levels in cells, thus providing insight into functional mechanisms of diseases and other biological processes.
-		However, because of the high dimensionality of this data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analysis.
+		However, because of the high dimensionality of these data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analysis.
 		For example, collecting data in multiple runs causes nontrivial differences in the data (known as batch effects),
 		known covariates that are not of interest to the study may have strong effects,
 		and there may be large systemic effects when integrating multiple expression datasets.
@@ -147,7 +147,7 @@
 Gene expression data can be applied in many ways to advance our understanding of medicine and biology.
 For example, expression data has been applied to discover conserved genetic modules \citep{stuart_gene-coexpression_2003}, to better understand the mechanisms of cardiovascular disease \citep{henriksen_application_2002}, to more accurately predict the clinical outcome in cancer patients \citep{veer_gene_2002}, and to discover effective drugs for treating specific diseases \citep{sirota_discovery_2011}.
 Expression datasets are quite ``wide,'' often containing tens of thousands of columns representing each gene in the human transcriptome.
-Because of the sensitive nature of this data (i.e. gene product levels in organisms may respond drastically to small environmental changes) and of the equipment used to quantify expression levels, expression data often contains unwanted confounding effects that can skew analysis.
+Because of the sensitive nature of these data (i.e. gene product levels in organisms may respond drastically to small environmental changes) and of the equipment used to quantify expression levels, expression data often contains unwanted confounding effects that can skew analysis.
 Three examples of this include
 \begin{enumerate*}[(a)]
 	\item batch effects, \label{it:batch}
@@ -182,14 +182,14 @@ Each of these problems---batch effects, known covariates, and dataset integratio
 Several methods exist for removing batch effects from gene expression datasets.
 Two commonly used methods are ComBat \citep{johnson_adjusting_2007} and SVA \citep{leek_capturing_2007}.
 ComBat uses an empirical Bayes method to estimate batch effect parameters and then uses linear regression to remove the effects, and SVA uses singular value decomposition to model batch effects which can then be accounted for in statistical analyses.
-Since both of these methods use linear methods to model batch effects, they are not designed to account for nonlinear effects, such as complex interactions in gene pathways in response to environmental changes.
-As machine learning becomes more common in biological research, these nonlinear batch effects become more troublesome since many machine learning algorithms can successfully identify complex interactions between variables.
-Advances in neural networks have introduced new ways to account for higher-order, nonlinear relationships in data.
+Since both of these methods use linear methods to model confounding effects, they are not designed to account for nonlinear effects, such as the cascading changes in gene pathways in response to environmental stressors (e.g. gene X transcripts increase and gene Y transcripts decrease in response to rising temperature, and since both are now past a certain threshold, gene Z transcripts also increase, and so on).
+As machine learning becomes more common in biological research, these nonlinear confounding effects become more troublesome since many machine learning algorithms can successfully identify complex interactions between variables.
+For example, advances in neural networks have introduced new ways to account for higher-order, nonlinear relationships in data.
 These networks have proven effective in removing irrelevant, domain-specific signal in credit rating, online reviews, and image recognition tasks \citep{louizos_variational_2015}.
 Recent work \cite{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019} has applied neural networks to batch effects.
-However, these recent programs have several items that complicate their usability on many real-world datasets:
-they require that the input data only contains two batches, that the batches are sufficiently large, and that the batches are perfectly balanced.
-These requirements rarely hold in existing datasets; for example, the bladderbatch dataset used in the documentation for the R sva package \cite{leek_bladderbatch_2017,leek_sva_2017} has 5 batches, only 57 samples, and between 4 and 19 samples per batch.
+However, several limitations complicate their usability on many real-world datasets:
+they require that the input data only contains two batches, that the batches are sufficiently large (we received errors when testing with a subset of MNIST where n=100), and that the batches are perfectly balanced.
+These requirements rarely hold in existing datasets; for example, the bladderbatch dataset used in the R sva package \cite{leek_bladderbatch_2017,leek_sva_2017} has 5 batches, only 57 samples, and between 4 and 19 samples per batch.
 Additionally, the metrics these studies have used to validate results don't test whether complex interactions still remain in the data.
 
 To address these issues, we implemented a deep neural network approach to batch correction that works on real-world datasets, and we calculated batch removal measurements based on machine learning algorithms to test for remaining nonlinear effects.
@@ -209,9 +209,9 @@ Recently, researchers have experimented with discouraging neural networks from l
 2. to forget any patterns that help distinguish between domains \citep{ganin_domain-adversarial_2015,tzeng_deep_2014-2}.
 \citet{louizos_variational_2015} used this type of dual objective function with a variational autoencoder and successfully removed domain-based variability in credit score, financial savings, and hospital admittance datasets.
 
-In this study, we present Confounded, an adversarial autoencoder that identifies and removes effects between different batches.
-We test the hypothesis that using an adversarial neural network can correct for batch effects more completely than previous tools do.
-We also explore the extent to which batch effects still remain in different datasets after adjustment with various algorithms, and we present a framework to assess the extent to which batch effects remain after adjustment using various classification algorithms.
+In this study, we present Confounded, an adversarial autoencoder that identifies and removes confounding effects.
+We test the hypothesis that using an adversarial neural network can correct for confounding effects more completely than previous tools do.
+We also explore the extent to which confounders still remain in different datasets after adjustment with various algorithms, and we present a framework to assess the extent to which confounding effects remain after adjustment using various classification algorithms.
 
 \section{Methods} \label{sec:methods}
 
@@ -219,9 +219,9 @@ All our code has been made publicly available at \url{https://github.com/jdayton
 
 \subsection{Network Structure}
 
-We used an adversarial autoencoder network to model and remove the batch effects.
-We structured this network in two parts: a variational autoencoder \cite{louizos_variational_2015} to replicate the input (expression) data and a discriminator to detect remaining batch effects in the autoencoder's output.
-By penalizing the autoencoder for the discriminator's success, the autoencoder subnetwork learned over the course of training to output the expression data free of batch effects.
+We used an adversarial autoencoder network to model and remove the confounding effects.
+We structured this network in two parts: a variational autoencoder \cite{louizos_variational_2015} to replicate the input (expression) data and a discriminator to detect remaining confounding effects in the autoencoder's output.
+By penalizing the autoencoder for the discriminator's success, the autoencoder subnetwork learned over the course of training to output the expression data with confounding effects minimized.
 We implemented the neural network in TensorFlow 1.11.0 \cite{abadi_tensorflow_2015} with Python 3.6 \cite{python_software_foundation_python_2019}.
 All layers in the network were fully connected and all activation functions were Rectified Linear Units (ReLUs) \cite{agarap_deep_2018} except the final layers in the autoencoder and the discriminator, which used the sigmoid function.
 
@@ -239,8 +239,11 @@ All layers in the network were fully connected and all activation functions were
 
 \subsubsection{Autoencoder}
 
-We implemented the variational autoencoder \cite{louizos_variational_2015} described by \citet[Chapter 15]{geron_hands-machine_2017}.
-Additional information can be found in our supplementary material.
+We implemented the variational autoencoder \citep{louizos_variational_2015} described by \citet[Chapter 15]{geron_hands-machine_2017}.
+This network has 2 hidden encoding layers and 2 decoding layers, each of size 500.
+The code size is 20.
+Each hidden layer is activated with the Exponential Linear Unit (ELU) function \citep{clevert_fast_2015}.
+It is trained with the Adam optimizer \citep{kingma_adam_2014} on reconstruction loss (sigmoid cross entropy) combined with latent loss (KL divergence \citep{kullback_information_1951}).
 
 \subsubsection{Discriminator}
 
@@ -252,7 +255,7 @@ These additions seemed to reduce overfitting in the discriminator.
 \subsubsection{Loss functions}
 
 We trained the network using three loss functions.
-First, we calculated the autoencoder's loss ($L_A$) by summing the reconstruction loss (sigmoid cross entropy between the autoencoder's input and output) and the latent loss (Kullback-Leibler divergence \cite{kullback_information_1951} of the code layer).
+First, we calculated the autoencoder's loss ($L_A$) by summing the reconstruction loss (sigmoid cross entropy between the autoencoder's input and output) and the latent loss (Kullback-Leibler (KL) divergence \cite{kullback_information_1951} of the code layer).
 Second, we calculated the discriminator's loss ($L_D$) as sigmoid cross entropy between its output and a one-hot encoding of the samples' batch labels.
 Finally, we also trained the autoencoder layers on a combination of the two previous losses,
 
@@ -261,13 +264,13 @@ Finally, we also trained the autoencoder layers on a combination of the two prev
 	L_{dual} = L_A - \lambda{}(L_D)
 \end{equation}
 
-The $\lambda$ value represents a tradeoff parameter for tuning the network's tendency for more faithfully replicating the input or for more completely removing batch effects.
-A higher $\lambda$ value indicates that the network should remove batch effects more aggressively, whereas a lower value indicates that the network should instead favor faithfully reconstructing the input data.
+The $\lambda$ value represents a tradeoff parameter for tuning the network's tendency for more faithfully replicating the input or for more completely removing confounding effects.
+A higher $\lambda$ value indicates that the network should remove confounding effects more aggressively, whereas a lower value indicates that the network should instead favor faithfully reconstructing the input data.
 We did not optimize $L_A$ directly; instead we trained the autoencoder by optimizing $L_{dual}$.
 
 \subsubsection{Training}
 
-In all cases, we trained the network using the Adam Optimizer \cite{kingma_adam_2014} with a training rate of 0.0001 for 10,000 iterations on mini-batches of size 100.
+In all cases, we trained the network using the Adam Optimizer \citep{kingma_adam_2014} with a training rate of 0.0001 for 10,000 iterations on mini-batches of size 100.
 In each iteration, we optimized on both $L_D$ and $L_{dual}$.
 When optimizing $L_D$ (i.e. training the discriminator), we froze the autoencoder's weights, and vice versa.
 We trained the network on a 2017 Dell XPS 15 9560 with an 8-core Intel i7-7700HQ CPU and 16 GB of RAM.
@@ -277,7 +280,7 @@ For each dataset, training typically took roughly 30 minutes to complete, includ
 	\pdfbookmark[1]{Figure \ref{fig:training_loss}}{training_loss}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/training_loss.pdf}
-	\caption[Autoencoder and discriminator loss]{\textbf{Autoencoder and discriminator loss} over time for one run of Confounded.
+	\caption[Autoencoder and discriminator loss]{\textbf{Autoencoder and discriminator loss} over time for one run of Confounded on the MNIST dataset.
 	Over the course of training, the autoencoder more faithfully replicates the input data.
 	The autoencoder also seems to introduce noise (see the red dashed line around iteration 3100) in response to the discriminator's slight improvements.}
 	\label{fig:training_loss}
@@ -309,7 +312,7 @@ In this way, we show that the autoencoder is still able to find and represent sp
 
 \paragraph{Synthetic Batch Effects}
 
-Because there is no batch information in the MNIST digits dataset, we had to simulate nonlinear batch effects.
+Because there is no batch information in the MNIST digits dataset, we had to simulate nonlinear confonding effects.
 To do so, we wrote a Python script to take the MNIST data in, apply a nonlinear effect, and output the adjusted data.
 We applied nonlinear effects by iteratively realizing vectors of normally distributed values, multiplying and adding these vectors to the ``expression'' vectors, and applying nonlinearity to the adjusted vector.
 We split the image data into two batches while keeping the batches balanced (5,000 images for each batch) and including the same number of each digit in each batch.
@@ -327,7 +330,7 @@ Because bladderbatch is such a small dataset in terms of typical deep learning d
 \subsubsection{GSE37199}
 
 The GSE37199 dataset contains Affymetrix microarray gene-expression data from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
-We accessed a version of this data from \url{http://doi.org/10.17605/OSF.IO/SSK3T} that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
+We accessed a version of this dataset from \url{http://doi.org/10.17605/OSF.IO/SSK3T} that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
 It contains expression values for 93 tissue samples categorized as either ``Advanced castration resistant'' or ``good prognosis.''
 We used this cancer status variable as the ``true class'' for classification.
 It has two types of batch variables: ``plate'' and ``centre.''
@@ -346,9 +349,11 @@ We used this dataset as a way to test whether Confounded works on RNA-Seq data a
 
 \subsection{Comparison to other methods}
 
-We compared our method to two other batch adjusters: a mean and scale adjuster and ComBat \citep{johnson_adjusting_2007}.
-We implemented the mean and scale adjuster in the R programming language, version 3.6.0 \citep{r_core_team_r_2014} using RStudio version 1.2.1194 \citep{rstudio_team_rstudio_2018}.
-We used the ComBat implementation from the sva package \citep{leek_sva_2017} with some modifications to allow it to work on columns without variance in the MNIST dataset.
+We compared our method to two other batch adjusters: a scale adjuster and ComBat \citep{johnson_adjusting_2007}.
+We implemented the scale adjuster in the R programming language, version 3.6.0 \citep{r_core_team_r_2014} using RStudio version 1.2.1194 \citep{rstudio_team_rstudio_2018}.
+It adjusts the data by linearly expanding or contracting each batch so all batches have the same range.
+We used the ComBat implementation from the R sva package \citep{leek_sva_2017} with some modifications to allow it to work on columns without variance in the MNIST dataset.
+We initially intended to test against the SVA \citep{leek_capturing_2007} method but concluded that SVA is more suited for producing surrogate variables for further statistical research rather than removing those variables from the data.
 There are a number of other methods for batch adjustment that do and do not use deep neural networks (for example, see \citep{leek_capturing_2007,espin-perez_comparison_2018,shaham_removal_2017,shaham_batch_2018}). % TODO: add like 8 more methods
 Unfortunately, most of these methods lack a common interface and common assumptions that input datasets must meet.
 For these reasons, we compared Confounded only to the two methods listed above.
@@ -388,9 +393,12 @@ Therefore, given output data from the ideal batch adjuster, batch classification
 
 \section{Results} \label{sec:results}
 
-\subsection{Confounded removes nonlinear batch effects that other adjusters miss}
+The scaling method performed consistently worse across the qualitative and quantitative evaluations that we performed;
+ComBat and Confounded performed relatively well overall, but each of these algorithms excelled in different types of scenarios, which we illustrate below.
 
-Various previous studies use differing methods to show qualitatively and quantitatively how well batch effects have been removed.
+\subsection{Confounded removes nonlinear confounding effects that other adjusters miss}
+
+Various previous studies use differing methods to show qualitatively and quantitatively how well confounding effects have been removed.
 To compare Confounded to other batch adjustment methods, we compared PCA and t-SNE plots along with MSE, MMD, and classifier batch prediction accuracy (using various classifiers).
 
 PCA and t-SNE plots seem to show a decrease in separability after adjustment with various methods for the GSE37199 dataset (see Figures \ref{fig:pca} and \ref{fig:tsne}).
@@ -418,8 +426,8 @@ This may indicate an effective removal of nonlinear effects in both cases.
 \end{figure}
 
 Confounded shows mixed success with the MSE and MMD metrics.
-With MSE, Confounded outperformed the scale adjuster in 3 of the 4 datasets but scored drastically worse on the fourth dataset, with score pairs of \{(0.003, 0.00168), (0.247, 0.0698), (0.00312, 0.0187), (912315, 139458)\}.
-With MMD, Confounded outperformed the scale adjuster again in 3 of the 4 datasets and tied the scale adjuster on the fourth dataset, with scores of \{(0.463, 0.258),(0.0906, 0.0376),(0.0653, 0.0117),(0.0942, 0.0942)\}.
+With MSE, Confounded outperformed the scale adjuster in 3 of the 4 datasets but scored drastically worse on the MNIST dataset, with scores (listed as: scale, Confounded) of \{(0.003, 0.00168), (0.247, 0.0698), (0.00312, 0.0187), (912315, 139458)\}.
+With MMD, Confounded outperformed the scale adjuster again in 3 of the 4 datasets and tied the scale adjuster on the TCGA dataset, with scores of \{(0.463, 0.258),(0.0906, 0.0376),(0.0653, 0.0117),(0.0942, 0.0942)\}.
 With both metrics, Confounded consistently performed somewhat worse than ComBat.
 (See Figures \ref{fig:mse} and \ref{fig:mmd}.)
 
@@ -448,7 +456,7 @@ Using the batch classification accuracy metric, Confounded seems to outperform o
 With both the bladderbatch and GSE37199 datasets, batch classification accuracy decreases well below baseline after batch adjustment with ComBat for all classifiers we tested (see Table \ref{tab:batch}).
 Interestingly, batch accuracy also decreases drastically for the MNIST and TCGA datasets, but only for the Naive Bayes classifier.
 This may be due to two factors: both ComBat and Naive Bayes use Bayesian methods, so ComBat may specifically remove the effects that Naive Bayes identifies; and Naive Bayes does not find patterns based on interactions between variables.
-Although Naive Bayes is no longer able to identify batch effects in the data after ComBat-adjustment, Random Forests (which does use interactions between variables) still has a very high accuracy for MNIST and an increased accuracy for TCGA.
+Although Naive Bayes is no longer able to identify confounding effects in the data after ComBat-adjustment, Random Forests (which does use interactions between variables) still has a very high accuracy for MNIST and an increased accuracy for TCGA.
 In contrast, after adjustment by Confounded, the Random Forests algorithm's accuracy decreases more than with any other adjuster for both the MNIST and TCGA datasets.
 This indicates that while ComBat's performance may work at least as well as Confounded for smaller expression datasets, Confounded may work better with larger datasets.
 
@@ -486,14 +494,14 @@ For the Bladderbatch dataset, true class accuracy is much lower after adjusting 
 With the larger datasets, Confounded's true class accuracy consistently decreases below the accuracy of other adjusters.
 A look at the MNIST digits before and after adjustment (see Figure \ref{fig:mnist}) shows that Confounded's output is often blurry, as is common with the output of variational autoencoders \cite{hou_deep_2016}.
 With MNIST, Confounded's accuracy with Random Forests is still much higher than baseline (84.8\% vs. 11.4\%), but with TCGA, the accuracy decreases below baseline (66.5\% vs. 69.8\%) while the other adjusters' accuracies remain above baseline.
-However, preliminary testing indicates that fine-tuning Confounded's parameters to run on these datasets rather than using the default settings may greatly improve Confounded's post-adjustment true class accuracy.
-% TODO: include this^
+However, the particular set of parameters that we used in Confounded are likely not optimal for every dataset.
+Additional tuning may improve the performance metrics.
 
 \begin{figure}
 	\pdfbookmark[1]{Figure \ref{fig:true_class}}{true_class}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/true_class_accuracy.pdf}
-	\caption[True class classification accuracy]{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross-validation repeated 3 times.
+	\caption[True class classification accuracy]{\textbf{True class classification accuracy} for several datasets and adjusters with 4-fold cross-validation repeated 3 times. A higher accuracy after adjustment is desired because it represents that the adjuster has not destroyed the true class signal.
 	See also Table \ref{tab:true_class}.}
 	\label{fig:true_class}
 \end{figure}
@@ -563,14 +571,14 @@ Such researchers can adjust Confounded's $\lambda$ parameter in order to balance
 	\item Neural networks usually perform better when given large amounts of data, and traditional batch datasets typically have very few samples.
 	We did find that ComBat may outperform Confounded on many smaller, more traditional datasets, but that Confounded performs better on larger datasets.
 	However, Confounded did perform reasonably well with the smaller datasets and appeared to avoid overfitting.
-	In cases where ComBat is unable to completely remove batch effects in a small dataset, Confounded may be a viable replacement method.
+	In cases where ComBat is unable to completely remove confounding effects in a small dataset, Confounded may be a viable replacement method.
 \end{enumerate*}
 
 \textbf{What else might Confounded be used for?}
 At its root, batch correction is a data integration problem:
 data from multiple batches must have batch-specific confounding effects removed in order to be treated as one dataset.
 Confounded shows promise in removing traditional batch effects from microarray expression data in the Bladderbatch and GSE37199 datasets.
-It also effectively decreased artificial batch effects in image data and tissue-specific effects in RNA-Seq data.
+It also effectively decreased artificial batch effects in image data and cancer-type-specific confounding effects in RNA-Seq data.
 Confounded may be effective in other data integration problems, such as combining microarray with RNA-Seq datasets, or merging several large datasets measured under different conditions.
 
 Confounded, and adversarial autoencoders in general, show promise as a valuable way to remove confounding biases from expression datasets.

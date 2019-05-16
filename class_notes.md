@@ -169,3 +169,9 @@ Cool if you can mix a few of the above types of points.
 - Changed "important signal"->"class-related signal"
 - Updated the MNIST digits image and the caption
 - Put actual numbers instead of improvement ratios for MSE / MMD
+
+---
+
+"Blurry" section - images / other expression data
+"Confounded may be a viable replacement method" -> is an effective alternative
+Code & instructions for running it can be found at URL
