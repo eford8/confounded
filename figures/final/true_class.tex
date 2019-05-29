@@ -1,54 +1,50 @@
-\centering\rowcolors{2}{gray!6}{white}
-
+\centering
 \begin{tabular}{l|l|r|r|r|r|r}
-\hiderowcolors
 \hline
 Dataset & Adjustment & Baseline & GaussianNB & KNeighbors & RandomForest & SVC\\
 \hline
-\showrowcolors
- & Unadjusted &  & 0.9079365 & 0.9047619 & 0.8841270 & 0.9063492\\
+\rowcolor{gray!6}   & Unadjusted &  & 0.908 & 0.905 & 0.884 & 0.906\\
 \cline{2-2}
 \cline{4-7}
- & Scale &  & 0.6492063 & 0.7190476 & 0.6952381 & 0.7428571\\
+ & Scale &  & 0.649 & 0.719 & 0.695 & 0.743\\
 \cline{2-2}
 \cline{4-7}
- & ComBat &  & 0.6968254 & 0.5777778 & 0.7428571 & 0.7222222\\
+\rowcolor{gray!6}   & ComBat &  & 0.697 & 0.578 & 0.743 & 0.722\\
 \cline{2-2}
 \cline{4-7}
-\multirow[t]{-4}{*}{\raggedright\arraybackslash Bladder Batch} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.7017544} & 0.6730159 & 0.6761905 & 0.7206349 & 0.6984127\\
+\multirow[t]{-4}{*}{\raggedright\arraybackslash Bladder Batch} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.702} & 0.673 & 0.676 & 0.721 & 0.698\\
 \cline{1-7}
- & Unadjusted &  & 0.6612319 & 0.6890097 & 0.6896135 & 0.6618357\\
+\rowcolor{gray!6}   & Unadjusted &  & 0.661 & 0.689 & 0.690 & 0.662\\
 \cline{2-2}
 \cline{4-7}
- & Scale &  & 0.6322464 & 0.6902174 & 0.7041063 & 0.6618357\\
+ & Scale &  & 0.632 & 0.690 & 0.704 & 0.662\\
 \cline{2-2}
 \cline{4-7}
- & ComBat &  & 0.6467391 & 0.6757246 & 0.6044686 & 0.6618357\\
+\rowcolor{gray!6}   & ComBat &  & 0.647 & 0.676 & 0.604 & 0.662\\
 \cline{2-2}
 \cline{4-7}
-\multirow[t]{-4}{*}{\raggedright\arraybackslash GSE37199} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.6666667} & 0.6461353 & 0.6606280 & 0.6902174 & 0.6618357\\
+\multirow[t]{-4}{*}{\raggedright\arraybackslash GSE37199} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.667} & 0.646 & 0.661 & 0.690 & 0.662\\
 \cline{1-7}
- & Unadjusted &  & 0.8236658 & 0.9388265 & 0.8801867 & 0.9128345\\
+\rowcolor{gray!6}   & Unadjusted &  & 0.824 & 0.939 & 0.880 & 0.913\\
 \cline{2-2}
 \cline{4-7}
- & Scale &  & 0.8160683 & 0.9462902 & 0.8743188 & 0.9153669\\
+ & Scale &  & 0.816 & 0.946 & 0.874 & 0.915\\
 \cline{2-2}
 \cline{4-7}
- & ComBat &  & 0.8152686 & 0.9478891 & 0.8755154 & 0.9140346\\
+\rowcolor{gray!6}   & ComBat &  & 0.815 & 0.948 & 0.876 & 0.914\\
 \cline{2-2}
 \cline{4-7}
-\multirow[t]{-4}{*}{\raggedright\arraybackslash MNIST} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.1135000} & 0.7944837 & 0.8907100 & 0.8484595 & 0.8528601\\
+\multirow[t]{-4}{*}{\raggedright\arraybackslash MNIST} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.114} & 0.794 & 0.891 & 0.848 & 0.853\\
 \cline{1-7}
- & Unadjusted &  & 0.6251933 & 0.7380770 & 0.7675432 & 0.6979360\\
+\rowcolor{gray!6}   & Unadjusted &  & 0.625 & 0.738 & 0.768 & 0.698\\
 \cline{2-2}
 \cline{4-7}
- & Scale &  & 0.6028491 & 0.7232736 & 0.7602833 & 0.6979360\\
+ & Scale &  & 0.603 & 0.723 & 0.760 & 0.698\\
 \cline{2-2}
 \cline{4-7}
- & ComBat &  & 0.6590746 & 0.6953731 & 0.7444855 & 0.6979360\\
+\rowcolor{gray!6}   & ComBat &  & 0.659 & 0.695 & 0.744 & 0.698\\
 \cline{2-2}
 \cline{4-7}
-\multirow[t]{-4}{*}{\raggedright\arraybackslash TCGA} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.6979500} & 0.4612043 & 0.6387186 & 0.6651957 & 0.6979360\\
+\multirow[t]{-4}{*}{\raggedright\arraybackslash TCGA} & Confounded & \multirow[t]{-4}{*}{\raggedleft\arraybackslash 0.698} & 0.461 & 0.639 & 0.665 & 0.698\\
 \hline
 \end{tabular}
-\rowcolors{2}{white}{white}
