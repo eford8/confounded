@@ -333,3 +333,15 @@ Questions
 - Could you add another "true class" discriminator?
 - Why RNA data, not protein expression? (historical data)
 - Give a coherent response to Dr. Clement
+
+## 2019-05-31
+
+I passed my final defense!!!
+I'm done!
+Except I still need to submit my thesis, but I need a paper from Dr. Piccolo before I can do that.
+Also, I'm trying to submit to Bioinformatics by next Friday, so I need to fix / add a bunch of things that Dr. Piccolo recommended.
+I'll collect below the issues that need to be fixed.
+
+- Organize the paper with a similar flow to the defense
+- Do experiments on sample size. How does Confounded work on TCGA when there are much fewer samples?
+- Add the extra figures & descriptions from the presentation into the supplementary material
