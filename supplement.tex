@@ -28,8 +28,9 @@
 
 \section{Optimizing default parameters}
 
-We tried a number of parameter optimizations to set reasonable defaults.
-We list them below and further discuss the bolded items.
+We tried a number of parameter optimizations so we could set reasonable defaults for Confounded.
+As expected, some parameter adjustments helped, and some did not.
+We list several of our adjustments below and further discuss the bolded items.
 
 \paragraph{Things that helped}
 
@@ -37,24 +38,31 @@ We list them below and further discuss the bolded items.
 	\item \textbf{Adjust autoencoder depth}
 	\item \textbf{Adjust discriminator depth}
 	\item \textbf{Scale to [0, 1] with sigmoid}
+	\item \textbf{Dropout in the discriminator} (less overfitting) % Cite dropout paper
 	\item Make code layer more narrow
-	\item Optimizing cross-entropy instead of MSE - trains faster
-	\item Adjusting the lambda value - somewhat dataset specific
-	\item Variational instead of normal autoencoder - loss is less erratic
-	\item Dropout in the discriminator - less overfitting
+	\item Optimizing cross-entropy instead of MSE (training happened faster) % Cite xentropy paper
+	\item Adjusting the lambda value (somewhat dataset specific)
+	\item Variational instead of normal autoencoder \cite{kingma_auto-encoding_2013} (loss became less erratic)
 \end{enumerate}
 
 \paragraph{Things that didn't help}
 
 \begin{enumerate}
-	\item ReLU vs SELU \cite{klambauer_self-normalizing_2017} activation - no difference
-	\item Recurrent discriminator connections - no difference
-	\item Recurrent autoencoder connections (like UNet) - no difference
-	\item Training autoencoder, discriminator, then dual optimizers sequentially - did worse
-	\item Stopping early - did worse
+	\item ReLU vs SELU \cite{klambauer_self-normalizing_2017} activation (no difference)
+	\item Recurrent discriminator connections (no difference) % Cite paper about recurrent connections
+	\item Recurrent autoencoder connections, similar to the U-Net architecture \cite{ronneberger_u-net_2015} (no difference)
+	\item Training autoencoder, discriminator, then dual optimizers sequentially (did worse)
+	\item Stopping early (did worse)
 \end{enumerate}
 
 \paragraph{Adjust autoencoder depth}
+
+A neural network with no hidden layers (i.e. a layer of perceptrons) can only model linear functions;
+it must have one or more hidden layers in order to model nonlinear functions.
+However, in some cases, neural networks work better with large amounts of hidden layers, and in other cases, the opposite is true. % Citation needed
+The number of hidden layers is somewhat problem-specific.
+We varied the number of hidden layers in the autoencoder to figure out how many layers are sufficient, and in our testing, after adding a single hidden layer in both the encoder and the decoder, additional hidden layers had no noticeable effect (see \figurename{} \ref{fig:ae}).
+Therefore, Confounded's default autoencoder depth is 1.
 
 \begin{figure}
 	\centering
@@ -63,10 +71,6 @@ We list them below and further discuss the bolded items.
 	}
 	\label{fig:ae}
 \end{figure}
-
-In order to prevent overfitting while allowing sufficient complexity for identifying and removing higher-order batch effects we added dropout to all the layers with a probability of 50\%.
-We tested this autoencoder with varying encoding and decoding layer sizes in order to determine the optimal balance of complexity and speed.
-We also tested several variations on autoencoders; we implemented a variation on the U-Net \cite{ronneberger_u-net_2015} and plan to test the network with a variational autoencoder \cite{kingma_auto-encoding_2013}.
 
 \paragraph{Adjust discriminator depth}
 
@@ -91,7 +95,15 @@ Since it memorized which sample belonged to which batch instead of learning batc
 	\label{fig:scaling}
 \end{figure}
 
+\paragraph{Dropout in the discriminator}
 
+When training initially with a plain autoencoder and discriminator (meaning subnetworks with only weights, biases, and activation functions), the network trained very poorly.
+For example, the outputs for the MNIST datasets looked only like random noise rather than like handwritten digits.
+We hypothesized that this may be because the discriminator was overfitting;
+rather than learn what the batch effect looked like, it would memorize every sample in each batch, and then when it saw output from the autoencoder that looked like one of the memorized outputs, it would be able to predict the batch perfectly, regardless of whether the batch effect remained in the data.
+In order to prevent this overfitting, we added dropout to all the layers with a probability of 50\%.
+Once we added dropout, the network began to output images that looked like the original MNIST digits.
+Our interpretation of this result is that dropout was able to successfully discourage the discriminator from overfitting.
 
 \paragraph{Other ideas}
 
