@@ -345,3 +345,7 @@ I'll collect below the issues that need to be fixed.
 - Organize the paper with a similar flow to the defense
 - Do experiments on sample size. How does Confounded work on TCGA when there are much fewer samples?
 - Add the extra figures & descriptions from the presentation into the supplementary material
+
+1. All code in GitHub
+2. All data files in CodeOcean (OSF first, then CodeOcean after submission)?
+3. Send to Dr. Piccolo link to GitHub repo with tex file.
