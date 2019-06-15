@@ -167,12 +167,12 @@ Our results show that with the TCGA dataset, Confounded continues to outperform 
 This may indicate that Confounded works better on more complex confounding effects, or perhaps that it works better with a smaller columnset (our TCGA dataset was restricted to 325 columns).
 Future testing may be required to identify general cases when Confounded will outperform classic batch adjusters such as ComBat, but we anticipate that Confounded may be better particularly in removing confounding effects, whereas classic methods may be better on typical batch effects.
 
-\newcommand{\disclaimer}{Note: the scaling function produced errors when run on the small TCGA dataset and was therefore not used in this chart.}
+\newcommand{\disclaimer}{\textit{Note: the scaling function produced errors when run on the small TCGA dataset and was therefore not used in this chart.}}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/supplement/tcga_mse.pdf}
-	\caption{\textbf{TCGA MSE}.
+	\caption{\textbf{TCGA MSE} (lower is better).
 	Confounded consistently outperforms other adjusters with different sizes of the TCGA dataset in terms of mean squared error, meaning that Confounded is less disruptive to the original data.
 	\disclaimer{}
 	}
@@ -181,7 +181,7 @@ Future testing may be required to identify general cases when Confounded will ou
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/supplement/tcga_mmd.pdf}
-	\caption{\textbf{TCGA MMD}
+	\caption{\textbf{TCGA MMD} (lower is better).
 	Confounded outperforms other adjusters on the different sizes of the TCGA dataset in terms of max mean discrepancy, meaning that Confounded better aligns the expression value distributions between different cancer types.
 	\disclaimer{}
 	}
@@ -190,7 +190,7 @@ Future testing may be required to identify general cases when Confounded will ou
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/supplement/tcga_true_class_accuracy.pdf}
-	\caption{\textbf{TCGA True Class Accuracy}.
+	\caption{\textbf{TCGA True Class Accuracy} (higher is better).
 	Confounded typically has a lower true class accuracy than the other adjusters for the TCGA dataset.
 	However, this is likely because the true class (TP53 mutation status) is confounded with the batch (CancerType) that we've tried to remove.
 	\disclaimer{}
@@ -200,8 +200,8 @@ Future testing may be required to identify general cases when Confounded will ou
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/supplement/tcga_batch_accuracy.pdf}
+	\caption{\textbf{TCGA Batch Accuracy} (lower is better).
 	Confounded consistently removes more of the batch effects than the other adjusters as measured by Naive Bayes and Random Forests classification accuracy.
-	\caption{\textbf{TCGA Batch Accuracy}
 	\disclaimer{}
 	}
 	\label{fig:batch}
