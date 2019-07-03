@@ -69,7 +69,7 @@ Each of these problems---batch effects, known covariates, and dataset integratio
 	\includegraphics[width=\columnwidth]{figures/final/adjuster_workflow.pdf}
 	\caption[Batch adjustment justification and steps]{\textbf{Batch adjustment justification and steps.}
 	\begin{enumerate*}[(a)]
-		\item When measurements are collected from a sample ($X$), systemic effects ($H$) also affect the measurements.
+		\item When measurements are collected from a sample ($X$), systemic effects ($H$) may affect the measurements.
 		\item If data from the same sample $X$ is measured under two different conditions, $H_1$ and $H_2$, we may obtain slightly different measurements.
 		\item In order to normalize batches of data relative to one another, we first estimate the effect of the hidden variables based on differences in measurements between batches.
 		\item Second, we remove the estimated effects in order to normalize the batches relative to one another.
@@ -78,39 +78,26 @@ Each of these problems---batch effects, known covariates, and dataset integratio
 	\label{fig:workflow}
 \end{figure}
 
-Several methods exist for removing batch effects from gene expression datasets.
+Several methods exist for characterizing and removing batch effects from gene-expression data.
 Two commonly used methods are ComBat \citep{johnson_adjusting_2007} and SVA \citep{leek_capturing_2007}.
-ComBat uses an empirical Bayes method to estimate batch effect parameters and then uses linear regression to remove the effects, and SVA uses singular value decomposition to model batch effects which can then be accounted for in statistical analyses.
-Since both of these methods use linear methods to model confounding effects, they are not designed to account for nonlinear effects, such as the cascading changes in gene pathways in response to environmental stressors (e.g. gene X transcripts increase and gene Y transcripts decrease in response to rising temperature, and since both are now past a certain threshold, gene Z transcripts also increase, and so on).
-As machine learning becomes more common in biological research, these nonlinear confounding effects become more troublesome since many machine learning algorithms can successfully identify complex interactions between variables.
-For example, advances in neural networks have introduced new ways to account for higher-order, nonlinear relationships in data.
-These networks have proven effective in removing irrelevant, domain-specific signal in credit rating, online reviews, and image recognition tasks \citep{louizos_variational_2015}.
-Recent work \cite{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019} has applied neural networks to batch effects.
-However, several limitations complicate their usability on many real-world datasets:
-they require that the input data only contains two batches, that the batches are sufficiently large (we received errors when testing with a subset of MNIST where n=100), and that the batches are perfectly balanced.
-These requirements rarely hold in existing datasets; for example, the bladderbatch dataset used in the R sva package \cite{leek_bladderbatch_2017,leek_sva_2017} has 5 batches, only 57 samples, and between 4 and 19 samples per batch.
-Additionally, the metrics these studies have used to validate results don't test whether complex interactions still remain in the data.
+ComBat uses an empirical Bayes approach to estimate batch effect parameters and then uses linear regression to model and remove the effects. SVA uses singular value decomposition to model batch effects, which can then be accounted for in statistical analyses.
+Both of these methods use linear methods to model confounding effects and thus may not account for nonlinear effects, such as multi-gene, cascading interactions within signaling pathways.
+As machine learning becomes more common in biological research, these nonlinear confounding effects become more troublesome because many machine-learning algorithms can successfully account for complex interactions among variables.
+%For example, advances in neural networks have introduced new ways to account for higher-order, nonlinear relationships in data.
+%These networks have proven effective in removing irrelevant, domain-specific signal in credit-rating, online-review, and image-recognition tasks \citep{louizos_variational_2015}.
 
-To address these issues, we implemented a deep neural network approach to batch correction that works on real-world datasets, and we calculated batch removal measurements based on machine learning algorithms to test for remaining nonlinear effects.
-Artificial neural networks are a machine learning tool inspired by the way human brains function; input values pass through layers of linear and nonlinear functions, the final output values are measured against objectives, and the layers of functions are adjusted to bring the outputs closer to the objectives.
-This process is repeated until the outputs are sufficiently close to their targets \citep{schmidhuber_deep_2015}.
-Research has shown that neural networks are effective in working with gene expression data; for example, neural networks have been applied
-to detect cancer and identify critical cancer genes \citep{danaee_deep_2016},
-to infer gene-expression values from just the values of a few ``landmark genes'' \citep{chen_gene_2016},
-to extract biologically relevant latent spaces in RNA-Seq data \citep{way_extracting_2017},
-to reduce the dimensions of single-cell RNA-Seq data \citep{lin_using_2017},
-to identify drug-repurposing targets using transcriptomic data \citep{aliper_deep_2016},
-and to generate realistic synthetic biomedical data for other scientific studies \citep{beaulieu-jones_privacy-preserving_2017}.
-Autoencoders are a type of neural network that encode and then reconstruct their input, and their traditional objective function is to construct the output to be as similar to the input as possible \citep{hinton_reducing_2006}.
-Neural networks have historically decreased in effectiveness when working with data from multiple research domains \citep{ganin_domain-adversarial_2015}, in part because they may learn based on dataset-specific confounding effects (e.g. which researcher collected the data) instead of learning based on practically meaningful causal effects (e.g. which gene is consistently upregulated in a disease) \citep{louizos_causal_2017-2}.
-Recently, researchers have experimented with discouraging neural networks from learning based on domain-specific information by giving them two objective functions:
-1. to learn as much as possible about the input data and
-2. to forget any patterns that help distinguish between domains \citep{ganin_domain-adversarial_2015,tzeng_deep_2014-2}.
-\citet{louizos_variational_2015} used this type of dual objective function with a variational autoencoder and successfully removed domain-based variability in credit score, financial savings, and hospital admittance datasets.
+Artificial neural networks, a category of machine-learning algorithms, are inspired by the way human brains function; input values pass through layers of linear and nonlinear functions, the final output values are measured against specific objectives, and the function layers are adjusted to bring the outputs closer to the objectives; this process is repeated until the outputs are sufficiently close to their targets \citep{schmidhuber_deep_2015}. Neural networks have been applied broadly to gene-expression data. For example, they have been used to detect cancer and identify critical cancer genes \citep{danaee_deep_2016}, to impute gene-expression levels from the values of a few ``landmark genes'' \citep{chen_gene_2016}, to extract biologically relevant latent spaces in RNA-Seq data \citep{way_extracting_2017}, to reduce the dimensions of single-cell RNA-Seq data \citep{lin_using_2017}, to identify drug-repurposing targets \citep{aliper_deep_2016}, and to generate synthetic biomedical data as a way to preserve patient privacy \citep{beaulieu-jones_privacy-preserving_2017}.
 
-In this study, we present Confounded, an adversarial autoencoder that identifies and removes confounding effects.
-We test the hypothesis that using an adversarial neural network can correct for confounding effects more completely than previous tools do.
-We also explore the extent to which confounders still remain in different datasets after adjustment with various algorithms, and we present a framework to assess the extent to which confounding effects remain after adjustment using various classification algorithms.
+Recent progress has been made in using artificial neural networks to correct batch effects in expression data \cite{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019}. However, these methods are designed for a limited range of scenarios:
+1) when the input data contain only two batches, 2) the batches are sufficiently large (> 100 samples in our testing), and 3) the batches are balanced.[@For #2, does this mean the total number of samples? Or the number of samples per batch? Please clarify the wording.@] These requirements rarely hold in applied research; for example, the bladderbatch dataset---which is used to test batch-adjustment techniques\cite{leek_bladderbatch_2017,leek_sva_2017}---has 5 batches, 57 samples, and 4 to 19 samples per batch.
+Additionally, existing methods for batch correction have not been tested to verify whether nonlinear patterns remain in expression data after batch correction. To address these limitations, we implemented a deep neural network that [@describe our method briefly, what is different about our method, and why we think our method can be applied when there are >2 batches, small datasets, and unbalanced batches.@] Furthermore, we tested our method using machine-learning classification algorithms to quantify the extent to which nonlinear batch effects remained after adjustment.
+
+Autoencoders are a type of neural network that encodes input data in fewer dimensions and then reconstructs the data in the original dimensions\citep{hinton_reducing_2006}[@Please verify that this is a correct reference to use here.@]. This technique can be used to reduce noise and thus refine the data representation.[@Make sure this wording is legit.@] Typically, autoencoders are trained using an objective function that seeks to ensure that the output is as similar as possible to the input \citep{hinton_reducing_2006}. However, neural networks are adept at finding subtle patterns in data; thus the objective function may prioritize replication of confounding patterns, such as batch effects, rather than the signals of interest \citep{ganin_domain-adversarial_2015,louizos_causal_2017-2}.[@Make sure this wording and the references are appropriate.@] Recently, researchers have experimented with discouraging neural networks from learning such patterns by giving them two competing objective functions: 1) to maximize similarity between in the input and output data and 2) to ignore any patterns associated with known confounding variables \citep{ganin_domain-adversarial_2015,tzeng_deep_2014-2}.
+Louizos, et al. have used this type of dual-objective function in combination with a variational autoencoder and successfully removed domain-based variability in credit scores, financial savings, and hospital admittance datasets \citet{louizos_variational_2015}.
+
+In this study, we present \textit{Confounded}, an adversarial autoencoder that identifies and removes confounding effects from gene-expression data.
+We test the hypothesis that using an adversarial neural network can correct for confounding effects more effectively than alternative tools.
+We present a classification-based framework to assess the extent to which confounding effects remain after adjustment, and we apply these techniques to four datasets.
 
 \section{Methods} \label{sec:methods}
 
