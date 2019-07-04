@@ -112,15 +112,15 @@ We present a classification-based framework to assess the extent to which confou
 
 \section{Methods} \label{sec:methods}
 
-All our code has been made publicly available at \url{https://github.com/jdayton3/Confounded}, and all our data are available as described below.
+An open-source implementation of Confounded is publicly available at \url{https://github.com/jdayton3/Confounded}. Materials for generating this manuscript, including scripts and data, are available at \url{https://github.com/jdayton3/ms-thesis/tree/bioinformatics} and \url{https://osf.io/b76ch/}, respectively.
 
-\subsection{Network Structure}
+\subsection{Neural network structure}
 
-We used an adversarial autoencoder network to model and remove the confounding effects.
+We used an adversarial autoencoder network to model and remove confounding effects.
 We structured this network in two parts: a variational autoencoder \cite{louizos_variational_2015} to replicate the input (expression) data and a discriminator to detect remaining confounding effects in the autoencoder's output.
-By penalizing the autoencoder for the discriminator's success, the autoencoder subnetwork learned over the course of training to output the expression data with confounding effects minimized.
+By penalizing the autoencoder for the discriminator's success, the autoencoder subnetwork learns over the course of training to output the expression data with confounding effects minimized.
 We implemented the neural network in TensorFlow 1.11.0 \cite{abadi_tensorflow_2015} with Python 3.6 \cite{python_software_foundation_python_2019}.
-All layers in the network were fully connected and all activation functions were Rectified Linear Units (ReLUs) \cite{agarap_deep_2018} except the final layers in the autoencoder and the discriminator, which used the sigmoid function.
+All layers in the network are fully connected, and all activation functions are Rectified Linear Units (ReLUs) \cite{agarap_deep_2018}, except the final layers in the autoencoder and the discriminator, which use the sigmoid function.
 
 \begin{figure}
 	\centering
@@ -135,18 +135,17 @@ All layers in the network were fully connected and all activation functions were
 
 \subsubsection{Autoencoder}
 
-We implemented the variational autoencoder \citep{louizos_variational_2015} described by \citet[Chapter 15]{geron_hands-machine_2017}.
+We implemented the variational autoencoder architecture \citep{louizos_variational_2015} described by \citet[Chapter 15]{geron_hands-machine_2017}.
 This network has 2 hidden encoding layers and 2 decoding layers, each of size 500.
 The code size is 20.
-Each hidden layer is activated with the Exponential Linear Unit (ELU) function \citep{clevert_fast_2015}.
-It is trained with the Adam optimizer \citep{kingma_adam_2014} on reconstruction loss (sigmoid cross entropy) combined with latent loss (KL divergence \citep{kullback_information_1951}).
+Each hidden layer is activated with the Exponential Linear Unit (ELU) function \citep{clevert_fast_2015} and trained with the Adam optimizer \citep{kingma_adam_2014} on reconstruction loss (sigmoid cross entropy) combined with latent loss (KL divergence \citep{kullback_information_1951}).
 
 \subsubsection{Discriminator}
 
-We trained the discriminator to determine the original batch of the autoencoder's output.
-The discriminator subnetwork consists of an input layer; four fully connected hidden layers of sizes 1024, 512, 512, and 128, respectively; and an output layer sized based on the number of batches.
-In order to combat overfitting and improve training, we also added 50\%-probability dropout \cite{srivastava_dropout_2014} (which prevents overfitting by dropping a random subset of layer inputs in each training iteration) and batch normalization \cite{ioffe_batch_2015} (which helps training by smoothing out the optimization landscape \citep{santurkar_how_2018}) to each layer of the discriminator.
-These additions seemed to reduce overfitting in the discriminator.
+We trained the discriminator to predict the original batch of the autoencoder's output.
+The discriminator subnetwork consists of an input layer; four fully connected hidden layers of sizes 1024, 512, 512, and 128, respectively; and an output layer sized based on the number of batches[@Please provide a little more detail about how the output layer size is calculated@].
+To combat overfitting and improve training, we also added 50\%-probability dropout \cite{srivastava_dropout_2014} (which prevents overfitting by dropping a random subset of layer inputs in each training iteration) and batch normalization \cite{ioffe_batch_2015} (which helps training by smoothing out the optimization landscape \citep{santurkar_how_2018}) to each layer of the discriminator.
+These additions seem to reduce overfitting in the discriminator.
 
 \subsubsection{Loss functions}
 
@@ -160,7 +159,7 @@ Finally, we also trained the autoencoder layers on a combination of the two prev
 	L_{dual} = L_A - \lambda{}(L_D)
 \end{equation}
 
-The $\lambda$ value represents a tradeoff parameter for tuning the network's tendency for more faithfully replicating the input or for more completely removing confounding effects.
+The $\lambda$ value represents a tradeoff parameter for tuning the network's tendency to more faithfully replicate the input or to more completely remove confounding effects.
 A higher $\lambda$ value indicates that the network should remove confounding effects more aggressively, whereas a lower value indicates that the network should instead favor faithfully reconstructing the input data.
 We did not optimize $L_A$ directly; instead we trained the autoencoder by optimizing $L_{dual}$.
 
@@ -169,121 +168,116 @@ We did not optimize $L_A$ directly; instead we trained the autoencoder by optimi
 In all cases, we trained the network using the Adam Optimizer \citep{kingma_adam_2014} with a training rate of 0.0001 for 10,000 iterations on mini-batches of size 100.
 In each iteration, we optimized on both $L_D$ and $L_{dual}$.
 When optimizing $L_D$ (i.e. training the discriminator), we froze the autoencoder's weights, and vice versa.
-We trained the network on a 2017 Dell XPS 15 9560 with an 8-core Intel i7-7700HQ CPU and 16 GB of RAM.
-For each dataset, training typically took roughly 30 minutes to complete, including the time taken to load the input into memory and to save the output to disk.
+We trained the network on a 2017 Dell XPS 15 9560 with an 8-core Intel i7-7700HQ central processing unit and 16 GB of random access memory.
+For each dataset, training took roughly 30 minutes to complete, including time to load the input into memory and to save the output to disk.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{figures/final/training_loss.pdf}
-	\caption[Autoencoder and discriminator loss]{\textbf{Autoencoder and discriminator loss} over time for one run of Confounded on the MNIST dataset.
+	\caption[Autoencoder and discriminator loss]{\textbf{Autoencoder and discriminator loss} over time for one run of Confounded on the MNIST dataset (which we used to validate the network).
 	Over the course of training, the autoencoder more faithfully replicates the input data.
-	The autoencoder also seems to introduce noise (see the red dashed line around iteration 3100) in response to the discriminator's slight improvements.}
+	The autoencoder also seems to introduce noise (see the red dashed line near iteration 3100) in response to the discriminator's slight improvements.}
 	\label{fig:training_loss}
 \end{figure}
 
+\subsection{Comparison to other methods}
+
+We compared Confounded against two other methods that can be used for batch correction. The first was a simple scaling adjuster,
+which we implemented in the R programming language (version 3.6.0) \citep{r_core_team_r_2014} using RStudio version 1.2.1194 \citep{rstudio_team_rstudio_2018}.
+It adjusts the data by linearly expanding or contracting the values for each variable so that all variables have the same range across the batches.
+We also compared against ComBat \citep{johnson_adjusting_2007} using an implementation from the sva package \citep{leek_sva_2017} with some modifications to allow it to work on columns without variance.
+
+We initially intended to test against the SVA \citep{leek_capturing_2007} method but concluded that SVA is more suited for producing surrogate variables for further statistical research rather than removing those variables from the data.
+A number of other methods for batch adjustment are available. Some of these use deep neural networks \citep{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019}, while others do not\citep{espin-perez_comparison_2018}.
+Unfortunately, most of these methods lack a common interface and common assumptions that input datasets must meet.[@This won't be convincing enough to the reviewers. Be more explicit about why we couldn't use these other methods.@]
+
 \subsection{Datasets}
 
-In order to test both theoretical and practical differences between Confounded and previous methods, we compared them for a variety of datasets of varying sizes and type of data measured.
+To test both theoretical and practical differences between Confounded and the alternative methods, we compared them for datasets that varied in size and type of data measured.
 
 \begin{table}
 	\centering
-	\input{figures/final/datasets.tex}
 	\caption[Dataset information]{
-		\textbf{Dataset information} for each dataset used.
+		\textbf{Information} about each dataset used to compare algorithm performance.
 	}
+	\input{figures/final/datasets.tex}
 	\label{tab:datasets}
 \end{table}
 
 \subsubsection{MNIST}
 
-The MNIST digits dataset \cite{lecun_mnist_nodate} is a database of images of handwritten digits that are size-normalized and centered.
+The MNIST digits dataset \cite{lecun_mnist_nodate} contains images of handwritten digits that are size-normalized and centered.
 It contains 60,000 training images and 10,000 test images.
-We used MNIST so we could visually assess how well the true signal (in this case, the shape and digit of each handwritten digit image) was preserved after batch adjustment.
-In order to use this dataset, we flattened each 28 by 28 image into a 1D vector of size 784 and put each in a CSV file along with the accompanying digit information.
-We limited our dataset to only the 10,000 test images.
-Although convolutional layers are typically used when working with image data, we only used fully connected layers even for this image dataset.
-In this way, we show that the autoencoder is still able to find and represent spatial relationships without explicitly defining spatial relationships in the model while testing the same network we use on expression data, where no spatial relationships are inherent.
+We used MNIST so we could visually assess how well the batch-correction methods preserve true signal (in this case, the shape and digit of each handwritten digit image) after simulated batch adjustment.
+We flattened each 28-by-28 image into a 1D vector of size 784 and put each in a CSV file along with the accompanying digit (class) information.
+We limited our analysis to the 10,000 test images.
+Although convolutional layers are typically used when working with image data, we used fully connected layers to maintain consistency with what would be used on gene-expression data.
+However, the autoencoder was still able to represent spatial relationships without explicitly defining them in the model.
 
-\paragraph{Synthetic Batch Effects}
+\paragraph{Synthetic batch effects}
 
-Because there is no batch information in the MNIST digits dataset, we had to simulate nonlinear confonding effects.
-To do so, we wrote a Python script to take the MNIST data in, apply a nonlinear effect, and output the adjusted data.
+Because there is no batch information in the MNIST digits dataset, we simulated nonlinear confonding effects.
 We applied nonlinear effects by iteratively realizing vectors of normally distributed values, multiplying and adding these vectors to the ``expression'' vectors, and applying nonlinearity to the adjusted vector.
-We split the image data into two batches while keeping the batches balanced (5,000 images for each batch) and including the same number of each digit in each batch.
-We applied the same random vectors to each image in a batch.
-Finally, we added random noise to each image in order to prevent images in a batch from being overly similar to each other.
+We split the images into two balanced batches (5,000 images for each batch) and included the same number of each digit in each batch.
+We applied the same random vectors to each image in a given batch.
+Finally, we added random noise to each image to prevent images in a batch from being overly similar to each other.
 
-\subsubsection{Bladderbatch}
+\subsubsection{Bladderbatch data}
 
-The bladderbatch dataset is a microarray transcriptomic expression dataset from a study of patients with bladder cancer \cite{dyrskjot_gene_2004}.
-It has been made available as an R package \cite{leek_bladderbatch_2017} and is used in the documentation of the sva R package \cite{leek_sva_2017} to illustrate how to batch-adjust using ComBat.
+The bladderbatch dataset is a microarray gene-expression dataset from a study of patients with bladder cancer \cite{dyrskjot_gene_2004}.
+It is available as an R package \cite{leek_bladderbatch_2017}.
 It contains expression values for 57 tissue samples with and without bladder cancer across 5 unbalanced batches.
-The dataset has a cancer status (cancerous vs. normal tissue) column, which we used for ``true class'' classification, and a batch column.
-Because bladderbatch is such a small dataset in terms of typical deep learning datasets, we selected it as a way to test whether our network was overfitting.
+The dataset has a cancer status (cancerous vs. normal tissue) variable, which we used as the ``true class'' in our validations; it also has a batch variable.
+Because bladderbatch is small relative to datasets typically used for deep learning, it helped us to evaluate whether our network overfits on gene-expression datasets of the size often used in applied research.
 
 \subsubsection{GSE37199}
 
-The GSE37199 dataset contains Affymetrix microarray gene-expression data from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
-We accessed a version of this dataset from \url{http://doi.org/10.17605/OSF.IO/SSK3T} that was tidied as part of a curated compendium of human transcriptional biomarker data \cite{golightly_curated_2018}.
+The GSE37199 dataset was profiled using Affymetrix microarrays from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
+We used a curated version of this dataset from \url{http://doi.org/10.17605/OSF.IO/SSK3T}\cite{golightly_curated_2018}.
 It contains expression values for 93 tissue samples categorized as either ``Advanced castration resistant'' or ``good prognosis.''
-We used this cancer status variable as the ``true class'' for classification.
-It has two types of batch variables: ``plate'' and ``centre.''
-We adjusted against the ``plate'' variable because it was more balanced than ``centre'' (with counts of $\{43, 50\}$ compared to $\{27, 66\}$).
-The GSE37199 dataset represents a slightly larger dataset than bladderbatch, with only two batches that are closer to being balanced (with batch counts of $\{4, 5, 11, 18, 19\}$ and $\{43, 50\}$, respectively).
+We used these categories for the ``true class'' labels.
+This dataset has two types of batch variables---``plate'' and ``centre''---which indicate the microarray plate and research lab that processed the data, respectively.
+We adjusted against the ``plate'' variable because it was granular in nature (with counts of $\{43, 50\}$).
 
-\subsubsection{TCGA Pan-cancer Data}
+\subsubsection{TCGA pan-cancer data}
 
-The Cancer Genome Atlas (TCGA) Pan-Cancer project produced expression data for thousands of tumors across many cancer types \cite{the_cancer_genome_atlas_research_network_cancer_2013}.
+The Cancer Genome Atlas (TCGA) produced RNA-Sequencing data for tumors across many cancer types \cite{the_cancer_genome_atlas_research_network_cancer_2013}.
 In a previous study \cite{dayton_classifying_2017-1}, we classified this dataset based on the presence or absence of mutations in several known cancer genes.
-We attempted to adjust for the confounding effect of cancer type using ComBat prior to classification.
+In that study, we observed that cancer type had a strong confounding effect on our analysis, in which sought to identify patterns spanning many cancer types. We adjusted for this effect using ComBat.
 However, we found that a strong nonlinear signal could still be identified by the Random Forests algorithm after adjustment.
-Here, we used the same version of the dataset that we tidied in this previous study (available at \url{https://osf.io/7xjdn/}).
-This dataset has RNA-Seq expression values for 9,365 samples across 25 distinct cancer types.
-We used this dataset as a way to test whether Confounded works on RNA-Seq data and to test whether we could remove confounding effects that ComBat cannot remove.
+Here, we used the same version of TCGA dataset (available at \url{https://osf.io/7xjdn/}),
+which has expression values for 9,365 samples across 25 cancer types.
 
-\subsection{Comparison to other methods}
-
-We compared our method to two other batch adjusters: a scale adjuster and ComBat \citep{johnson_adjusting_2007}.
-We implemented the scale adjuster in the R programming language, version 3.6.0 \citep{r_core_team_r_2014} using RStudio version 1.2.1194 \citep{rstudio_team_rstudio_2018}.
-It adjusts the data by linearly expanding or contracting each batch so all batches have the same range.
-We used the ComBat implementation from the R sva package \citep{leek_sva_2017} with some modifications to allow it to work on columns without variance in the MNIST dataset.
-We initially intended to test against the SVA \citep{leek_capturing_2007} method but concluded that SVA is more suited for producing surrogate variables for further statistical research rather than removing those variables from the data.
-There are a number of other methods for batch adjustment that do and do not use deep neural networks (for example, see \citep{leek_capturing_2007,espin-perez_comparison_2018,shaham_removal_2017,shaham_batch_2018}).
-Unfortunately, most of these methods lack a common interface and common assumptions that input datasets must meet.
-For these reasons, we compared Confounded only to the two methods listed above.
-Future batch adjustment research may benefit from standardization of input formats, user interfaces, and validation datasets.
-
-\subsection{Statistics and Metrics}
+\subsection{Statistics and metrics}
 
 \subsubsection{Mean squared error}
 
 Mean squared error (MSE) is a measure of how much two vectors or matrices deviate from one another.
-It is commonly used as a loss value in autoencoders to make the network minimize the difference between the input and output values.
-We wanted to see how well Confounded and other batch correction software maintain patterns in the input data as measured by MSE.
+It is commonly used as to quantify loss when the objective (as with autoencoders) is to minimize the difference between input and output values.
 
 \subsubsection{Maximum mean discrepancy} \label{section:mmd}
 
 In a recent paper, \citet{shaham_removal_2017} used neural networks to remove batch effects.
 Instead of constraining the autoencoder to remove batch effects based on a discriminator, these researchers trained their network to minimize maximum mean discrepancy (MMD) between batches in an embedded layer of their network.
-We calculated MMD using the same formula as \citeauthor{shaham_removal_2017} to determine whether batches looked like they came from the same distribution after adjustment.
-For the kernel, we used the Gaussian kernel between two batches as implemented in \texttt{sklearn.metrics.pairwise.rbf\_kernel} \cite{pedregosa_scikit-learn_2011}.
+We calculated MMD using the same formula to determine whether batches appear to come from the same distribution after adjustment.
+We used the Gaussian kernel as implemented in \texttt{sklearn.metrics.pairwise.rbf\_kernel} \cite{pedregosa_scikit-learn_2011}.
 In cases where there were more than two batches, we averaged all pairwise MMD values to calculate an overall MMD.
 
 \subsubsection{Classification accuracy}
 
-In order to determine \begin{enumerate*}[(a)]
-	\item whether batch can still be identified post-adjustment and
-	\item how well class-related signal is maintained after adjustment,
-\end{enumerate*}
-we determined classification accuracy based on batch and ``true class'' labels using several machine learning classifiers.
+To determine
+a) whether batch could still be identified post-adjustment and
+b) how well class-related signal was maintained after adjustment,
+we used classification algorithms to predict either batch or the ``true class`` labels based on the expression data and used classification accuracy as a metric.
+Table \ref{tab:datasets} details which columns were used for these analyses.
 
-We used four classifiers from the scikit-learn 0.19.1 Python library \cite{pedregosa_scikit-learn_2011} in order to classify on batch and true class before and after adjustment: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and SVM \citep{cortes_support-vector_1995} with a radial basis kernel.
-Table \ref{tab:datasets} details which columns were used for training.
+We used four classification algorithms from the scikit-learn (version 0.19.1) library \cite{pedregosa_scikit-learn_2011}: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and SVM \citep{cortes_support-vector_1995} with a radial basis kernel.
+[@Say something about what hyperparameters we used. Defaults?@]
 
-We calculated the average of classification accuracies for four-fold cross-validation repeated three times.
-We interpret lower accuracy for batch classification as meaning that the batch is removed more effectively.
-We also interpret higher true class classification as meaning that the important signal is not lost during the process of adjustment.
-Therefore, given output data from the ideal batch adjuster, batch classification would be no better than random for any classification algorithm, and true class accuracy would be no lower than accuracy for the unadjusted data.
+We calculated the average classification accuracy across four-fold cross-validation repeated three times.
+We interpreted lower accuracy for batch classification to indicate that batch signal was removed more effectively.
+We interpreted higher true-class accuracy to indicate that biologically relevant signal was not lost during the batch-adjustment process.
+Therefore, given output data from a ideal batch adjuster, batch classification accuracy would be no better than random chance, and true-class accuracy would be equal to what would be obtained for the unadjusted data.
 
 \section{Results} \label{sec:results}
 
