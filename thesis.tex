@@ -281,20 +281,25 @@ Therefore, given output data from a ideal batch adjuster, batch classification a
 
 \section{Results} \label{sec:results}
 
-In this study, we created Confounded, an adversarial variational autoencoder neural network, to remove nonlinear batch and confounding effects from expression data that may not be accounted for by traditional linear methods.
-We compared Confounded to a scaling method and to ComBat \citep{johnson_adjusting_2007} using various metrics.
-The scaling method performed consistently worse across the qualitative and quantitative evaluations that we performed;
-ComBat and Confounded performed relatively well overall, but each of these algorithms excelled in different types of scenarios, which we illustrate below.
+In this study, we created Confounded, an adversarial, variational, autoencoder neural network, to remove nonlinear confounding effects from gene-expression data that may not be accounted for by linear methods.
+We compared Confounded to a scaling method and to ComBat \citep{johnson_adjusting_2007} and used qualitative and quantitative techniques to compare the performance of these methods.
+Overall, the scaling method performed consistently worse than the other methods;
+ComBat and Confounded each excelled in different scenarios, which we illustrate below.
 
 \subsection{Confounded removes nonlinear confounding effects that other adjusters miss}
 
-To compare Confounded to other batch adjustment methods, we compared PCA and t-SNE plots along with MSE, MMD, and classifier batch prediction accuracy (using various classifiers).
+[@At least in my mind, we justified using MNIST as a way to visually see how our method performs and to modify it accordingly. However, the Results don't reflect that (in my mind) because the MNIST images are blurry for Confounded, whereas they are clear for the other methods. There is some explanation below about why this might be happening with Confounded. But as an outsider reading this, I would question why we used MNIST at all because our method didn't perform particularly well. It's hard to justify using MNIST anyway because it's so different from gene-expression data. So I think we should remove it from the paper (but it was fine to use it in your thesis). Let me know if you disagree. If not, please remove it.@]
 
-PCA and t-SNE plots seem to show a decrease in separability after adjustment with various methods for the GSE37199 dataset (see \figurename{s} \ref{fig:pca} and \ref{fig:tsne}).
-However, previous research has shown that these plots are not completely trustworthy in representing nonlinear effects \cite{dayton_classifying_2017-1}.
+[@For simplicity, I think we should only include t-SNE graphs, not PCA. t-SNE accounts for nonlinear patterns, which is the point of our method.@]
+[@I also think we should have t-SNE graphs for all three datasets.]
+[@Please put in the full name for t-SNE and cite the paper for this method.@]
+We used principal component analysis (PCA) and t-Stochastic... (t-SNE) plots to visualize the data before and after batch adjustment.
+Before any adjustment, batches (microarray plates) in the GSE37199 dataset showed distinct expression patterns for each batch.
+After adjustment with each of the three methods, the batches were less distinct (see \figurename{s} \ref{fig:pca} and \ref{fig:tsne}).
 In the PCA plot, Confounded appears to maintain a similar distribution to the unadjusted data, indicating that the underlying distribution has been faithfully reproduced by the networks.
 The t-SNE plot shows that the data post-adjustment by Confounded and ComBat appear to cluster less tightly by batch than the unadjusted and scale-adjusted data.
 This may indicate an effective removal of nonlinear effects in both cases.
+%However, previous research has shown that these plots are not completely trustworthy in representing nonlinear effects \cite{dayton_classifying_2017-1}.
 
 \begin{figure}
 	\centering
@@ -312,6 +317,7 @@ This may indicate an effective removal of nonlinear effects in both cases.
 	\label{fig:tsne}
 \end{figure}
 
+%%%To compare Confounded against the other batch adjustment methods, we compared PCA and t-SNE plots along with MSE, MMD, and classifier batch prediction accuracy (using various classifiers).
 Confounded shows mixed success with the MSE and MMD metrics.
 With MSE, Confounded outperformed the scale adjuster in 3 of the 4 datasets but scored drastically worse on the MNIST dataset, with scores listed in Table \ref{tab:mse} (see also \figurename{} \ref{fig:mse}).
 With MMD, Confounded outperformed the scale adjuster again in 3 of the 4 datasets and tied the scale adjuster on the TCGA dataset, with scores listed in Table \ref{tab:mmd} (see also \figurename{} \ref{fig:mmd}).
