@@ -5,3 +5,6 @@ supplement.*
 !supplement.tex
 **/*.tex.*
 .DS_Store
+.Rproj.user
+.RData
+.Rhistory
