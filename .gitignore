@@ -8,3 +8,6 @@ supplement.*
 .Rproj.user
 .RData
 .Rhistory
+code/data
+*.pyc
+**/__pycache__

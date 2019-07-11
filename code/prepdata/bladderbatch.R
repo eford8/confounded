@@ -1,24 +1,16 @@
----
-title: "Bladder Batch to tidy CSV"
-author: "Jonathan Dayton"
-date: "1/3/2019"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 if (!require("pacman")) install.packages("pacman"); library(pacman)
-p_load("tidyverse")
+p_load("tidyverse", "argparse")
+
+parser <- ArgumentParser()
+parser$add_argument("outfile", help = "Path to the output file")
+args <- parser$parse_args()
+
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("bladderbatch")
 library(bladderbatch)
 data(bladderdata)
-```
 
-# Turn it into a tibble
-
-```{r}
 clin_df <- bladderEset %>%
   pData() %>%
   as.tibble(rownames = "id")
@@ -29,5 +21,4 @@ gene_df <- bladderEset %>%
 
 all <- inner_join(clin_df, gene_df, by = "id")
 
-write_csv(all, "../../data/bladderbatch/bladderbatch.csv")
-```
+write_csv(all, args$outfile)
