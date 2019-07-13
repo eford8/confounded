@@ -1,6 +1,7 @@
 #!/bin/bash
 
-dest="../data/tcga/"
+data_dir=${data_dir:-"../data/"}
+dest="${data_dir}/tcga/"
 rnaseq="${dest}/rnaseq.tsv.gz"
 mutations="${dest}/mutations.tsv.gz"
 labels="${dest}/labels.tsv.gz"

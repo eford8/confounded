@@ -1,6 +1,7 @@
 #!/bin/bash
 
-dest="../data/bladderbatch/"
+data_dir=${data_dir:-"../data/"}
+dest="${data_dir}/bladderbatch/"
 out_csv="${dest}/bladderbatch.csv"
 
 mkdir -p $dest

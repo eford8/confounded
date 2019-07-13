@@ -1,6 +1,7 @@
 #!/bin/bash
 
-dest="../data/gse37199/"
+data_dir=${data_dir:-"../data/"}
+dest="${data_dir}/gse37199/"
 raw="${dest}/raw/"
 raw_loc="${raw}/raw.tar.gz"
 expression_tsv="${raw}/GSE37199_Expression_BatchUnadjusted.txt.gz"

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-dest="../data/mnist/"
+data_dir=${data_dir:-"../data/"}
+dest="${data_dir}/mnist/"
 raw_csv="${dest}/raw.csv"
 tidy_csv="${dest}/unadjusted.csv"
 batched_csv="${dest}/noisy.csv"

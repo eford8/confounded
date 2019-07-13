@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export data_dir="../data/input/"
 bash mnist.sh
 bash bladderbatch.sh
 bash gse37199.sh
