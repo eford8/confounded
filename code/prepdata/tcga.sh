@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e
+
+printf "\033[0;32mDownloading the TCGA dataset\033[0m\n"
+
 data_dir=${data_dir:-"../data/"}
 dest="${data_dir}/tcga/"
 rnaseq="${dest}/rnaseq.tsv.gz"
@@ -18,5 +22,7 @@ fi
 if [ ! -f $labels ]; then
     wget https://osf.io/frxv6/download -O $labels
 fi
+
+printf "\033[0;32mTidying the TCGA dataset\033[0m\n"
 
 python tcga.py $rnaseq $mutations $labels $final
