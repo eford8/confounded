@@ -32,8 +32,8 @@
 	Gene-expression profiling enables researchers to quantify transcription levels in cells, thus providing insights into functional mechanisms of diseases and other biological processes.
 	However, because of the high dimensionality of these data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analyses.
 	For example, collecting data in multiple runs can cause nontrivial differences in the data known as batch effects.
-	Covariates that are not of interest to the study may have strong effects on gene expression,
-	and there may be systemic platform effects when integrating multiple datasets.
+	In addition, covariates that are not of interest to the study may have strong effects on gene expression.
+%	and there may be systemic effects when integrating multiple datasets.
 	These confounding effects may be driven by higher-order interactions that are not removable using existing techniques that identify linear patterns.
 	We created *Confounded* to remove these effects from expression data.
 	[@Please modify the following sentence to better reflect the dual-objective aspect and the fact that it uses neural networks.@]
@@ -45,25 +45,30 @@
 \doublespacing
 \section{Background} \label{sec:background}
 
-Gene expression data can be applied in many ways to advance our understanding of medicine and biology.
-For example, expression data has been applied to discover conserved genetic modules \citep{stuart_gene-coexpression_2003}, to better understand the mechanisms of cardiovascular disease \citep{henriksen_application_2002}, to more accurately predict the clinical outcome in cancer patients \citep{veer_gene_2002}, and to discover effective drugs for treating specific diseases \citep{sirota_discovery_2011}.
-Expression datasets are quite ``wide,'' often containing tens of thousands of columns representing each gene in the human transcriptome.
-Because of the sensitive nature of these data (i.e. gene product levels in organisms may respond drastically to small environmental changes) and of the equipment used to quantify expression levels, expression data often contains unwanted confounding effects that can skew analysis.
-Three examples of this include
-\begin{enumerate*}[(a)]
-	\item batch effects, \label{it:batch}
-	\item known covariates, and \label{it:cov}
-	\item dataset-level effects. \label{it:int}
-\end{enumerate*}
-\ref{it:batch} Batch effects occur when expression data are generated in multiple runs or multiple batches, and slight systemic differences occur during the different runs, such as different technicians operating the machine or slight temperature differences in the room.
-Batch effects are understood to have a nontrivial impact on high-throughput expression data \citep{leek_tackling_2010}.
-In one study, researchers found that, contrary to previous knowledge, expression values from mice and humans clustered more closely by species than by tissue type \citep{yue_comparative_2014};
-however, referees showed in a rebuttal that when accounting for batch effects, these data actually clustered more closely by tissue type, as initially expected \citep{gilad_reanalysis_2015}.
-\ref{it:cov} Systemic bias can be even more pronounced when there are known covariates---for example, using data collected from different cancer types when cancer type is not of interest to the study \citep{dayton_classifying_2017-1}.
-\ref{it:int} Finally, though batch effects within a dataset collected all by one lab at one time may be somewhat decreased experimentally by careful replication of experimental conditions, this is no longer possible when integrating different datasets;
-however, much better statistical significance can be achieved when analyzing larger datasets, so data integration is a key goal for transcriptomic analysis  \citep{lazar_batch_2013}.
-Each of these problems---batch effects, known covariates, and dataset integration---represents a case where data measurements are effected by some hidden variables and must be removed for effective analysis (see \figurename{} \ref{fig:workflow}).
+Gene-expression data can be used to advance our understanding of medicine and biology.
+For example, gene-expression data have helped to discover conserved genetic modules \citep{stuart_gene-coexpression_2003}, to better understand the mechanisms of cardiovascular disease \citep{henriksen_application_2002}, to more accurately predict clinical outcomes in cancer patients \citep{veer_gene_2002}, and to discover effective drugs for treating specific diseases \citep{sirota_discovery_2011}.
+Expression datasets are quite ``wide,'' typically containing tens of thousands of columns representing genes in the human transcriptome.
+Because of the sensitive nature of technologies used to generate these data (i.e., expression levels may respond drastically to small environmental changes), expression data often contains unwanted confounding effects that can skew analyses.
+Three examples of these include batch effects \label{it:batch}, known covariates, dataset-integration effects.
 
+Batch effects occur when expression data are generated in multiple runs or batches and systemic biases affect the runs. Such biases include different technicians operating the equipment or slight temperature differences in the room.
+Batch effects often have a measurable impact on high-throughput expression data \citep{leek_tackling_2010}.
+For example, in one study, researchers found that, contrary to prior knowledge, expression values from mice and humans clustered more closely by species than by tissue type \citep{yue_comparative_2014};
+however, a later rebuttal showed that when accounting for batch effects, the biological samples clustered more closely by tissue type than by species, as initially expected \citep{gilad_reanalysis_2015}.
+
+Systemic biases can be even more pronounced when driven by known covariates.
+For example, Dayton and Piccolo performed a pan-cancer analysis of gene-expression values in The Cancer Genome Atlas, identifying patterns associated with cancer-mutation status\citep{dayton_classifying_2017-1}.
+We found that a tumor's tissue of origin exerted a strong effect on gene-expression levels.
+This signal was so strong that we could predict a given tumor's tissue of origin with near-perfect accuracy using a machine-learning classifier.
+However, we sought to identify patterns that were tissue-agnostic, so tissue of origin represented a confounding effect.
+
+%TODO: Move this to Discussion as a future issue to tackle?
+%Finally, data integration is a key goal for gene-expression analyses \citep{lazar_batch_2013}.
+%As sample sizes increase, so can statistical significance.
+%Although batch effects within a single dataset may be somewhat decreased by careful replication of experimental conditions, this is not possible when integrating different datasets. Methods used for batch correction may be used to correct for dataset-integration effects; however, this problem is 
+%however, , .
+
+These biases represent cases where data measurements are affected by hidden variables and must be removed for effective analyses (see \figurename{} \ref{fig:workflow}).
 
 \begin{figure}
 	\centering
@@ -79,15 +84,15 @@ Each of these problems---batch effects, known covariates, and dataset integratio
 	\label{fig:workflow}
 \end{figure}
 
-Several methods exist for characterizing and removing batch effects from gene-expression data.
-Two commonly used methods are ComBat \citep{johnson_adjusting_2007} and SVA \citep{leek_capturing_2007}.
-ComBat uses an empirical Bayes approach to estimate batch effect parameters and then uses linear regression to model and remove the effects. SVA uses singular value decomposition to model batch effects, which can then be accounted for in statistical analyses.
-Both of these methods use linear methods to model confounding effects and thus may not account for nonlinear effects, such as multi-gene, cascading interactions within signaling pathways.
-As machine learning becomes more common in biological research, these nonlinear confounding effects become more troublesome because many machine-learning algorithms can successfully account for complex interactions among variables.
+Several methods exist for characterizing or removing batch effects from gene-expression data.
+SVA uses singular value decomposition to model batch effects, which can then be accounted for in statistical analyses\citep{leek_capturing_2007}.
+ComBat uses an empirical Bayes approach to estimate batch effect parameters and then uses linear regression to model and remove the effects\citep{johnson_adjusting_2007}.
+Both of these techniques use linear methods to model confounding effects and thus may not account for nonlinear effects, such as multi-gene, cascading interactions within signaling pathways.
+As machine learning becomes more common in biological research, these nonlinear confounding effects become more troublesome because many machine-learning algorithms can successfully identify such patterns, which may bias the algorithms' outputs.
 %For example, advances in neural networks have introduced new ways to account for higher-order, nonlinear relationships in data.
 %These networks have proven effective in removing irrelevant, domain-specific signal in credit-rating, online-review, and image-recognition tasks \citep{louizos_variational_2015}.
 
-Artificial neural networks, a category of machine-learning algorithms, are inspired by the way human brains function; input values pass through layers of linear and nonlinear functions, the final output values are measured against specific objectives, and the function layers are adjusted to bring the outputs closer to the objectives; this process is repeated until the outputs are sufficiently close to their targets \citep{schmidhuber_deep_2015}.
+Artificial neural networks, a category of machine-learning algorithms, are inspired by the way human brains function; input values pass through layers of linear and nonlinear functions; the final output values are measured against specific objectives, and the function layers are adjusted to bring the outputs closer to the objectives; this process is repeated until the outputs are sufficiently close to their targets \citep{schmidhuber_deep_2015}.
 Neural networks have been applied broadly to gene-expression data. For example, they have been used to detect cancer and identify critical cancer genes \citep{danaee_deep_2016}, to impute gene-expression levels from the values of a few ``landmark genes'' \citep{chen_gene_2016}, to extract biologically relevant latent spaces in RNA-Seq data \citep{way_extracting_2017}, to reduce the dimensions of single-cell RNA-Seq data \citep{lin_using_2017}, to identify drug-repurposing targets \citep{aliper_deep_2016}, and to generate synthetic biomedical data as a way to preserve patient privacy \citep{beaulieu-jones_privacy-preserving_2017}.
 
 Recent progress has been made in using artificial neural networks to correct batch effects in expression data \cite{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019}.
