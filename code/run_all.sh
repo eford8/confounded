@@ -13,3 +13,7 @@ cd ../
 cd metrics
 bash all.sh
 cd ../
+
+cd figures
+bash all.sh
+cd ../
