@@ -1,14 +1,12 @@
-if (!require("pacman")) install.packages("pacman"); library(pacman)
-#p_load("tidyverse", "argparse")
-p_load("dplyr", "readr", "tibble", "argparse")
+library(pacman)
+library(argparse)
+library(dplyr)
+library(readr)
 
 parser <- ArgumentParser()
 parser$add_argument("outfile", help = "Path to the output file")
 args <- parser$parse_args()
 
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install("bladderbatch")
 library(bladderbatch)
 data(bladderdata)
 
