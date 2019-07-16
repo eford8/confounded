@@ -1,6 +1,6 @@
 {
     "files.exclude": {
-        "**/*.{aux,bbl,blg,fdb*,fff,fls,lof,log,out,synctex.gz,ttt,lot,rtf,toc,pdf,pyc}": true
+        "**/*.{aux,bbl,blg,fdb*,fff,fls,lof,log,out,synctex.gz,ttt,lot,rtf,toc,pyc}": true
     },
     "latex-workshop.docker.enabled": true,
     // "editor.wordWrap": "bounded"
