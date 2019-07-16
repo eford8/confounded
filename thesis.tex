@@ -19,26 +19,27 @@
 
 \begin{document}
 
-\title{Adversarial Deep Neural Networks Effectively Remove Nonlinear Batch Effects from Gene-Expression Data}
+\title{Adversarial deep neural networks remove nonlinear batch effects from gene-expression data}
 \author{Jonathan Bryan Dayton}
 \author[1]{Jonathan B. Dayton}
 \author[1]{Stephen R. Piccolo}
 \affil[1]{Department of Biology, Brigham Young University, Provo, UT 84602 USA}
+%[@Please list my contact information. I don't remember how to do this in LaTeX. But please make sure it looks similar to our previous paper.]
 
 \maketitle
 
 \begin{abstract}
-	Gene-expression profiling enables researchers to quantify transcription levels in cells, thus providing insight into functional mechanisms of diseases and other biological processes.
-	However, because of the high dimensionality of these data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analysis.
-	For example, collecting data in multiple runs causes nontrivial differences in the data (known as batch effects),
-	known covariates that are not of interest to the study may have strong effects,
-	and there may be large systemic effects when integrating multiple expression datasets.
-	Additionally, many of these confounding effects represent higher-order interactions that may not be removable using existing techniques that identify linear patterns.
-	We created Confounded to remove these effects from expression data.
+	Gene-expression profiling enables researchers to quantify transcription levels in cells, thus providing insights into functional mechanisms of diseases and other biological processes.
+	However, because of the high dimensionality of these data and the sensitivity of measuring equipment, expression data often contains unwanted confounding effects that can skew analyses.
+	For example, collecting data in multiple runs can cause nontrivial differences in the data known as batch effects.
+	Covariates that are not of interest to the study may have strong effects on gene expression,
+	and there may be systemic platform effects when integrating multiple datasets.
+	These confounding effects may be driven by higher-order interactions that are not removable using existing techniques that identify linear patterns.
+	We created *Confounded* to remove these effects from expression data.
+	[@Please modify the following sentence to better reflect the dual-objective aspect and the fact that it uses neural networks.@]
 	Confounded is an adversarial variational autoencoder that removes confounding effects while minimizing the amount of change to the input data.
-	We tested the model on artificially constructed data and commonly used gene expression datasets and compared against other common batch adjustment algorithms.
-	We also applied the model to remove cancer-type-specific signal from a pan-cancer expression dataset.
-	Our software is publicly available at \url{https://github.com/jdayton3/Confounded}.
+	We tested the model on artificially constructed data and three gene-expression datasets and compared against other batch-adjustment algorithms.
+	Our software is available at \url{https://github.com/jdayton3/Confounded}.
 \end{abstract}
 
 \doublespacing
