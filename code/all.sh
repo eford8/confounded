@@ -4,12 +4,13 @@ set -e
 
 cd prepdata
 bash all.sh
-exit
 cd ../
+exit
 
 cd adjust
 bash all.sh
 cd ../
+exit
 
 cd metrics
 bash all.sh

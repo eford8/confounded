@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 image=srp33/confounded-paper:version1
 
 docker build -t $image .
