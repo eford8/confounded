@@ -4,6 +4,7 @@ set -e
 
 cd prepdata
 bash all.sh
+exit
 cd ../
 
 cd adjust
