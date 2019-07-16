@@ -12,7 +12,9 @@ docker run -it \
     jdayton3/confounded data/gse37199/gse37199.csv -b plate
 docker run -it \
     -v $(pwd)/../data/input/mnist/:/confounded/data/mnist \
-    jdayton3/confounded data/mnist/noisy.csv -b Batch
+    -v $(pwd)/../data/metrics/:/confounded/data/log \
+    jdayton3/confounded data/mnist/noisy.csv -b Batch \
+    -f data/log/log.csv # save a log for our loss chart
 docker run -it \
     -v $(pwd)/../data/input/tcga/:/confounded/data/tcga \
     jdayton3/confounded data/tcga/tcga.csv -b CancerType

@@ -13,5 +13,4 @@ df = df.set_index("Digit")\
     .reset_index()\
     .reset_index()\
     .rename(columns={"index": "Sample"})
-df["Batch"] = ["A", "B"] * 5000
 df.to_csv(args.outfile, index=False)
