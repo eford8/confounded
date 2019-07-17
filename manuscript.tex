@@ -123,11 +123,12 @@ We present a classification-based framework to assess the extent to which confou
 
 \section{Methods} \label{sec:methods}
 
-An open-source implementation of Confounded is publicly available at \url{https://github.com/jdayton3/Confounded}. Materials for generating this manuscript, including scripts and data, are available at \url{https://github.com/jdayton3/ms-thesis/tree/bioinformatics} and \url{https://osf.io/b76ch/}, respectively.
+An open-source implementation of Confounded is publicly available at \url{https://github.com/jdayton3/Confounded}. Materials for generating this manuscript, including scripts and data, are available at \url{https://github.com/jdayton3/confounded-paper} and \url{https://osf.io/b76ch/}, respectively.
+%TODO: We may be able to remove the OSF repo now...but let's wait...
 
 \subsection{Neural network structure}
 
-We used an adversarial autoencoder network to model and remove confounding effects.
+We developed an adversarial autoencoder network to model and remove confounding effects.
 We structured this network in two parts: a variational autoencoder \cite{louizos_variational_2015} to replicate the input (expression) data and a discriminator to detect remaining confounding effects in the autoencoder's output.
 By penalizing the autoencoder for the discriminator's success, the autoencoder subnetwork learns over the course of training to output the expression data with confounding effects minimized.
 We implemented the neural network in TensorFlow 1.11.0 \cite{abadi_tensorflow_2015} with Python 3.6 \cite{python_software_foundation_python_2019}.
@@ -153,17 +154,17 @@ Each hidden layer is activated with the Exponential Linear Unit (ELU) function \
 
 \subsubsection{Discriminator}
 
-We trained the discriminator to predict the original batch of the autoencoder's output.
-The discriminator subnetwork consists of an input layer; four fully connected hidden layers of sizes 1024, 512, 512, and 128, respectively; and an output layer sized based on the number of batches (i.e. if there are 4 distinct batches in the data, the output layer will be size 4). [@Please provide a little more detail about how the output layer size is calculated - How's this?@].
+We trained the discriminator to predict the original batches based on the autoencoder's output.
+The discriminator subnetwork consists of an input layer; four fully connected hidden layers of sizes 1024, 512, 512, and 128, respectively; and an output layer sized based on the number of batches (i.e. if there are 4 distinct batches in the data, the output layer will be size 4).
 To combat overfitting and improve training, we also added 50\%-probability dropout \cite{srivastava_dropout_2014} (which prevents overfitting by dropping a random subset of layer inputs in each training iteration) and batch normalization \cite{ioffe_batch_2015} (which helps training by smoothing out the optimization landscape \citep{santurkar_how_2018}) to each layer of the discriminator.
 These additions seem to reduce overfitting in the discriminator.
 
 \subsubsection{Loss functions}
 
-We trained the network using three loss functions.
+To evaluate the network's performance, we used three loss functions.
 First, we calculated the autoencoder's loss ($L_A$) by summing the reconstruction loss (sigmoid cross entropy between the autoencoder's input and output) and the latent loss (Kullback-Leibler (KL) divergence \cite{kullback_information_1951} of the code layer).
 Second, we calculated the discriminator's loss ($L_D$) as sigmoid cross entropy between its output and a one-hot encoding of the samples' batch labels.
-Finally, we also trained the autoencoder layers on a combination of the two previous losses,
+Finally, we trained the autoencoder layers on a combination of the two previous losses,
 
 \begin{equation}
 	\label{dual_loss}
@@ -180,7 +181,7 @@ In all cases, we trained the network using the Adam Optimizer \citep{kingma_adam
 In each iteration, we optimized on both $L_D$ and $L_{dual}$.
 When optimizing $L_D$ (i.e. training the discriminator), we froze the autoencoder's weights, and vice versa.
 We trained the network on a 2017 Dell XPS 15 9560 with an 8-core Intel i7-7700HQ central processing unit and 16 GB of random access memory.
-For each dataset, training took roughly 30 minutes to complete, including time to load the input into memory and to save the output to disk.
+For each dataset, training took roughly 30 minutes to complete, including time to load the input into memory and save the output to disk.
 
 \begin{figure}
 	\centering
@@ -200,7 +201,7 @@ We also compared against ComBat \citep{johnson_adjusting_2007} using an implemen
 
 We initially intended to test against the SVA \citep{leek_capturing_2007} method but concluded that SVA is more suited for producing surrogate variables for further statistical research rather than removing those variables from the data.
 A number of other methods for batch adjustment are available. Some of these use deep neural networks \citep{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019}, while others do not\citep{espin-perez_comparison_2018}.
-Unfortunately, most of these methods lack a common interface and common assumptions that input datasets must meet.[@This won't be convincing enough to the reviewers. Be more explicit about why we couldn't use these other methods. - Should I just copy the info in the background here (the "limited range of scenarios" part)?@]
+Unfortunately, the datasets we tested did not meet the requirements of these methods (e.g., two equal-sized batches, large sample sizes).
 
 \subsection{Datasets}
 
