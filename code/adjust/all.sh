@@ -2,6 +2,6 @@
 
 set -e
 
-bash ./scale.sh
+#bash ./scale.sh
 #bash ./combat.sh
-#bash ./confounded.sh
+bash ./confounded.sh

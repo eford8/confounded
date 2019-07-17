@@ -2,10 +2,9 @@
 
 set -e
 
-cd prepdata
-bash all.sh
-cd ../
-exit
+#cd prepdata
+#bash all.sh
+#cd ../
 
 cd adjust
 bash all.sh

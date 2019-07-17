@@ -2,24 +2,12 @@
 options(error=function() { traceback(2); if(!interactive()) quit("no", status = 1, runLast = FALSE) })
 
 # Load dependencies --------------------------------
-
-load_stuff <- function() {
-  for (package in c("tidyverse", "docstring", "stringr", "argparse")) {
-    if (!require(package, character.only = TRUE)) { 
-      install.packages(package)
-      library(package, character.only = TRUE)
-    }
-  }
-  install_sva <- function() {
-    ## try http:// if https:// URLs are not supported
-    source("https://bioconductor.org/biocLite.R")
-    biocLite("sva")
-  }
-  if (!require("sva")) install_sva()
-  library(sva)
-}
-
-suppressMessages(load_stuff())
+library(dplyr)
+library(readr)
+library(docstring)
+library(stringr)
+library(argparse)
+library(sva)
 
 # Parse command line args --------------------------
 

@@ -14,7 +14,7 @@ ENV TZ=America/Denver
 ####################################################################################
 
 RUN apt-get update --fix-missing && \
-  apt-get install -y wget apt-transport-https software-properties-common && \
+  apt-get install -y wget curl apt-transport-https software-properties-common && \
   apt-get update && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
   add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/' && \
@@ -44,6 +44,16 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.6.14-Linux-x86
   echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
   echo "conda activate base" >> ~/.bashrc && \
   conda install numpy scikit-learn pandas tensorflow=1.11.0
+
+####################################################################################
+# Install Confounded within the image
+####################################################################################
+
+RUN mkdir /confounded && \
+    curl -sL https://github.com/jdayton3/Confounded/archive/docker-0.1.6.tar.gz | \
+    tar xz -C /confounded --strip-components 1 && \
+    echo '#!/bin/bash\ncd /confounded\npython -m confounded "$@"' > /usr/bin/confounded && \
+    chmod +x /usr/bin/confounded
 
 ####################################################################################
 # Copy files into the image
