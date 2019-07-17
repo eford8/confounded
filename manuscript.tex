@@ -108,7 +108,7 @@ no formulas that require batches to be equal sizes.
 Furthermore, we tested our method using machine-learning classification algorithms to quantify the extent to which nonlinear batch effects remain after adjustment.
 
 Autoencoders are a type of neural network that encodes input data in a smaller number of dimensions than the original data and then reconstructs the data in the original dimensions\citep{hinton_reducing_2006}.
-This technique can be used to reduce noise and thus refine the data representation.[@Make sure this wording is legit. - Are you referencing denoising autoencoders, or are you saying that vanilla autoencoders reduce noise? Either way, we might need a reference. You would know better than I. Please clarify this based on what is relevant to the paper and add a relevant reference.@]
+This technique can be used to reduce noise and thus refine the data representation.[@Make sure this wording is legit. - Are you referencing denoising autoencoders, or are you saying that vanilla autoencoders reduce noise? Either way, we might need a reference. -You would know better than I. Please clarify this based on what is relevant to the paper and add a relevant reference.@]
 Typically, autoencoders are trained using an objective function that seeks to ensure that the output is as similar as possible to the input \citep{hinton_reducing_2006}.
 However, neural networks are adept at finding subtle patterns in data;
 thus the objective function may prioritize replication of confounding patterns, such as batch effects, rather than the signals of interest \citep{ganin_domain-adversarial_2015,louizos_causal_2017-2}.
@@ -228,7 +228,7 @@ However, the autoencoder was still able to represent spatial relationships witho
 \paragraph{Synthetic batch effects}
 
 Because there is no batch information in the MNIST digits dataset, we simulated nonlinear confonding effects.
-We applied these effects by iteratively realizing vectors of normally distributed values, multiplying and adding these vectors to the ``expression'' vectors, and applying nonlinearity to the adjusted vector.[@Be more specific in the last part. How did you apply nonlinearity?@]
+We applied these effects by iteratively realizing vectors of normally distributed values, multiplying and adding these vectors to the ``expression'' vectors, and applying nonlinearity to the adjusted vector.[@Be more specific in the last part. How did you apply nonlinearity? Or maybe this last part of the sentence is unnecessary.@]
 We split the images into two balanced batches (5,000 images for each batch) and included the same number of each digit in each batch.
 We applied the same random vectors to each image in a given batch.
 Finally, we added random noise to each image to prevent images in a batch from being overly similar to each other.
@@ -284,7 +284,7 @@ Table \ref{tab:datasets} details which columns were used for these analyses.
 
 We used four classification algorithms from the scikit-learn (version 0.19.1) library \cite{pedregosa_scikit-learn_2011}: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and Support Vector Machines (SVM) \citep{cortes_support-vector_1995} with a radial-basis kernel.
 In most cases, we used the default hyperparameters, with the exceptions of using Random Forests with \texttt{n\_estimators=10} and using SVM with \texttt{kernel="rbf"}.
-[@Say something about what hyperparameters we used. Defaults? - How's this? The default in version 0.19.1 was 10. Are you saying you used 10 or something different?@]
+[@The defaults in version 0.19.1 of sklearn are n_estimators=10 for RF and kernel="rbf" for SVM. Did you use these defaults or something different?@]
 
 We calculated the average classification accuracy across four cross-validation folds, repeated three times.
 We interpreted lower accuracy for batch classification to indicate that batch signal was removed more effectively.
@@ -293,17 +293,17 @@ Therefore, given output data from an ideal batch adjuster, batch classification 
 
 \section{Results} \label{sec:results}
 
-In this study, we created Confounded, an adversarial, variational, autoencoder neural network, to remove nonlinear confounding effects from gene-expression data that may not be accounted for by linear methods.
+In this study, we created Confounded, an adversarial, variational autoencoder, neural network, to remove nonlinear confounding effects from gene-expression data that may not be accounted for by linear methods.
 We compared Confounded to a scaling method and to ComBat \citep{johnson_adjusting_2007} and used qualitative and quantitative techniques to compare the performance of these methods.
 Overall, the scaling method performed consistently worse than the other methods;
-ComBat and Confounded each excelled in different scenarios, which we illustrate below.
+ComBat and Confounded each excelled in different scenarios, which we describe below.
 
 \subsection{Confounded removes nonlinear confounding effects that other adjusters miss}
 
-[@At least in my mind, we justified using MNIST as a way to visually see how our method performs and to modify it accordingly. However, the Results don't reflect that (in my mind) because the MNIST images are blurry for Confounded, whereas they are clear for the other methods. There is some explanation below about why this might be happening with Confounded. But as an outsider reading this, I would question why we used MNIST at all because our method didn't perform particularly well. It's hard to justify using MNIST anyway because it's so different from gene-expression data. So I think we should remove it from the paper (but it was fine to use it in your thesis). Let me know if you disagree. If not, please remove it. - We talked about maybe keeping it after training for 10k at LR=0.001 and 10k at LR=0.0001. What are your thoughts on this now?@]
+[@I also think we should have t-SNE graphs for all three datasets. - Do you think this should be in the main text or just in the supplement? - The supplement.@]
 
-[@For simplicity, I think we should only include t-SNE graphs, not PCA. t-SNE accounts for nonlinear patterns, which is the point of our method. - I like including both because it's an evidence that linear visualizations don't cut it when using ML algorithms, but I could go either way on this.@]
-[@I also think we should have t-SNE graphs for all three datasets. - Do you think this should be in the main text or just in the supplement?@]
+[@Please structure this so that the MNIST results are described first. I think the bladderbatch results should come next because that is the closest thing we have to a reference set for gene expression. Then GSE37199. Then pan-cancer. Please restructure the results and wording to reflect this order. It's OK to mix and match. But the first set of results should be in this order.@]
+
 We used principal component analysis (PCA) and t-distributed Stochastic Neighbor Embedding (t-SNE) \citep{maaten_visualizing_2008} plots to visualize the data before and after batch adjustment.
 Before any adjustment, batches (microarray plates) in the GSE37199 dataset showed distinct expression patterns for each batch.
 After adjustment with each of the three methods, the batches were less distinct (see \figurename{s} \ref{fig:pca} and \ref{fig:tsne}).
