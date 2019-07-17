@@ -205,7 +205,7 @@ Unfortunately, the datasets we tested did not meet the requirements of these met
 
 \subsection{Datasets}
 
-To test both theoretical and practical differences between Confounded and the alternative methods, we compared them for datasets that varied in size and type of data measured.
+We tested each method on four datasets that varied in size and the ype of data measured.
 
 \begin{table}
 	\centering
@@ -218,18 +218,17 @@ To test both theoretical and practical differences between Confounded and the al
 
 \subsubsection{MNIST}
 
-The MNIST digits dataset \cite{lecun_mnist_nodate} contains images of handwritten digits that are size-normalized and centered.
-It contains 60,000 training images and 10,000 test images.
-We used MNIST so we could visually assess how well the batch-correction methods preserve true signal (in this case, the shape and digit of each handwritten digit image) after simulated batch adjustment.
-We flattened each 28-by-28 image into a 1D vector of size 784 and put each in a CSV file along with the accompanying digit (class) information.
+Initially, we used an image dataset so we could visually assess how well the batch-correction methods preserve true signal (in this case, the shape and definition of each handwritten digit image).
+The MNIST dataset \cite{lecun_mnist_nodate} contains images of handwritten digits that are size-normalized and centered.
 We limited our analysis to the 10,000 test images.
+We flattened each 28-by-28 image into a 1D vector of size 784 and put each in a CSV file along with the accompanying digit (class) information.
 Although convolutional layers are typically used when working with image data, we used fully connected layers to maintain consistency with what would be used on gene-expression data.
 However, the autoencoder was still able to represent spatial relationships without explicitly defining them in the model.
 
 \paragraph{Synthetic batch effects}
 
 Because there is no batch information in the MNIST digits dataset, we simulated nonlinear confonding effects.
-We applied nonlinear effects by iteratively realizing vectors of normally distributed values, multiplying and adding these vectors to the ``expression'' vectors, and applying nonlinearity to the adjusted vector.
+We applied these effects by iteratively realizing vectors of normally distributed values, multiplying and adding these vectors to the ``expression'' vectors, and applying nonlinearity to the adjusted vector.[@Be more specific in the last part. How did you apply nonlinearity?@]
 We split the images into two balanced batches (5,000 images for each batch) and included the same number of each digit in each batch.
 We applied the same random vectors to each image in a given batch.
 Finally, we added random noise to each image to prevent images in a batch from being overly similar to each other.
@@ -240,18 +239,18 @@ The bladderbatch dataset is a microarray gene-expression dataset from a study of
 It is available as an R package \cite{leek_bladderbatch_2017}.
 It contains expression values for 57 tissue samples with and without bladder cancer across 5 unbalanced batches.
 The dataset has a cancer status (cancerous vs. normal tissue) variable, which we used as the ``true class'' in our validations; it also has a batch variable.
-Because bladderbatch is small relative to datasets typically used for deep learning, it helped us to evaluate whether our network overfits on gene-expression datasets of the size often used in applied research.
+Because bladderbatch is small relative to datasets typically used for deep learning, it helped us to evaluate whether our network overfits on gene-expression datasets of a size typical of applied research.
 
-\subsubsection{GSE37199}
+\subsubsection{Prostate cancer data}
 
 The GSE37199 dataset was profiled using Affymetrix microarrays from patients with advanced castration-resistant prostate cancer \cite{olmos_prognostic_2012}.
 We used a curated version of this dataset from \url{http://doi.org/10.17605/OSF.IO/SSK3T}\cite{golightly_curated_2018}.
 It contains expression values for 93 tissue samples categorized as either ``Advanced castration resistant'' or ``good prognosis.''
 We used these categories for the ``true class'' labels.
 This dataset has two types of batch variables---``plate'' and ``centre''---which indicate the microarray plate and research lab that processed the data, respectively.
-We adjusted against the ``plate'' variable because it was granular in nature (with counts of $\{43, 50\}$).
+We adjusted against the ``plate'' variable because it is more granular in nature (with counts of $\{43, 50\}$).
 
-\subsubsection{TCGA pan-cancer data}
+\subsubsection{Pan-cancer data}
 
 The Cancer Genome Atlas (TCGA) produced RNA-Sequencing data for tumors across many cancer types \cite{the_cancer_genome_atlas_research_network_cancer_2013}.
 In a previous study \cite{dayton_classifying_2017-1}, we classified this dataset based on the presence or absence of mutations in several known cancer genes.
@@ -265,7 +264,7 @@ which has expression values for 9,365 samples across 25 cancer types.
 \subsubsection{Mean squared error}
 
 Mean squared error (MSE) is a measure of how much two vectors or matrices deviate from one another.
-It is commonly used as to quantify loss when the objective (as with autoencoders) is to minimize the difference between input and output values.
+It is commonly used to quantify loss when the objective (as with autoencoders) is to minimize the difference between input and output values.
 
 \subsubsection{Maximum mean discrepancy} \label{section:mmd}
 
@@ -283,14 +282,14 @@ b) how well class-related signal was maintained after adjustment,
 we used classification algorithms to predict either batch or the ``true class`` labels based on the expression data and used classification accuracy as a metric.
 Table \ref{tab:datasets} details which columns were used for these analyses.
 
-We used four classification algorithms from the scikit-learn (version 0.19.1) library \cite{pedregosa_scikit-learn_2011}: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and SVM \citep{cortes_support-vector_1995} with a radial basis kernel.
-In most cases, we used the default hyperparameters, with exceptions of using Random Forests with \texttt{n\_estimators=10} and using SVM with \texttt{kernel="rbf"}.
-[@Say something about what hyperparameters we used. Defaults? - How's this?@]
+We used four classification algorithms from the scikit-learn (version 0.19.1) library \cite{pedregosa_scikit-learn_2011}: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and Support Vector Machines (SVM) \citep{cortes_support-vector_1995} with a radial-basis kernel.
+In most cases, we used the default hyperparameters, with the exceptions of using Random Forests with \texttt{n\_estimators=10} and using SVM with \texttt{kernel="rbf"}.
+[@Say something about what hyperparameters we used. Defaults? - How's this? The default in version 0.19.1 was 10. Are you saying you used 10 or something different?@]
 
-We calculated the average classification accuracy across four-fold cross-validation repeated three times.
+We calculated the average classification accuracy across four cross-validation folds, repeated three times.
 We interpreted lower accuracy for batch classification to indicate that batch signal was removed more effectively.
-We interpreted higher true-class accuracy to indicate that biologically relevant signal was not lost during the batch-adjustment process.
-Therefore, given output data from a ideal batch adjuster, batch classification accuracy would be no better than random chance, and true-class accuracy would be equal to what would be obtained for the unadjusted data.
+We interpreted higher true-class accuracy to indicate that biologically relevant signal was retained during the batch-adjustment process.
+Therefore, given output data from an ideal batch adjuster, batch classification accuracy would be no better than random chance, and true-class accuracy would be equal to what would be obtained for the unadjusted data.
 
 \section{Results} \label{sec:results}
 
