@@ -72,7 +72,7 @@ These biases represent cases where data measurements are affected by hidden vari
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/adjuster_workflow.pdf}
+	\includegraphics[width=\columnwidth]{figures/static/adjuster_workflow.pdf}
 	\caption[Batch adjustment justification and steps]{\textbf{Batch adjustment justification and steps.}
 	\begin{enumerate*}[(a)]
 		\item When measurements are collected from a sample ($X$), systemic effects ($H$) may affect the measurements.
@@ -136,7 +136,7 @@ All layers in the network are fully connected, and all activation functions are 
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\columnwidth]{figures/final/network.pdf}
+	\includegraphics[width=\columnwidth]{figures/static/network.pdf}
 	\caption[Network architecture of Confounded]{\textbf{Network architecture of Confounded.}
 	Data with batch effects (represented by different colors) are input into an autoencoder.
 	The output of the autoencoder is classified by a discriminator network based on batch.
@@ -279,6 +279,8 @@ In that study, we observed that cancer type had a strong confounding effect on o
 However, we found that a strong nonlinear signal could still be identified by the Random Forests algorithm after adjustment.
 Here, we used the same version of TCGA dataset (available at \url{https://osf.io/7xjdn/}),
 which has expression values for 9,365 samples across 25 cancer types.
+%TODO: Change this to 8744 samples (after averaging across replicates and limiting to patients that had all types of data), 23,386 genes and 24 cancer types?
+%TODO: Mention that we used all genes rather than 300?
 
 \subsection{Statistics and metrics}
 
@@ -303,6 +305,7 @@ b) how well class-related signal was maintained after adjustment,
 we used classification algorithms to predict either batch or the ``true class`` labels based on the expression data and used classification accuracy as a metric.
 Table \ref{tab:datasets} details which columns were used for these analyses.
 
+%TODO: Update the algorithms listed here.
 We used four classification algorithms from the scikit-learn (version 0.19.1) library \cite{pedregosa_scikit-learn_2011}: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and Support Vector Machines (SVM) \citep{cortes_support-vector_1995} with a radial-basis kernel.
 In most cases, we used the default hyperparameters, with the exceptions of using Random Forests with \texttt{n\_estimators=10} and using SVM with \texttt{kernel="rbf"}.
 [@The defaults in version 0.19.1 of sklearn are n\_estimators=10 for RF and kernel="rbf" for SVM. Did you use these defaults or something different?@]

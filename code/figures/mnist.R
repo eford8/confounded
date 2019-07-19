@@ -43,6 +43,7 @@ for (name in names(dfs)) {
   }
 }
 
+# Perhaps tweak these sizes to get the labels to show up correctly.
 label_width <- 65
 text_background <- image_scale(image_read(array(rep(1, 28*label_width), c(28, label_width, 1))), "x100")
 labels <- NULL
@@ -51,6 +52,7 @@ for (name in names(dfs)) {
   if (is.null(labels)) {
     labels <- new_label
   } else {
+    # This puts the images vertically.
     labels <- image_append(c(labels, new_label), stack = TRUE)
   }
 }
