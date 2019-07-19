@@ -59,10 +59,10 @@ RUN mkdir /confounded && \
 # Copy files into the image
 ####################################################################################
 
-COPY adjust /adjust
-COPY figures /figures
-COPY metrics /metrics
 COPY prepdata /prepdata
+COPY adjust /adjust
+COPY metrics /metrics
+COPY figures /figures
 COPY all.sh /
 
 ENTRYPOINT /all.sh

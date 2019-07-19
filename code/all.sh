@@ -11,9 +11,9 @@ bash all.sh
 cd ../
 exit
 
-cd metrics
-bash all.sh
-cd ../
+#cd metrics
+#bash all.sh
+#cd ../
 
 cd figures
 bash all.sh
