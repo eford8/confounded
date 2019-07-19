@@ -15,5 +15,6 @@ docker run -i --rm \
   -v $(pwd)/data:/data \
   -v $(pwd)/../metrics:/data/metrics \
   -v $(pwd)/../figures:/figures \
-  -v /tmp:/tmp \
   $image
+
+#  -v /tmp:/tmp \

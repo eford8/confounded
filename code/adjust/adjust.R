@@ -187,7 +187,6 @@ if (!(args$batch_col %in% names(df))) {
 }
 
 message(sprintf("Adjusting using the '%s' adjuster", args$adjuster))
-print(df)
 batch_adjust_tidy(
   df, 
   batch_col = args$batch_col, 

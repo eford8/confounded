@@ -25,4 +25,4 @@ data = inner_join(cancer_types, mutations, by = "Sample") %>%
     inner_join(rnaseq, by = "Sample") %>%
     dplyr::rename(TP53_Mutated = Mutated)
 
-write_tsv(data, out_file_path)
+write_csv(data, out_file_path)
