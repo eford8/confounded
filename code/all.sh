@@ -6,9 +6,10 @@ set -e
 #bash all.sh
 #cd ../
 
-#cd adjust
-#bash all.sh
-#cd ../
+cd adjust
+bash all.sh
+cd ../
+exit
 
 #cd metrics
 #bash all.sh

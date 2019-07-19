@@ -23,6 +23,7 @@ args = parser.parse_args()
 
 mutations = pd.read_csv(args.mutations, sep="\t")
 ctypes = pd.read_csv(args.cancer_types, sep="\t")
+print(args.rnaseq)
 expression = pd.read_csv(args.rnaseq, sep="\t")
 
 most_mutated = mutations['MutatedGene'].value_counts()[:5].index.tolist()
