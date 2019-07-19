@@ -11,8 +11,9 @@ mkdir -p data/metrics
 
 #docker run -i -t --rm \
 docker run -i --rm \
+  --user $(id -u):$(id -g) \
   -v $(pwd)/data:/data \
   -v $(pwd)/../metrics:/data/metrics \
   -v $(pwd)/../figures:/figures \
+  -v /tmp:/tmp \
   $image
-#  --user $(id -u):$(id -g) \

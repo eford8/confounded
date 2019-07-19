@@ -23,12 +23,12 @@ args = parser.parse_args()
 
 mutations = pd.read_csv(args.mutations, sep="\t")
 ctypes = pd.read_csv(args.cancer_types, sep="\t")
-print(args.rnaseq)
 expression = pd.read_csv(args.rnaseq, sep="\t")
 
 most_mutated = mutations['MutatedGene'].value_counts()[:5].index.tolist()
 mutations = mutations[mutations['MutatedGene'].isin(most_mutated)]
 mutations_matrix = to_sparse_matrix(mutations)
+
 clinical = ctypes.merge(mutations_matrix, on="Sample", how="left").fillna(0)
 clinical = clinical.applymap(maybe_to_int)
 all_data = clinical.merge(expression, on="Sample", how="inner").drop_duplicates()
