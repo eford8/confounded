@@ -65,7 +65,7 @@ However, we sought to identify patterns that were tissue-agnostic, so tissue of 
 %TODO: Move this to Discussion as a future issue to tackle?
 %Finally, data integration is a key goal for gene-expression analyses \citep{lazar_batch_2013}.
 %As sample sizes increase, so can statistical significance.
-%Although batch effects within a single dataset may be somewhat decreased by careful replication of experimental conditions, this is not possible when integrating different datasets. Methods used for batch correction may be used to correct for dataset-integration effects; however, this problem is 
+%Although batch effects within a single dataset may be somewhat decreased by careful replication of experimental conditions, this is not possible when integrating different datasets. Methods used for batch correction may be used to correct for dataset-integration effects; however, this problem is
 %however, , .
 
 These biases represent cases where data measurements are affected by hidden variables and must be removed for effective analyses (see \figurename{} \ref{fig:workflow}).
@@ -203,6 +203,27 @@ We initially intended to test against the SVA \citep{leek_capturing_2007} method
 A number of other methods for batch adjustment are available. Some of these use deep neural networks \citep{shaham_removal_2017,shaham_batch_2018,upadhyay_removal_2019}, while others do not\citep{espin-perez_comparison_2018}.
 Unfortunately, the datasets we tested did not meet the requirements of these methods (e.g., two equal-sized batches, large sample sizes).
 
+% ----- Brief explanation of the other methods -----
+% 1.
+% The Shaham lab has two method that we reference up here^, one from 2017 , and one from 2018.
+% The 2017 one is the distribution-matching residual net.
+% It arbitrarily designates one batch as the "target" and the other batch as the "source".
+% It calculates MMD with 3 kernels and averages them, and uses them as the loss function.
+% Over training, the source's distribution (according to MMD) should be aligned to the target's distribution.
+% In our testing, this was SUPER memory-intensive.
+% I think this is the practical reason they reduced their dataset to the first 37 principal components, but their explanation in the paper is that the people who generated the data said the first 37 components contain most of the variation.
+% 2.
+% The 2018 Shaham paper is about using an adversarial autoencoder to make a batch-free encoding of expression data.
+% They have a variational autoencoder with a shared encoder, but separate decoders for each of the 2 batches.
+% They say that the decoders output data that has batch info in it but that the encoding layer doesn't have batch info.
+% Their encoding layer is only size 15-20, so this is essentially a dimensionality reduction technique--the "batch free encoding" they're producing doesn't have values for each gene.
+% 3.
+% I don't know how worth-mentioning the Upadhyay paper is, but they basically replicate the DMResNet paper and replace the MMD loss with a discriminator loss like we do.
+% They use the Shaham datasets, and I think their code, which is either not publicly available or is just really hard to find, probably has the same caveats as the Shaham code.
+% Most particularly, they only account for 2 batches.
+% I might have misunderstood their approach though because the English is a little difficult to interpret.
+
+
 \subsection{Datasets}
 
 We tested each method on four datasets that varied in size and the ype of data measured.
@@ -212,7 +233,7 @@ We tested each method on four datasets that varied in size and the ype of data m
 	\caption[Dataset information]{
 		\textbf{Information} about each dataset used to compare algorithm performance.
 	}
-	\input{figures/final/datasets.tex}
+	\input{tables/static/datasets.tex}
 	\label{tab:datasets}
 \end{table}
 
@@ -284,7 +305,7 @@ Table \ref{tab:datasets} details which columns were used for these analyses.
 
 We used four classification algorithms from the scikit-learn (version 0.19.1) library \cite{pedregosa_scikit-learn_2011}: Naive Bayes \citep{maron_automatic_1961}, Random Forests \citep{tin_kam_ho_random_1995}, k-Nearest Neighbors \citep{fix_discriminatory_1951}, and Support Vector Machines (SVM) \citep{cortes_support-vector_1995} with a radial-basis kernel.
 In most cases, we used the default hyperparameters, with the exceptions of using Random Forests with \texttt{n\_estimators=10} and using SVM with \texttt{kernel="rbf"}.
-[@The defaults in version 0.19.1 of sklearn are n_estimators=10 for RF and kernel="rbf" for SVM. Did you use these defaults or something different?@]
+[@The defaults in version 0.19.1 of sklearn are n\_estimators=10 for RF and kernel="rbf" for SVM. Did you use these defaults or something different?@]
 
 We calculated the average classification accuracy across four cross-validation folds, repeated three times.
 We interpreted lower accuracy for batch classification to indicate that batch signal was removed more effectively.
@@ -347,7 +368,7 @@ With both metrics, Confounded consistently performed somewhat worse than ComBat.
 	\label{fig:mse}
 \end{figure}
 \begin{table}
-	\input{figures/final/mse.tex}
+	\input{tables/static/mse.tex}
 	\caption[Mean squared error (MSE)]{
 		\textbf{Mean squared error (MSE)} of the unadjusted input data compared to the data output by the given adjusters.
 		Lower MSE indicates that the output has changed less from the input.
@@ -369,7 +390,7 @@ With both metrics, Confounded consistently performed somewhat worse than ComBat.
 \end{figure}
 \begin{table}
 	\centering
-	\input{figures/final/mmd.tex}
+	\input{tables/static/mmd.tex}
 	\caption[Maximum mean discrepancy (MMD)]{
 		\textbf{Maximum mean discrepancy} (MMD) comparing the distributions of the batches to each other after a given adjustment.
 		Lower MMD indicates that the distributions of the different batches are more similar.
@@ -399,7 +420,7 @@ This indicates that while ComBat's performance may work at least as well as Conf
 \end{figure}
 \begin{table}
 	\centering
-	\input{figures/final/batch.tex}
+	\input{tables/static/batch.tex}
 	\caption[Batch classification accuracy]{
 		\textbf{Batch classification accuracy} for several datasets and adjusters.
 		The ideal batch adjuster would completely remove all signal due to batch and would therefore \textit{decrease} batch classification accuracy to around the baseline for all classifiers.
@@ -432,7 +453,7 @@ Additional tuning may improve the performance metrics.
 \end{figure}
 \begin{table}
 	\centering
-	\input{figures/final/true_class.tex}
+	\input{tables/static/true_class.tex}
 	\caption[True class classification accuracy]{
 		\textbf{True class classification accuracy} for several datasets and adjusters.
 		After adjustment by the ideal batch adjuster, all true class signal should be preserved, and all classifiers should therefore have the same accuracy in predicting true class before and after adjustment.
