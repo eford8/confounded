@@ -1,28 +1,10 @@
----
-title: "Stratified Samplinig"
-author: "Jonathan Dayton"
-date: "5/31/2019"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(tidyverse)
-```
 
-## Make a test dataset
-
-```{r}
-a = 4
-b = 9
-c = 25
-d = 65
-tot = a + b + c + d
-df = tbl_df(list(
-  group = c(rep("A", a), rep("B", b), rep("C", c), rep("D", d)),
-  val = rnorm(tot)
-))
+IN_FILE <- "../data/input/tcga/tcga.csv"
+OUT_DIR <- "../data/input/"
+MEDIUM <- paste0(OUT_DIR, "/tcga_medium/medium.csv")
+SMALL <- paste0(OUT_DIR, "/tcga_small/small.csv")
 
 get_group <- function(df, colname, value) {
   colname <- enquo(colname)
@@ -54,28 +36,9 @@ sample_sqrt <- function(data, group_col = "group", scale = 1) {
   }, group_col)
 }
 
-
-sample_log(df)
-sample_sqrt(df)
-```
-
-
-## Figure out the TCGA dataset
-
-```{r}
-tcga <- read_csv("../../data/tcga/tcga.csv")
+tcga <- read_csv(IN_FILE)
 tcga %>% group_by(CancerType) %>% summarize(count=ceiling(sqrt(n()))) %>% arrange(desc(count)) %>% ungroup()
-```
 
-```{r}
 set.seed(0)
-sample_sqrt(tcga, group_col = "CancerType", scale = 2) %>% write_csv("../../data/tcga/medium.csv")
-sample_log(tcga, "CancerType") %>% write_csv("../../data/tcga/small.csv")
-```
-
-```{r}
-x %>% group_by(CancerType) %>% summarize(n = n()) %>% arrange(desc(n)) %>% View()
-y %>% group_by(CancerType) %>% summarize(n = n()) %>% arrange(desc(n)) %>% View()
-```
-
-
+sample_sqrt(tcga, group_col = "CancerType", scale = 2) %>% write_csv(MEDIUM)
+sample_log(tcga, "CancerType") %>% write_csv(SMALL)

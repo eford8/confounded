@@ -7,6 +7,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import robust_scale
 from util import DataFrameCache, get_dataset_path_dict, no_extension
 import time
 from sklearn.model_selection import train_test_split
@@ -35,11 +36,12 @@ def cross_validate(path, meta_cols=None, predict="Batch", times=100, folds=5, mo
     data = CSVData(path, meta_cols, predict)
     accuracies = []
     elapsed_times = []
+    scaled_X = robust_scale(data.X)
     for _ in range(times):
         start = time.time()
         try:
             accuracies += list(cross_val_score(
-                classifier, data.X, data.Y, cv=folds, scoring="accuracy"
+                classifier, scaled_X, data.Y, cv=folds, scoring="accuracy"
             ))
             elapsed_times.append(time.time() - start)
         except ValueError as e:

@@ -48,6 +48,7 @@ label_width <- 65
 text_background <- image_scale(image_read(array(rep(1, 28*label_width), c(28, label_width, 1))), "x100")
 labels <- NULL
 for (name in names(dfs)) {
+  # Font size = 32
   new_label <- image_annotate(text_background, name, gravity = "center", size = 32)
   if (is.null(labels)) {
     labels <- new_label
@@ -57,7 +58,8 @@ for (name in names(dfs)) {
   }
 }
 
-big_img <- image_scale(big_img, "500")
+# I think "600" means 6x100 pixels. If you have 7 images, change it to 700.
+big_img <- image_scale(big_img, "600")
 labelled <- image_append(c(labels, big_img))
 
 image_write(labelled, paste0(OUT_DIR, "/mnist.png"))

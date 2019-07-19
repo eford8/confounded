@@ -5,6 +5,8 @@ set -e
 printf "\033[0;32mDownloading the TCGA dataset\033[0m\n"
 
 dest="${data_dir}/tcga"
+medium="${data_dir}/tcga_medium"
+small="${data_dir}/tcga_small"
 rnaseq="/tmp/rnaseq.tsv.gz"
 mutations="/tmp/mutations.tsv.gz"
 labels="/tmp/labels.tsv.gz"
@@ -30,3 +32,8 @@ wget https://osf.io/frxv6/download -O $labels
 printf "\033[0;32mTidying the TCGA dataset\033[0m\n"
 
 Rscript --vanilla tcga.R $rnaseq $mutations $labels $final
+
+# Do the subsampling stuff
+mkdir -p $medium
+mkdir -p $small
+Rscript tcga_sampling.R
