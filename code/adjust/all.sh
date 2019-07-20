@@ -3,5 +3,5 @@
 set -e
 
 bash ./scale.sh
-#bash ./combat.sh
-#bash ./confounded.sh
+bash ./combat.sh
+bash ./confounded.sh

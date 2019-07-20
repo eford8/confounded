@@ -98,7 +98,7 @@ if __name__ == "__main__":
     cache = DataFrameCache()
     # comparisons = cache.get_dataframe(COMPARISONS_PATH)
     LEARNERS = [
-        (RandomForestClassifier, {"n_estimators": 10}),
+        (RandomForestClassifier, {"n_estimators": 100}),
         # (MLPClassifier, {"hidden_layer_sizes": tuple([5]*10), "max_iter": 1000}),
         (GaussianNB, {}),
         # (KNeighborsClassifier, {}),
