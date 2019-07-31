@@ -37,10 +37,10 @@ def mmd_multi_batch(batches):
             mmds.append(mmd(batches[i], batches[j]))
     return np.array(mmds).mean()
 
-def calculate_mmd(df, batch_col, log_adjust=False):
+def calculate_mmd(df, batch_col):
     batches = split_into_batches(df, batch_col)
-    if log_adjust:
-        batches = tuple([log_scale(batch) for batch in batches])
+#    if log_adjust:
+#        batches = tuple([log_scale(batch) for batch in batches])
     return mmd_multi_batch(batches)
 
 # Open files
@@ -70,7 +70,7 @@ for inpath in args.input_files:
             batch_col = "plate"
         else:
             batch_col = "Batch"
-        value = calculate_mmd(df, batch_col, log_adjust=("TCGA" in dataset.upper()))
+        value = calculate_mmd(df, batch_col)
         # Store metrics in logger
         logger.log(adjuster, dataset, value)
 

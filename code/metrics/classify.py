@@ -111,7 +111,7 @@ if __name__ == "__main__":
         ("/data/input/bladderbatch/", "batch", "cancer"),
         ("/data/input/gse37199/", "plate", "Stage"),
         ("/data/input/mnist/", "Batch", "Digit"),
-        ("/data/input/tcga/", "CancerType", "TP53_mutation"),
+        ("/data/input/tcga/", "CancerType", "TP53_Mutated"),
     ]
 
     for data_dir, batch_col, true_class_col in column_info:

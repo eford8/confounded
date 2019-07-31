@@ -9,12 +9,12 @@ parser.add_argument("-o", "--output-path", help="Path to output file", required=
 args = parser.parse_args()
 
 
-def calculate_mse(df1, df2, log_adjust=False):
+def calculate_mse(df1, df2):
     _, genes1 = split_discrete_continuous(df1)
     _, genes2 = split_discrete_continuous(df2)
-    if log_adjust:
-        genes1 = log_scale(genes1)
-        genes2 = log_scale(genes2)
+#    if log_adjust:
+#        genes1 = log_scale(genes1)
+#        genes2 = log_scale(genes2)
     squared_error = (np.array(genes1) - np.array(genes2))**2
     return squared_error.mean()
 
@@ -37,7 +37,7 @@ for inpath in args.input_files:
         else:
             adjuster = no_ext.replace(dataset, "").lstrip("_")
         print("Calculating MSE for the {} x {} dataset".format(dataset, adjuster))
-        value = calculate_mse(unadj, df, log_adjust=("TCGA" in dataset.upper()))
+        value = calculate_mse(unadj, df)
         # Store metrics in logger
         logger.log(adjuster, dataset, value)
 

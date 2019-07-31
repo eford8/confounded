@@ -133,23 +133,37 @@ scale_adjust <- function(matrix_, batch)
   # Get columnwise mins & maxes
   mins <- apply(matrix_, 2, min)
   maxes <- apply(matrix_, 2, max)
+
   # Scale each batch individually to [0, 1]
-  batches <- list()
   for (b in levels(factor(batch))) {
     # drop=F makes it return a matrix when you only grab one row.
     batch_rows <- matrix_[batch == b, , drop = FALSE]
-    if (nrow(batch_rows) == 1) {
-      stop(sprintf("Can't scale columns: batch '%s' only has 1 sample.", b))
+
+    if (nrow(batch_rows) <= 1) {
+      stop(sprintf("Can't scale columns: batch '%s' has <= 1 sample.", b))
     }
-    batch_mins <- apply(batch_rows, 2, min)
-    batch_maxes <- apply(batch_rows, 2, max)
-    adjusted <- t((t(batch_rows) - batch_mins) / (batch_maxes - batch_mins))
-    batches[[b]] <- adjusted
+
+    adjusted = apply(batch_rows, 2, function(x) {
+      if (all(x == 0))
+        return(x)
+
+      numerator = x - min(x)
+      denominator = max(x) - min(x)
+
+      return(numerator / denominator)
+    })
+
     # Merge adjustment back in
     matrix_[batch == b] = adjusted
   }
-  # Scale back up to [min, max]
-  t(t(matrix_) * (maxes - mins) + mins)
+
+  ## Scale back up to [min, max]
+  sapply(1:ncol(matrix_), function(i) {
+    x = matrix_[,i]
+    pre_min = mins[i]
+    pre_max = maxes[i]
+    x * (pre_max - pre_min) + pre_min
+  })
 }
 
 batch_adjust_tidy <- function(df, adjuster = ComBat_ignore_nonvariance, batch_col = "Batch") {
