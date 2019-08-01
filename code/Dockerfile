@@ -46,6 +46,16 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.6.14-Linux-x86
   conda install numpy scikit-learn pandas tensorflow=1.11.0
 
 ####################################################################################
+# Copy files into the image
+####################################################################################
+
+COPY prepdata /prepdata
+COPY adjust /adjust
+COPY metrics /metrics
+COPY figures /figures
+COPY all.sh /
+
+####################################################################################
 # Install Confounded within the image
 ####################################################################################
 
@@ -58,22 +68,5 @@ RUN cd /tmp && \
     echo '#!/bin/bash\ncd /confounded\npython -m confounded "$@"' > /usr/bin/confounded && \
     chmod +x /usr/bin/confounded && \
     chmod 777 /confounded -R
-
-#RUN mkdir /confounded && \
-#    curl -sL https://github.com/jdayton3/Confounded/archive/docker-0.1.6.tar.gz | \
-#    tar xz -C /confounded --strip-components 1 && \
-#    echo '#!/bin/bash\ncd /confounded\npython -m confounded "$@"' > /usr/bin/confounded && \
-#    chmod +x /usr/bin/confounded && \
-#    chmod 777 /confounded -R
-
-####################################################################################
-# Copy files into the image
-####################################################################################
-
-COPY prepdata /prepdata
-COPY adjust /adjust
-COPY metrics /metrics
-COPY figures /figures
-COPY all.sh /
 
 ENTRYPOINT /all.sh

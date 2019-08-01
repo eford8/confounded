@@ -17,6 +17,9 @@ metrics <- rbind(mse, mmd) %>%
     filter(!str_detect(adjuster, "pretrained")) %>%
     mutate(adjuster = factor(adjuster, levels = order))
 
+# This is a workaround for a ggplot2 bug.
+pdf(NULL)
+
 # Save figures ------------------
 metrics %>%
   filter(metric == "MSE") %>%

@@ -14,17 +14,11 @@ library(sva)
 parser <- ArgumentParser()
 
 parser$add_argument("input_file", help = "path to the input file")
+parser$add_argument("output_file", help = "path to the output file.")
 parser$add_argument("-a", "--adjuster", default = "combat", choices = c("combat", "scale"), help = "method to use for adjustment")
 parser$add_argument("-b", "--batch-col", default = "Batch", help = "title of batch column to adjust for")
-parser$add_argument("-o", "--output-file", help = "path to the output file. default: [input_file]_combat.csv")
 
 args <- parser$parse_args()
-
-if (is.null(args$output_file)) {
-  # /path/to/thing.csv -> /path/to/thing_combat.csv
-  args$output_file <- output_path <- str_replace_all(args$input_file, "(^.*)(\\.csv$)", sprintf("\\1_%s\\2", args$adjuster))
-}
-
 
 # Define functions ---------------------------------
 
@@ -36,59 +30,6 @@ is.whole <- function(a, tol = 1e-7) {
   }
   (is.numeric(a) && is.eq(a, floor(a))) ||
     (is.complex(a) && {ri <- c(Re(a),Im(a)); is.eq(ri, floor(ri))})
-}
-
-varying_row_mask <- function(matrix_)
-{
-  #' Get a varying row mask
-  #' 
-  #' Get a boolean vector mask for the rows with & without varying values.
-  #'
-  #' @param matrix_ A numerical matrix.
-  #' 
-  #' @return Boolean vector.
-  #'
-  #' @examples
-  #' x <- matrix(c(2, 1, 3, 3, 1, 4, 4, 1, 5, 5, 1, 6), nrow=3, ncol=4)
-  #' x
-  #' ##      [,1] [,2] [,3] [,4]
-  #' ## [1,]    2    3    4    5
-  #' ## [2,]    1    1    1    1
-  #' ## [3,]    3    4    5    6
-  #' varying_row_mask(x)
-  #' ## [1]  TRUE FALSE  TRUE
-  matrix_ %>%
-    as_tibble() %>%
-    mutate_(min = min(names(.)), max = max(names(.))) %>%
-    mutate(nonvarying = max != min) %>%
-    .$nonvarying
-}
-
-remove_nonvarying_rows <- function(matrix_)
-{
-  #' Remove features that don't vary.
-  #'
-  #' ComBat requires that all inputs have some variance, so we need to remove
-  #' any nonvarying rows before passing a matrix into ComBat.
-  #'
-  #' @param matrix_ A numerical matrix.
-  #'
-  #' @return The original matrix without any nonvarying rows.
-  #' 
-  #' @examples
-  #' x <- matrix(c(2, 1, 3, 3, 1, 4, 4, 1, 5, 5, 1, 6), nrow=3, ncol=4)
-  #' x
-  #' ##      [,1] [,2] [,3] [,4]
-  #' ## [1,]    2    3    4    5
-  #' ## [2,]    1    1    1    1
-  #' ## [3,]    3    4    5    6
-  #' remove_nonvarying_rows(x)
-  #' ##      [,1] [,2] [,3] [,4]
-  #' ## [1,]    2    3    4    5
-  #' ## [2,]    3    4    5    6
-  varying_rows <- matrix_ %>%
-    varying_row_mask()
-  matrix_[varying_rows,]
 }
 
 ComBat_ignore_nonvariance <- function(matrix_, batch)
@@ -110,10 +51,11 @@ ComBat_ignore_nonvariance <- function(matrix_, batch)
   #' @examples
   #' ComBat_ignore_nonvariance(data, c(rep(1, 5000), rep(2, 5000)))
   matrix_ <- t(matrix_)
-  variance_mask <- varying_row_mask(matrix_)
-  varying_rows <- remove_nonvarying_rows(matrix_)
-  adjusted <- ComBat(varying_rows, batch)
-  matrix_[variance_mask,] <- adjusted
+
+  varying_row_mask <- apply(matrix_, 1, function(x) { length(unique(x)) > 1 })
+
+  matrix_[varying_row_mask,] <- ComBat(matrix_[varying_row_mask,], batch)
+
   t(matrix_)
 }
 
@@ -129,6 +71,8 @@ scale_adjust <- function(matrix_, batch)
   #'
   #' @examples
   #' scale_adjust(data, c(rep(1, 5000), rep(2, 5000)))
+
+  column_names = colnames(matrix_)
   
   # Get columnwise mins & maxes
   mins <- apply(matrix_, 2, min)
@@ -158,31 +102,35 @@ scale_adjust <- function(matrix_, batch)
   }
 
   ## Scale back up to [min, max]
-  sapply(1:ncol(matrix_), function(i) {
+  matrix_ = sapply(1:ncol(matrix_), function(i) {
     x = matrix_[,i]
     pre_min = mins[i]
     pre_max = maxes[i]
     x * (pre_max - pre_min) + pre_min
   })
+
+  colnames(matrix_) = column_names
+  matrix_
 }
 
-batch_adjust_tidy <- function(df, adjuster = ComBat_ignore_nonvariance, batch_col = "Batch") {
+batch_adjust_tidy <- function(df, adjuster, batch_col = "Batch") {
+  orig_col_names = colnames(df)
+  batch = pull(df, batch_col)
+  df = select(df, -batch_col)
+
   categorical <- df %>%
     select_if(~!is.numeric(.) || is.whole(.))
   quantitative <- df %>%
     select_if(~is.numeric(.) && !is.whole(.))
+
+  if (adjuster == "combat") {
+    adjusted = ComBat_ignore_nonvariance(as.matrix(quantitative), batch)
+  } else {
+    adjusted = scale_adjust(as.matrix(quantitative), batch)
+  }
   
-  adjusted <- quantitative %>% as.matrix() %>% adjuster(df[[batch_col]]) %>% as_tibble()
-  bind_cols(categorical, adjusted)
+  cbind(batch, categorical, adjusted)[,orig_col_names]
 }
-
-# Run the adjuster ------------------------------------
-
-adjusters <- list(
-  combat = ComBat_ignore_nonvariance,
-  scale = scale_adjust
-)
-adjuster <- adjusters[[args$adjuster]]
 
 message("Reading input file.")
 
@@ -203,8 +151,8 @@ if (!(args$batch_col %in% names(df))) {
 message(sprintf("Adjusting using the '%s' adjuster", args$adjuster))
 batch_adjust_tidy(
   df, 
-  batch_col = args$batch_col, 
-  adjuster = adjuster
+  batch_col = args$batch_col,
+  adjuster = args$adjuster
 ) %>% write_csv(args$output_file)
 
 message(sprintf("Saved output to '%s'", args$output_file))

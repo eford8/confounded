@@ -105,7 +105,7 @@ if __name__ == "__main__":
         # (SVC, {"kernel": "rbf"})
     ]
 
-    logger = Logger("/data/metrics/classification.csv")
+    logger = Logger("/output/metrics/classification.csv")
 
     column_info = [
         ("/data/input/bladderbatch/", "batch", "cancer"),

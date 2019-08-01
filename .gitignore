@@ -12,3 +12,4 @@ code/data
 *.pyc
 **/__pycache__
 metrics
+figures

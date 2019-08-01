@@ -2,12 +2,12 @@ library(pacman)
 library(argparse)
 library(dplyr)
 library(readr)
+library(bladderbatch)
 
 parser <- ArgumentParser()
 parser$add_argument("outfile", help = "Path to the output file")
 args <- parser$parse_args()
 
-library(bladderbatch)
 data(bladderdata)
 
 clin_df <- bladderEset %>%
