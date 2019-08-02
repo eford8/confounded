@@ -10,16 +10,23 @@ import sys
 import time
 from util import DataFrameCache, get_dataset_path_dict, no_extension
 
-def cross_validate(df, predict, model, **kwargs):
+def cross_validate(df, predict_column, learner):
     meta_cols = list(df.select_dtypes(include=['object', 'int']).columns)
     X = robust_scale(df.drop(meta_cols, axis="columns"))
-    y = df[predict]
+    y = df[predict_column]
 
-    classifier = model(**kwargs)
+    scoring_metric = "balanced_accuracy"
+    n_jobs = 4
+
     scores = []
+    for i in range(iterations):
+        fit_params = learner[1]
+        estimator = learner[0](**fit_params)
 
-    for _ in range(iterations):
-        scores += list(cross_val_score(classifier, X, y, scoring="balanced_accuracy", cv=folds, n_jobs=4))
+        if "random_state" in fit_params:
+            fit_params["random_state"] = i
+
+        scores += list(cross_val_score(estimator, X, y, scoring=scoring_metric, cv=folds, n_jobs=n_jobs))
 
     return scores
 
@@ -52,14 +59,16 @@ parser.add_argument("-o", "--output-path1", help="Path to output file 1", requir
 parser.add_argument("-p", "--output-path2", help="Path to output file 1", required=True)
 args = parser.parse_args()
 
-iterations = 5
-folds = 5
-random_state = 3333
+iterations = 10
+# It makes sense to use 2 folds because there are few samples for some of the classes
+folds = 2
 
 cache = DataFrameCache()
+
+#LEARNERS = [(RandomForestClassifier, {"n_estimators": 100, "random_state": 0})]
 LEARNERS = [
-    (RandomForestClassifier, {"n_estimators": 100, "random_state": random_state}),
-    (SVC, {"random_state": random_state, "gamma": "auto"}),
+    (RandomForestClassifier, {"n_estimators": 100, "random_state": 0}),
+    (SVC, {"gamma": "auto", "random_state": 0}),
     (KNeighborsClassifier, {})
 ]
 
@@ -84,13 +93,11 @@ for inpath in args.input_dirs:
         for learner in LEARNERS:
             classifier_name = str(learner[0]).split("'")[1].split(".")[-1].replace("Classifier", "")
 
-            batch_scores = cross_validate(df, predict=batch_column, model=learner[0], **learner[1])
-            batch_value = sum(batch_scores) / len(batch_scores)
-            batch_results.append([classifier_name, method, dataset, str(batch_value)])
+            for score in cross_validate(df, batch_column, learner):
+                batch_results.append([classifier_name, method, dataset, str(score)])
 
-            true_scores = cross_validate(df, predict=true_column, model=learner[0], **learner[1])
-            true_value = sum(true_scores) / len(true_scores)
-            true_results.append([classifier_name, method, dataset, str(true_value)])
+            for score in cross_validate(df, true_column, learner):
+                true_results.append([classifier_name, method, dataset, str(score)])
 
 with open(args.output_path1, 'w') as output_file:
     for line in batch_results:
