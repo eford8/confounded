@@ -2,6 +2,6 @@
 
 set -e
 
-bash ./mse.sh
-bash ./mmd.sh
+#bash ./mse.sh
+#bash ./mmd.sh
 bash ./classify.sh

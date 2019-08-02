@@ -1,151 +1,101 @@
-"""Predict the true class of MNIST digits with a SVC classifier.
-"""
+import argparse
+import os
 import pandas as pd
 from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import robust_scale
-from util import DataFrameCache, get_dataset_path_dict, no_extension
+import sys
 import time
-from sklearn.model_selection import train_test_split
+from util import DataFrameCache, get_dataset_path_dict, no_extension
 
-class CSVData(object):
-    def __init__(self, path, meta_cols=None, predict="Batch"):
-        df = pd.read_csv(path)
-        if meta_cols is None:
-            meta_cols = list(df.select_dtypes(include=['object', 'int']).columns)
-        self.labels = df[predict]
-        self.features = df.drop(meta_cols, axis="columns")
-        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(
-            self.features, self.labels, test_size=0.2
-        )
+def cross_validate(df, predict, model, **kwargs):
+    meta_cols = list(df.select_dtypes(include=['object', 'int']).columns)
+    X = robust_scale(df.drop(meta_cols, axis="columns"))
+    y = df[predict]
 
-    @property
-    def X(self):
-        return self.features
-
-    @property
-    def Y(self):
-        return self.labels
-
-def cross_validate(path, meta_cols=None, predict="Batch", times=100, folds=5, model=RandomForestClassifier, **kwargs):
     classifier = model(**kwargs)
-    data = CSVData(path, meta_cols, predict)
-    accuracies = []
-    elapsed_times = []
-    scaled_X = robust_scale(data.X)
-    for _ in range(times):
-        start = time.time()
-        try:
-            accuracies += list(cross_val_score(
-                classifier, scaled_X, data.Y, cv=folds, scoring="accuracy"
-            ))
-            elapsed_times.append(time.time() - start)
-        except ValueError as e:
-            print("Something didn't work with file {}, column {}, and classifier {}:".format(
-                path, predict, model.__name__)
-            )
-            print(str(e))
-    return {
-        "accuracies": accuracies,
-        "times": elapsed_times
-    }
+    scores = []
 
-class Logger(object):
-    def __init__(self, log_file):
-        self.log_file = log_file
-        self.values = {
-            "path": [],
-            "model": [],
-            "predict": [],
-            "dataset": [],
-            "col_type": [],
-            "baseline": [],
-            "iteration": [],
-            "accuracy": [],
-            "time_elapsed": [],
-            "adjuster": [],
-        }
+    for _ in range(iterations):
+        scores += list(cross_val_score(classifier, X, y, scoring="balanced_accuracy", cv=folds, n_jobs=4))
 
-    def log(self, path, model, predict_col, dataset, col_type, baseline, accuracies, times_elapsed, adjuster):
-        for i, (accuracy, time) in enumerate(zip(accuracies, times_elapsed)):
-            self.values["path"].append(path)
-            self.values["model"].append(model.__name__)
-            self.values["predict"].append(predict_col)
-            self.values["dataset"].append(dataset)
-            self.values["col_type"].append(col_type)
-            self.values["baseline"].append(baseline)
-            self.values["iteration"].append(i)
-            self.values["accuracy"].append(accuracy)
-            self.values["time_elapsed"].append(time)
-            self.values["adjuster"].append(adjuster)
+    return scores
 
-    def save(self):
-        pd.DataFrame(self.values).to_csv(self.log_file, index=False)
-
-
-def baseline(path, column, cache=None):
-    try:
-        df = cache.get_dataframe(path)
-    except AttributeError:
-        df = pd.read_csv(path)
+def baseline(df, column):
     return df[column].value_counts().max() / len(df)
 
-if __name__ == "__main__":
-    cache = DataFrameCache()
-    # comparisons = cache.get_dataframe(COMPARISONS_PATH)
-    LEARNERS = [
-        (RandomForestClassifier, {"n_estimators": 100}),
-        # (MLPClassifier, {"hidden_layer_sizes": tuple([5]*10), "max_iter": 1000}),
-        (GaussianNB, {}),
-        # (KNeighborsClassifier, {}),
-        # (SVC, {"kernel": "rbf"})
-    ]
+def get_batch_col(dataset):
+    if "bladderbatch" in dataset:
+        return "batch"
+    elif "tcga" in dataset:
+        return "CancerType"
+    elif "gse" in dataset:
+        return "plate"
+    else:
+        return "Batch"
 
-    logger = Logger("/output/metrics/classification.csv")
+def get_true_col(dataset):
+    if "bladderbatch" in dataset:
+        return "cancer"
+    elif "tcga" in dataset:
+        return "TP53_Mutated"
+    elif "gse" in dataset:
+        return "Stage"
+    else:
+        return "Batch"
 
-    column_info = [
-        ("/data/input/bladderbatch/", "batch", "cancer"),
-        ("/data/input/gse37199/", "plate", "Stage"),
-        ("/data/input/mnist/", "Batch", "Digit"),
-        ("/data/input/tcga/", "CancerType", "TP53_Mutated"),
-    ]
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input-dirs", nargs="+", help="List of input directories", required=True)
+parser.add_argument("-o", "--output-path1", help="Path to output file 1", required=True)
+parser.add_argument("-p", "--output-path2", help="Path to output file 1", required=True)
+args = parser.parse_args()
 
-    for data_dir, batch_col, true_class_col in column_info:
-        unadj_path, adj_paths = list(get_dataset_path_dict(data_dir).items())[0]
-        unadj = cache.get_dataframe(unadj_path)
-        dataset = no_extension(unadj_path)
-        for path in [unadj_path] + adj_paths:
-            df = cache.get_dataframe(path)
-            no_ext = no_extension(path)
-            if no_ext == dataset:
-                adjuster = "unadjusted"
-            else:
-                adjuster = no_ext.replace(dataset, "").lstrip("_")
-            print("Working on {}: {}".format(dataset, adjuster))
-            for column, col_type in [(batch_col, "batch_col"), (true_class_col, "true_class_col")]:
-                for learner in LEARNERS:
-                    baseline_acc = baseline(path, column, cache=cache)
-                    cv_scores = cross_validate(
-                        path,
-                        predict=column,
-                        model=learner[0],
-                        folds=4,
-                        times=3,
-                        **learner[1]
-                    )
-                    logger.log(
-                        path,
-                        learner[0],
-                        column,
-                        dataset,
-                        col_type,
-                        baseline_acc,
-                        cv_scores["accuracies"],
-                        cv_scores["times"],
-                        adjuster
-                    )
-    logger.save()
+iterations = 5
+folds = 5
+random_state = 3333
+
+cache = DataFrameCache()
+LEARNERS = [
+    (RandomForestClassifier, {"n_estimators": 100, "random_state": random_state}),
+    (SVC, {"random_state": random_state, "gamma": "auto"}),
+    (KNeighborsClassifier, {})
+]
+
+batch_results = [["metric", "adjuster", "dataset", "value"]]
+true_results = list(batch_results)
+
+for inpath in args.input_dirs:
+    unadjusted_path = inpath + "/unadjusted.csv"
+
+    unadj = cache.get_dataframe(unadjusted_path)
+    dataset = os.path.basename(inpath)
+
+    batch_column = get_batch_col(dataset)
+    true_column = get_true_col(dataset)
+
+    baseline_batch_acc = baseline(unadj, batch_column)
+    baseline_true_acc = baseline(unadj, true_column)
+
+    for method in ["unadjusted", "scaled", "combat", "confounded"]:
+        df = cache.get_dataframe(inpath + "/" + method + ".csv")
+
+        for learner in LEARNERS:
+            classifier_name = str(learner[0]).split("'")[1].split(".")[-1].replace("Classifier", "")
+
+            batch_scores = cross_validate(df, predict=batch_column, model=learner[0], **learner[1])
+            batch_value = sum(batch_scores) / len(batch_scores)
+            batch_results.append([classifier_name, method, dataset, str(batch_value)])
+
+            true_scores = cross_validate(df, predict=true_column, model=learner[0], **learner[1])
+            true_value = sum(true_scores) / len(true_scores)
+            true_results.append([classifier_name, method, dataset, str(true_value)])
+
+with open(args.output_path1, 'w') as output_file:
+    for line in batch_results:
+        output_file.write(",".join(line) + "\n")
+
+with open(args.output_path2, 'w') as output_file:
+    for line in true_results:
+        output_file.write(",".join(line) + "\n")

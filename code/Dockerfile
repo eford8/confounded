@@ -46,16 +46,6 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.6.14-Linux-x86
   conda install numpy scikit-learn pandas tensorflow=1.11.0
 
 ####################################################################################
-# Copy files into the image
-####################################################################################
-
-COPY prepdata /prepdata
-COPY adjust /adjust
-COPY metrics /metrics
-COPY figures /figures
-COPY all.sh /
-
-####################################################################################
 # Install Confounded within the image
 ####################################################################################
 
@@ -68,5 +58,15 @@ RUN cd /tmp && \
     echo '#!/bin/bash\ncd /confounded\npython -m confounded "$@"' > /usr/bin/confounded && \
     chmod +x /usr/bin/confounded && \
     chmod 777 /confounded -R
+
+####################################################################################
+# Copy files into the image
+####################################################################################
+
+COPY prepdata /prepdata
+COPY adjust /adjust
+COPY metrics /metrics
+COPY figures /figures
+COPY all.sh /
 
 ENTRYPOINT /all.sh
