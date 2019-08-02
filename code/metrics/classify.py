@@ -15,7 +15,7 @@ def cross_validate(df, predict_column, learner):
     X = robust_scale(df.drop(meta_cols, axis="columns"))
     y = df[predict_column]
 
-    scoring_metric = "balanced_accuracy"
+    scoring_metric = "accuracy"
     n_jobs = 4
 
     scores = []
@@ -26,7 +26,8 @@ def cross_validate(df, predict_column, learner):
         if "random_state" in fit_params:
             fit_params["random_state"] = i
 
-        scores += list(cross_val_score(estimator, X, y, scoring=scoring_metric, cv=folds, n_jobs=n_jobs))
+        iter_scores = list(cross_val_score(estimator, X, y, scoring=scoring_metric, cv=folds, n_jobs=n_jobs))
+        scores.append(sum(iter_scores) / len(iter_scores))
 
     return scores
 
@@ -59,13 +60,12 @@ parser.add_argument("-o", "--output-path1", help="Path to output file 1", requir
 parser.add_argument("-p", "--output-path2", help="Path to output file 1", required=True)
 args = parser.parse_args()
 
-iterations = 10
-# It makes sense to use 2 folds because there are few samples for some of the classes
-folds = 2
+iterations = 5
+# It makes sense to use few folds because there are few samples for some of the classes
+folds = 3
 
 cache = DataFrameCache()
 
-#LEARNERS = [(RandomForestClassifier, {"n_estimators": 100, "random_state": 0})]
 LEARNERS = [
     (RandomForestClassifier, {"n_estimators": 100, "random_state": 0}),
     (SVC, {"gamma": "auto", "random_state": 0}),
@@ -86,6 +86,9 @@ for inpath in args.input_dirs:
 
     baseline_batch_acc = baseline(unadj, batch_column)
     baseline_true_acc = baseline(unadj, true_column)
+
+    batch_results.append(["baseline", "NA", dataset, str(baseline_batch_acc)])
+    true_results.append(["baseline", "NA", dataset, str(baseline_true_acc)])
 
     for method in ["unadjusted", "scaled", "combat", "confounded"]:
         df = cache.get_dataframe(inpath + "/" + method + ".csv")
