@@ -129,7 +129,9 @@ batch_adjust_tidy <- function(df, adjuster, batch_col = "Batch") {
     adjusted = scale_adjust(as.matrix(quantitative), batch)
   }
   
-  cbind(batch, categorical, adjusted)[,orig_col_names]
+  adjusted = cbind(batch, categorical, adjusted)
+  colnames(adjusted)[1] = batch_col
+  adjusted[,orig_col_names]
 }
 
 message("Reading input file.")
@@ -140,6 +142,7 @@ if (!(args$batch_col %in% names(df))) {
   discrete_col_names <- df %>%
     select_if(~!is.numeric(.) || is.whole(.)) %>%
     names()
+
   error_message <- sprintf(
     "--batch-col argument (default 'Batch', selected '%s') must be a column in 'input_path' csv. Options: [%s]",
     args$batch_col,

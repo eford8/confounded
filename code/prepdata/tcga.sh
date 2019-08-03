@@ -4,13 +4,12 @@ set -e
 
 printf "\033[0;32mDownloading the TCGA dataset\033[0m\n"
 
-dest="${data_dir}/tcga"
-medium="${data_dir}/tcga_medium"
-small="${data_dir}/tcga_small"
+full=/data/tcga/unadjusted.csv
+medium=/data/tcga_medium/unadjusted.csv
+small=/data/tcga_small/unadjusted.csv
 rnaseq="/tmp/rnaseq.tsv.gz"
 mutations="/tmp/mutations.tsv.gz"
 labels="/tmp/labels.tsv.gz"
-final="${dest}/tcga.csv"
 
 ## This gets the TCGA RNA-Seq dataset
 wget -O /tmp/GSE62944_RAW.tar "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE62944&format=file"
@@ -21,9 +20,6 @@ mv GSM1536837_06_01_15_TCGA_24.tumor_Rsubread_TPM.txt.gz rnaseq.tsv.gz
 python /prepdata/transpose_matrix.py rnaseq.tsv.gz rnaseq2.tsv.gz
 python /prepdata/tcga_expression.py rnaseq2.tsv.gz $rnaseq
 
-### Old version. Only has RNA-Seq data for ~300 genes
-###wget https://osf.io/7xjdn/download -O $rnaseq
-
 cd /prepdata
 
 wget https://osf.io/na3rp/download -O $mutations
@@ -31,9 +27,10 @@ wget https://osf.io/frxv6/download -O $labels
 
 printf "\033[0;32mTidying the TCGA dataset\033[0m\n"
 
-Rscript --vanilla tcga.R $rnaseq $mutations $labels $final
+Rscript --vanilla tcga.R $rnaseq $mutations $labels $full
 
 # Do the subsampling stuff
-mkdir -p $medium
-mkdir -p $small
+mkdir -p /data/tcga_medium
+mkdir -p /data/tcga_small
+
 Rscript tcga_sampling.R

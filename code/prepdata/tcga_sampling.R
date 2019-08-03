@@ -1,10 +1,10 @@
 library(readr)
 library(dplyr)
 
-IN_FILE <- "/data/input/tcga/tcga.csv"
-OUT_DIR <- "/data/input/"
-MEDIUM <- paste0(OUT_DIR, "/tcga_medium/tcga_medium.csv")
-SMALL <- paste0(OUT_DIR, "/tcga_small/tcga_small.csv")
+IN_FILE <- "/data/tcga/unadjusted.csv"
+OUT_DIR <- "/data/"
+MEDIUM <- paste0(OUT_DIR, "/tcga_medium/unadjusted.csv")
+SMALL <- paste0(OUT_DIR, "/tcga_small/unadjusted.csv")
 
 get_group <- function(df, colname, value) {
   colname <- enquo(colname)
