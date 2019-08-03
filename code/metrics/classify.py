@@ -6,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import robust_scale
+from sklearn.model_selection import StratifiedKFold
 import sys
 import time
 from util import DataFrameCache, get_dataset_path_dict, no_extension
@@ -21,12 +22,14 @@ def cross_validate(df, predict_column, learner):
     scores = []
     for i in range(iterations):
         fit_params = learner[1]
-        estimator = learner[0](**fit_params)
-
         if "random_state" in fit_params:
             fit_params["random_state"] = i
 
-        iter_scores = list(cross_val_score(estimator, X, y, scoring=scoring_metric, cv=folds, n_jobs=n_jobs))
+        estimator = learner[0](**fit_params)
+
+        kfold = StratifiedKFold(n_splits=folds, shuffle=True, random_state=i)
+        iter_scores = list(cross_val_score(estimator, X, y, scoring=scoring_metric, cv=kfold, n_jobs=n_jobs))
+
         scores.append(sum(iter_scores) / len(iter_scores))
 
     return scores
@@ -34,30 +37,10 @@ def cross_validate(df, predict_column, learner):
 def baseline(df, column):
     return df[column].value_counts().max() / len(df)
 
-def get_batch_col(dataset):
-    if "bladderbatch" in dataset:
-        return "batch"
-    elif "tcga" in dataset:
-        return "CancerType"
-    elif "gse" in dataset:
-        return "plate"
-    else:
-        return "Batch"
-
-def get_true_col(dataset):
-    if "bladderbatch" in dataset:
-        return "cancer"
-    elif "tcga" in dataset:
-        return "TP53_Mutated"
-    elif "gse" in dataset:
-        return "Stage"
-    else:
-        return "Batch"
-
 parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--input-dirs", nargs="+", help="List of input directories", required=True)
-parser.add_argument("-o", "--output-path1", help="Path to output file 1", required=True)
-parser.add_argument("-p", "--output-path2", help="Path to output file 1", required=True)
+parser.add_argument("-i", "--input-dir", help="Input directory", required=True)
+parser.add_argument("-o", "--output-path", help="Path to output file", required=True)
+parser.add_argument("-c", "--column", help="Prediction column", required=True)
 args = parser.parse_args()
 
 iterations = 5
@@ -72,40 +55,28 @@ LEARNERS = [
     (KNeighborsClassifier, {})
 ]
 
-batch_results = [["metric", "adjuster", "dataset", "value"]]
-true_results = list(batch_results)
+if not os.path.exists(args.output_path):
+    with open(args.output_path, "w") as output_file:
+        output_file.write("metric,adjuster,dataset,value\n")
 
-for inpath in args.input_dirs:
-    unadjusted_path = inpath + "/unadjusted.csv"
+results = []
 
-    unadj = cache.get_dataframe(unadjusted_path)
-    dataset = os.path.basename(inpath)
+unadjusted_path = args.input_dir + "/unadjusted.csv"
+unadj = cache.get_dataframe(unadjusted_path)
 
-    batch_column = get_batch_col(dataset)
-    true_column = get_true_col(dataset)
+dataset = os.path.basename(args.input_dir)
 
-    baseline_batch_acc = baseline(unadj, batch_column)
-    baseline_true_acc = baseline(unadj, true_column)
+results.append(["baseline", "NA", dataset, str(baseline(unadj, args.column))])
 
-    batch_results.append(["baseline", "NA", dataset, str(baseline_batch_acc)])
-    true_results.append(["baseline", "NA", dataset, str(baseline_true_acc)])
+for method in ["unadjusted", "scaled", "combat", "confounded"]:
+    df = cache.get_dataframe(args.input_dir + "/" + method + ".csv")
 
-    for method in ["unadjusted", "scaled", "combat", "confounded"]:
-        df = cache.get_dataframe(inpath + "/" + method + ".csv")
+    for learner in LEARNERS:
+        classifier_name = str(learner[0]).split("'")[1].split(".")[-1].replace("Classifier", "")
 
-        for learner in LEARNERS:
-            classifier_name = str(learner[0]).split("'")[1].split(".")[-1].replace("Classifier", "")
+        for score in cross_validate(df, args.column, learner):
+            results.append([classifier_name, method, dataset, str(score)])
 
-            for score in cross_validate(df, batch_column, learner):
-                batch_results.append([classifier_name, method, dataset, str(score)])
-
-            for score in cross_validate(df, true_column, learner):
-                true_results.append([classifier_name, method, dataset, str(score)])
-
-with open(args.output_path1, 'w') as output_file:
-    for line in batch_results:
-        output_file.write(",".join(line) + "\n")
-
-with open(args.output_path2, 'w') as output_file:
-    for line in true_results:
+with open(args.output_path, 'a') as output_file:
+    for line in results:
         output_file.write(",".join(line) + "\n")
