@@ -57,7 +57,8 @@ RUN cd /tmp && \
     rm -rf /tmp/Confounded && \
     echo '#!/bin/bash\ncd /confounded\npython -m confounded "$@"' > /usr/bin/confounded && \
     chmod +x /usr/bin/confounded && \
-    chmod 777 /confounded -R
+    chmod 777 /confounded -R && \
+    echo "Done importing Confounded code"
 
 ####################################################################################
 # Copy files into the image
