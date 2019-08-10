@@ -18,7 +18,8 @@ rm -f ${batch_out_path} ${true_out_path}
 #python classify.py -i /data/gse37199 -o ${batch_out_path} -c plate
 #python classify.py -i /data/gse37199 -o ${true_out_path} -c Stage
 
-for dataset in tcga tcga_medium tcga_small
+#for dataset in tcga tcga_medium tcga_small
+for dataset in tcga
 do
   python classify.py -i /data/$dataset -o ${batch_out_path} -c CancerType
   python classify.py -i /data/$dataset -o ${true_out_path} -c TP53_Mutated

@@ -17,7 +17,7 @@ def cross_validate(df, predict_column, learner):
     y = df[predict_column]
 
     scoring_metric = "accuracy"
-    n_jobs = 1
+    n_jobs = 12
 
     scores = []
     for i in range(iterations):
@@ -43,7 +43,7 @@ parser.add_argument("-o", "--output-path", help="Path to output file", required=
 parser.add_argument("-c", "--column", help="Prediction column", required=True)
 args = parser.parse_args()
 
-iterations = 5
+iterations = 1
 # It makes sense to use few folds because there are few samples for some of the classes
 folds = 3
 
