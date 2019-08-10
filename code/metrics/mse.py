@@ -4,8 +4,7 @@ import os
 from util import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--input-dirs", nargs="+",
-                    help="List of input directories", required=True)
+parser.add_argument("-i", "--input-dir", help="Input directory", required=True)
 parser.add_argument("-o", "--output-path", help="Path to output file", required=True)
 args = parser.parse_args()
 
@@ -20,25 +19,21 @@ def calculate_mse(df1, df2):
 # Open files
 cache = DataFrameCache()
 
-# Make a logger
-logger = Logger("MSE")
+if not os.path.exists(args.output_path):
+    with open(args.output_path, "w") as output_file:
+        output_file.write("metric,adjuster,dataset,value\n")
 
 # Calculate metrics
-for inpath in args.input_dirs:
-    unadjusted_path = inpath + "/unadjusted.csv"
+unadjusted_path = args.input_dir + "/unadjusted.csv"
+unadj = cache.get_dataframe(unadjusted_path)
+dataset = os.path.basename(args.input_dir)
 
-    unadj = cache.get_dataframe(unadjusted_path)
-    dataset = os.path.basename(inpath)
+for method in ["scaled", "combat", "confounded"]:
+    adjusted_path = args.input_dir + "/" + method + ".csv"
+    df = cache.get_dataframe(adjusted_path)
 
-    for method in ["scaled", "combat", "confounded"]:
-        adjusted_path = inpath + "/" + method + ".csv"
-        df = cache.get_dataframe(adjusted_path)
+    print("Calculating MSE for the {} method on the {} dataset".format(method, dataset), flush=True)
+    value = calculate_mse(unadj, df)
 
-        print("Calculating MSE for the {} method on the {} dataset".format(dataset, method))
-        value = calculate_mse(unadj, df)
-
-        # Store metrics in logger
-        logger.log(method, dataset, value)
-
-# Save log
-logger.save(args.output_path)
+    with open(args.output_path, "a") as output_file:
+        output_file.write("{},{},{},{}\n".format("MSE", method, dataset, value))

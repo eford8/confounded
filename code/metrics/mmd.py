@@ -4,8 +4,8 @@ from sklearn.metrics.pairwise import rbf_kernel, linear_kernel
 from util import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--input-dirs", nargs="+",
-                    help="List of input directories", required=True)
+parser.add_argument("-i", "--input-dir", help="Input directory", required=True)
+parser.add_argument("-b", "--batch-col", help="Batch column", required=True)
 parser.add_argument("-o", "--output-path", help="Path to output file", required=True)
 args = parser.parse_args()
 
@@ -41,38 +41,24 @@ def mmd_multi_batch(batches):
 def calculate_mmd(df, batch_col):
     return mmd_multi_batch(split_into_batches(df, batch_col))
 
-def get_batch_col(dataset):
-    if "bladderbatch" in dataset:
-        return "batch"
-    elif "tcga" in dataset:
-        return "CancerType"
-    elif "gse" in dataset:
-        return "plate"
-    else:
-        return "Batch"
-
 # Open files
 cache = DataFrameCache()
 
-# Make a logger
-logger = Logger("MMD")
+if not os.path.exists(args.output_path):
+    with open(args.output_path, "w") as output_file:
+        output_file.write("metric,adjuster,dataset,value\n")
 
 # Calculate metrics
-for inpath in args.input_dirs:
-    unadjusted_path = inpath + "/unadjusted.csv"
+unadjusted_path = args.input_dir + "/unadjusted.csv"
+unadj = cache.get_dataframe(unadjusted_path)
+dataset = os.path.basename(args.input_dir)
 
-    unadj = cache.get_dataframe(unadjusted_path)
-    dataset = os.path.basename(inpath)
+for method in ["scaled", "combat", "confounded"]:
+    adjusted_path = args.input_dir + "/" + method + ".csv"
+    df = cache.get_dataframe(adjusted_path)
 
-    for method in ["scaled", "combat", "confounded"]:
-        adjusted_path = inpath + "/" + method + ".csv"
-        df = cache.get_dataframe(adjusted_path)
+    print("Calculating MMD for the {} method on the {} dataset".format(method, dataset), flush=True)
+    value = calculate_mmd(df, args.batch_col)
 
-        print("Calculating MSE for the {} method on the {} dataset".format(dataset, method))
-        value = calculate_mmd(df, get_batch_col(dataset))
-
-        # Store metrics in logger
-        logger.log(method, dataset, value)
-
-# Save log
-logger.save(args.output_path)
+    with open(args.output_path, "a") as output_file:
+        output_file.write("{},{},{},{}\n".format("MMD", method, dataset, value))

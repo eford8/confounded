@@ -17,7 +17,7 @@ def cross_validate(df, predict_column, learner):
     y = df[predict_column]
 
     scoring_metric = "accuracy"
-    n_jobs = 4
+    n_jobs = 1
 
     scores = []
     for i in range(iterations):
@@ -74,6 +74,7 @@ for method in ["unadjusted", "scaled", "combat", "confounded"]:
     for learner in LEARNERS:
         classifier_name = str(learner[0]).split("'")[1].split(".")[-1].replace("Classifier", "")
 
+        print("Performing classification for {}, {}, {}, and {}.".format(dataset, method, args.column, classifier_name), flush=True)
         for score in cross_validate(df, args.column, learner):
             results.append([classifier_name, method, dataset, str(score)])
 
