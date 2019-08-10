@@ -6,7 +6,7 @@ library(tidyr)
 library(stringr)
 
 # Load data ---------
-df <- read_csv("/output/metrics/mnist_confounded_log2.csv") %>% 
+df <- read_csv("/output/metrics/mnist_confounded_log.csv") %>% 
   select(ae_loss, disc_loss, iteration) %>% 
   gather("Function", "Loss Function", -iteration) %>% 
   mutate(Function = str_replace(Function, "_loss", "")) %>%
