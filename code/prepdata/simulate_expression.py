@@ -1,42 +1,54 @@
 import numpy as np
 import random
 from sklearn import preprocessing
-#from sklearn.datasets import make_classification
-from sklearn.datasets import make_checkerboard
+from sklearn.datasets import make_classification
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 import sys
 
 out_file_path = sys.argv[1]
 
-n_samples = 400
-n_features = 10000
-n_clusters = 4
-n_samples_per_cluster =  int(n_samples / n_clusters)
+n_samples = 100 # Must be an even number
+n_random_features = 800
+#n_random_features = 19800
+n_informative_features = 25
+n_redundant_features = 175
 
-X, rows, columns = make_checkerboard(
-    shape=(n_samples, n_features), n_clusters=(n_clusters, n_clusters), noise=1,
-    shuffle=False, random_state=0, minval=-3, maxval=3)
+# This controls the ability to differentiate between the batches and class labels.
+class_sep = 2.0
 
-#X = preprocessing.scale(X)
+random_state = 0
+random.seed(random_state)
 
-labels = [0] * n_samples_per_cluster + [1] * n_samples_per_cluster + [0] * n_samples_per_cluster + [1] * n_samples_per_cluster
-batches = [0] * n_samples_per_cluster + [0] * n_samples_per_cluster + [1] * n_samples_per_cluster + [1] * n_samples_per_cluster
+n_features = n_random_features + n_informative_features + n_redundant_features
 
-## Used this code to verify that we can differentiate the classes
-from sklearn.svm import SVC
-clf = SVC(gamma="scale", random_state=0)
-from sklearn.model_selection import cross_val_score
+X, batches = make_classification(n_samples, n_features, n_informative_features,
+        n_redundant_features, n_clusters_per_class=2, random_state=random_state,
+        shuffle=False, flip_y=0.0, class_sep = class_sep)
+
+labels = [0 for x in range(int(n_samples / 2))] + [1 for x in range(int(n_samples / 2))]
+random_labels = list(labels)
+random.shuffle(random_labels)
+labels = np.array(labels)
+random_labels = np.array(random_labels)
+random_batches = list(batches)
+random.shuffle(random_batches)
+random_batches = np.array(random_batches)
+
+X = preprocessing.scale(X)
+
+## Used this code to verify that we can differentiate the classes and batches
+clf = RandomForestClassifier(max_depth=5, n_estimators=100, random_state=random_state)
+#clf = SVC(gamma="scale", random_state=random_state)
+
 print("Predicting true labels:")
 print(np.mean(cross_val_score(clf, X, labels, cv=5)))
 print("Predicting randomized labels:")
-random.seed(0)
-random_labels = list(labels)
-random.shuffle(random_labels)
 print(np.mean(cross_val_score(clf, X, random_labels, cv=5)))
 print("Predicting batches:")
 print(np.mean(cross_val_score(clf, X, batches, cv=5)))
 print("Predicting randomized batches:")
-random_batches = list(batches)
-random.shuffle(random_batches)
 print(np.mean(cross_val_score(clf, X, random_batches, cv=5)))
 
 with open(out_file_path, 'w') as out_file:
