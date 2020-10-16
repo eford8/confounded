@@ -3,13 +3,17 @@
 set -e
 
 printf "\033[0;32mCalculating classification accuracy\033[0m\n"
-
-batch_out_path="/output/metrics/batch_classification.csv"
-true_out_path="/output/metrics/true_classification.csv"
+numSamples="$1"
+numInformativeFeatures="$2"
+codeSize="$3"
+scaler="$4"
+batch_out_path="/output/metrics/batch_classification_s"$numSamples"+f"$numInformativeFeatures"+c"$codeSize"+"$scaler".csv"
+true_out_path="/output/metrics/true_classification_s"$numSamples"+f"$numInformativeFeatures"+c"$codeSize"+"$scaler".csv"
+out_path="/output/metrics/classification_ssigmoid.csv"
 
 rm -f ${batch_out_path} ${true_out_path}
 
-python classify.py -i /data/simulated_expression -o ${batch_out_path} -c Batch
+python classify.py -i /data/simulated_expression -o ${batch_out_path} -c Batch 
 python classify.py -i /data/simulated_expression -o ${true_out_path} -c Class
 
 #python classify.py -i /data/mnist -o ${batch_out_path} -c Batch

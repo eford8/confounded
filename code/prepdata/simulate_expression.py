@@ -7,13 +7,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 import sys
 
-out_file_path = sys.argv[1]
+out_file_path = sys.argv[1] + str()
 
-n_samples = 100 # Must be an even number
-n_random_features = 800
+n_samples = int(sys.argv[2]) # Must be an even number
+n_random_features = int(sys.argv[3])
 #n_random_features = 19800
-n_informative_features = 25
-n_redundant_features = 175
+n_informative_features = int(sys.argv[5])
+n_redundant_features = int(sys.argv[4])
 
 # This controls the ability to differentiate between the batches and class labels.
 class_sep = 2.0

@@ -16,7 +16,7 @@ def cross_validate(df, predict_column, learner):
     X = robust_scale(df.drop(meta_cols, axis="columns"))
     y = df[predict_column]
 
-    scoring_metric = "accuracy"
+    scoring_metric = "roc_auc"
     n_jobs = 12
 
     scores = []
@@ -50,9 +50,9 @@ folds = 3
 cache = DataFrameCache()
 
 LEARNERS = [
-    (RandomForestClassifier, {"n_estimators": 100, "random_state": 0}),
-    (SVC, {"gamma": "auto", "random_state": 0}),
-    (KNeighborsClassifier, {})
+    (RandomForestClassifier, {"n_estimators": 100, "random_state": 0})#,
+   #(SVC, {"gamma": "auto", "random_state": 0}),
+    #(KNeighborsClassifier, {})
 ]
 
 if not os.path.exists(args.output_path):
@@ -61,7 +61,7 @@ if not os.path.exists(args.output_path):
 
 results = []
 
-unadjusted_path = args.input_dir + "/unadjusted.csv"
+unadjusted_path = args.input_dir + "/unadjusted" + "1" + ".csv"
 unadj = cache.get_dataframe(unadjusted_path)
 
 dataset = os.path.basename(args.input_dir)
@@ -69,14 +69,14 @@ dataset = os.path.basename(args.input_dir)
 results.append(["baseline", "NA", dataset, str(baseline(unadj, args.column))])
 
 for method in ["unadjusted", "scaled", "combat", "confounded"]:
-    df = cache.get_dataframe(args.input_dir + "/" + method + ".csv")
+    df = cache.get_dataframe(args.input_dir + "/" + method + "1" + ".csv")
 
     for learner in LEARNERS:
         classifier_name = str(learner[0]).split("'")[1].split(".")[-1].replace("Classifier", "")
 
         print("Performing classification for {}, {}, {}, and {}.".format(dataset, method, args.column, classifier_name), flush=True)
         for score in cross_validate(df, args.column, learner):
-            results.append([classifier_name, method, dataset, str(score)])
+           results.append([classifier_name, method, dataset, str(score)])
 
 with open(args.output_path, 'a') as output_file:
     for line in results:
