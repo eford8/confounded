@@ -2,13 +2,11 @@
 
 set -e
 
-codeSize="$1"
-scaler="$2"
 
 printf "\033[0;32mAdjusting the data with Confounded\033[0m\n"
 
 # We also save a log for our loss chart
-confounded /data/simulated_expression/unadjusted1.csv -o /data/simulated_expression/confounded1.csv -b Batch -f /output/metrics/simulated_confounded_log1.csv -c $codeSize -s $scaler
+confounded /data/simulated_expression/unadjusted.csv -o /data/simulated_expression/confounded.csv -b Batch -f /output/metrics/simulated_confounded_log.csv -c 50 -s "sigmoid" -w 1.0 -g 0.0001 -m 256 -i 10000 -a 2
 
 #confounded /data/mnist/unadjusted.csv -o /data/mnist/confounded.csv -b Batch --learning-rate 0.0001 -f /output/metrics/mnist_confounded_log.csv
 ##confounded /data/mnist/unadjusted.csv -b Batch --learning-rate 0.001  -f /output/metrics/mnist_confounded_log2.csv

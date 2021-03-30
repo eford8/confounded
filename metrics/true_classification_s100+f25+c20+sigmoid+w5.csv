@@ -1,6 +1,0 @@
-metric,adjuster,dataset,value
-baseline,NA,simulated_expression,0.5
-RandomForest,unadjusted,simulated_expression,0.9982338523644753
-RandomForest,scaled,simulated_expression,0.9918180507497117
-RandomForest,combat,simulated_expression,0.9861231257208766
-RandomForest,confounded,simulated_expression,0.9597029988465975

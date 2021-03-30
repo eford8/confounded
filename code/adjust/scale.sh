@@ -4,7 +4,7 @@ set -e
 
 printf "\033[0;32mAdjusting the data with a linear scaler\033[0m\n"
 
-Rscript adjust.R /data/simulated_expression/unadjusted1.csv /data/simulated_expression/scaled1.csv -a scale -b Batch
+Rscript adjust.R /data/simulated_expression/unadjusted.csv /data/simulated_expression/scaled.csv -a scale -b Batch
 #Rscript adjust.R /data/mnist/unadjusted.csv /data/mnist/scaled.csv -a scale -b Batch
 #Rscript adjust.R /data/bladderbatch/unadjusted.csv /data/bladderbatch/scaled.csv -a scale -b batch
 #Rscript adjust.R /data/gse37199/unadjusted.csv /data/gse37199/scaled.csv -a scale -b plate
